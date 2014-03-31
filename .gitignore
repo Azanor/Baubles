@@ -3,6 +3,7 @@
 #################
 build/
 eclipse/
+.gradle
 
 #################
 ## Eclipse
