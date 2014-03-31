@@ -1,6 +1,9 @@
 package baubles.common.event;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.inventory.GuiContainerCreative;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.network.play.client.C16PacketClientStatus;
 
 import org.lwjgl.input.Keyboard;
 
@@ -27,10 +30,15 @@ public class KeyHandler {
 	@SubscribeEvent
 	public void playerTick(PlayerTickEvent event) {
 		if (event.side == Side.SERVER) return;
-		if (event.phase == Phase.START) {
+		if (event.phase == Phase.START ) {
 			if (key.getIsKeyPressed() && FMLClientHandler.instance().getClient().inGameHasFocus) {
-				Baubles.packetPipeline.sendToServer(new PacketOpenBaublesInventory(event.player));
-//				event.player.openGui(Baubles.instance, Baubles.GUI, event.player.worldObj, 0, 0, 0);
+				if (!event.player.capabilities.isCreativeMode)
+					Baubles.packetPipeline.sendToServer(new PacketOpenBaublesInventory(event.player));
+				else {
+					Minecraft.getMinecraft().getNetHandler().addToSendQueue(new C16PacketClientStatus(C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT));
+					Minecraft.getMinecraft().displayGuiScreen(new GuiContainerCreative(event.player));
+				}
+					
 			}
 		}
 	}

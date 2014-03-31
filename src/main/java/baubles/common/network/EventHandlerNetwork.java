@@ -2,7 +2,7 @@ package baubles.common.network;
 
 import java.util.HashMap;
 
-import baubles.common.Baubles;
+import baubles.common.lib.PlayerHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
@@ -14,7 +14,7 @@ public class EventHandlerNetwork {
 	public void playerLoggedInEvent (PlayerEvent.PlayerLoggedInEvent event)    {    
 		Side side = FMLCommonHandler.instance().getEffectiveSide();        
 		if (side == Side.SERVER) {
-			Baubles.instance.playerHandler.loadPlayerBaubles(event.player);
+			PlayerHandler.loadPlayerBaubles(event.player);
 		}
 	}
 	
@@ -24,7 +24,7 @@ public class EventHandlerNetwork {
 	public void playerUpdateEvent (PlayerEvent event)    {  
 		Side side = FMLCommonHandler.instance().getEffectiveSide();        
 		if (side == Side.SERVER) {
-			Baubles.instance.playerHandler.updatePlayerBaubles(event.player);
+			PlayerHandler.updatePlayerBaubles(event.player);
 		}
 	}
 	

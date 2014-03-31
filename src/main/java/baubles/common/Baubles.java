@@ -2,14 +2,12 @@ package baubles.common;
 
 import java.io.File;
 
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.MinecraftForge;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import baubles.common.event.EventHandlerEntity;
-import baubles.common.lib.CreativeTabBaubles;
 import baubles.common.lib.PlayerHandler;
 import baubles.common.network.EventHandlerNetwork;
 import baubles.common.network.PacketPipeline;
@@ -40,13 +38,11 @@ public class Baubles {
 	
 	public EventHandlerNetwork networkEventHandler;
 	public EventHandlerEntity entityEventHandler;
-	public PlayerHandler playerHandler;
 	public File modDir;
 	
 	public static final PacketPipeline packetPipeline = new PacketPipeline();
 	public static final Logger logger = LogManager.getLogger("Baubles");
 	public static final int GUI = 0;
-	public static CreativeTabs tabBaubles = new CreativeTabBaubles(CreativeTabs.getNextID(), "baubles");
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -62,7 +58,6 @@ public class Baubles {
 		}
 		
 		entityEventHandler = new EventHandlerEntity();
-		playerHandler = new PlayerHandler();
 		
 		MinecraftForge.EVENT_BUS.register(entityEventHandler);
 		FMLCommonHandler.instance().bus().register(new EventHandlerNetwork());

@@ -13,7 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
-import baubles.common.Baubles;
+import baubles.common.lib.PlayerHandler;
 
 public class ContainerPlayerExpanded extends Container
 {
@@ -36,7 +36,7 @@ public class ContainerPlayerExpanded extends Container
         baubles = new InventoryBaubles(player);
         baubles.setEventHandler(this);
         if (!player.worldObj.isRemote) {
-        	baubles.stackList = Baubles.instance.playerHandler.getPlayerBaubles(player).stackList;
+        	baubles.stackList = PlayerHandler.getPlayerBaubles(player).stackList;
         }
         
         this.addSlotToContainer(new SlotCrafting(playerInv.player, this.craftMatrix, this.craftResult, 0, 144, 36));
@@ -117,8 +117,8 @@ public class ContainerPlayerExpanded extends Container
 
         this.craftResult.setInventorySlotContents(0, (ItemStack)null);
         if (!player.worldObj.isRemote) {
-        	Baubles.instance.playerHandler.setPlayerBaubles(player, baubles);
-        	Baubles.instance.playerHandler.updatePlayerBaubles(player);
+        	PlayerHandler.setPlayerBaubles(player, baubles);
+        	PlayerHandler.updatePlayerBaubles(player);
         }
     }
 
@@ -185,7 +185,7 @@ public class ContainerPlayerExpanded extends Container
                     return null;
                 }
             }
-            else if (itemstack.getItem() instanceof IBauble && 
+            else if (par2>11 && itemstack.getItem() instanceof IBauble && 
             		((IBauble)itemstack.getItem()).getBaubleType(itemstack)==BaubleType.RING &&
             		!((Slot)this.inventorySlots.get(10)).getHasStack())
             {
@@ -195,7 +195,7 @@ public class ContainerPlayerExpanded extends Container
                     return null;
                 }
             }
-            else if (itemstack.getItem() instanceof IBauble && 
+            else if (par2>11 && itemstack.getItem() instanceof IBauble && 
             		((IBauble)itemstack.getItem()).getBaubleType(itemstack)==BaubleType.RING &&
             		!((Slot)this.inventorySlots.get(11)).getHasStack())
             {

@@ -1,8 +1,3 @@
 #
 # ITEMS
 item.Ring.0.name=Miner's Ring
-#
-# GUI
-#
-# OTHER
-itemGroup.baubles=Baubles

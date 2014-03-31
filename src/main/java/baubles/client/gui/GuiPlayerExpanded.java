@@ -3,7 +3,6 @@ package baubles.client.gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.achievement.GuiAchievements;
 import net.minecraft.client.gui.achievement.GuiStats;
-import net.minecraft.client.gui.inventory.GuiContainerCreative;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
@@ -45,10 +44,10 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
     @Override 
     public void updateScreen()
     {
-        if (this.mc.playerController.isInCreativeMode())
-        {
-            this.mc.displayGuiScreen(new GuiContainerCreative(this.mc.thePlayer));
-        }
+//        if (this.mc.playerController.isInCreativeMode())
+//        {
+//            this.mc.displayGuiScreen(new GuiContainerCreative(this.mc.thePlayer));
+//        }
     }
 
     /**
@@ -59,14 +58,14 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
     {
         this.buttonList.clear();
 
-        if (this.mc.playerController.isInCreativeMode())
-        {
-            this.mc.displayGuiScreen(new GuiContainerCreative(this.mc.thePlayer));
-        }
-        else
-        {
+//        if (this.mc.playerController.isInCreativeMode())
+//        {
+//            this.mc.displayGuiScreen(new GuiContainerCreative(this.mc.thePlayer));
+//        }
+//        else
+//        {
             super.initGui();
-        }
+//        }
     }
 
     /**

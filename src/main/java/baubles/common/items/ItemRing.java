@@ -13,7 +13,6 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.IIcon;
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
-import baubles.common.Baubles;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -26,7 +25,7 @@ public class ItemRing  extends Item implements IBauble
         this.setMaxStackSize(1);
         this.setHasSubtypes(true);
         this.setMaxDamage(0);
-        setCreativeTab(Baubles.tabBaubles);
+        setCreativeTab(CreativeTabs.tabTools);
     }
 	
 	public IIcon icon;
