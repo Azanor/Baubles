@@ -1,2 +1,2 @@
-1.0.0.0
-- 
+1.0.0.1
+- properly trigger unequip event when shift clicking out of bauble slot

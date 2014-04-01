@@ -229,7 +229,7 @@ public class ContainerPlayerExpanded extends Container
                     return null;
                 }
             }
-            else if (!this.mergeItemStack(itemstack1, 9+4, 45+4, false))
+            else if (!this.mergeItemStack(itemstack1, 9+4, 45+4, false, slot))
             {
                 return null;
             }
@@ -252,6 +252,103 @@ public class ContainerPlayerExpanded extends Container
         }
 
         return itemstack;
+    }
+    
+    private void unequipBauble(ItemStack stack) {
+    	if (stack.getItem() instanceof IBauble) {
+    		((IBauble)stack.getItem()).onUnequipped(stack, thePlayer);
+    	}
+    }
+    
+    protected boolean mergeItemStack(ItemStack par1ItemStack, int par2, int par3, boolean par4, Slot ss)
+    {
+        boolean flag1 = false;
+        int k = par2;
+
+        if (par4)
+        {
+            k = par3 - 1;
+        }
+
+        Slot slot;
+        ItemStack itemstack1;
+
+        if (par1ItemStack.isStackable())
+        {
+            while (par1ItemStack.stackSize > 0 && (!par4 && k < par3 || par4 && k >= par2))
+            {
+                slot = (Slot)this.inventorySlots.get(k);
+                itemstack1 = slot.getStack();
+
+                if (itemstack1 != null && itemstack1.getItem() == par1ItemStack.getItem() && (!par1ItemStack.getHasSubtypes() || par1ItemStack.getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(par1ItemStack, itemstack1))
+                {
+                    int l = itemstack1.stackSize + par1ItemStack.stackSize;
+                    if (l <= par1ItemStack.getMaxStackSize())
+                    {
+                    	if (ss instanceof SlotBauble) unequipBauble(par1ItemStack);
+                    	par1ItemStack.stackSize = 0;
+                        itemstack1.stackSize = l;
+                        slot.onSlotChanged();
+                        flag1 = true;
+                    }
+                    else if (itemstack1.stackSize < par1ItemStack.getMaxStackSize())
+                    {
+                    	if (ss instanceof SlotBauble) unequipBauble(par1ItemStack);
+                        par1ItemStack.stackSize -= par1ItemStack.getMaxStackSize() - itemstack1.stackSize;
+                        itemstack1.stackSize = par1ItemStack.getMaxStackSize();
+                        slot.onSlotChanged();
+                        flag1 = true;
+                    }
+                }
+
+                if (par4)
+                {
+                    --k;
+                }
+                else
+                {
+                    ++k;
+                }
+            }
+        }
+
+        if (par1ItemStack.stackSize > 0)
+        {
+            if (par4)
+            {
+                k = par3 - 1;
+            }
+            else
+            {
+                k = par2;
+            }
+
+            while (!par4 && k < par3 || par4 && k >= par2)
+            {
+                slot = (Slot)this.inventorySlots.get(k);
+                itemstack1 = slot.getStack();
+
+                if (itemstack1 == null)
+                {
+                	if (ss instanceof SlotBauble) unequipBauble(par1ItemStack);
+                    slot.putStack(par1ItemStack.copy());
+                    slot.onSlotChanged();
+                    par1ItemStack.stackSize = 0;
+                    flag1 = true;
+                    break;
+                }
+
+                if (par4)
+                {
+                    --k;
+                }
+                else
+                {
+                    ++k;
+                }
+            }
+        }
+        return flag1;
     }
 
     @Override
