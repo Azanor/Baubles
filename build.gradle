@@ -1,3 +1,5 @@
+defaultTasks 'build', 'copyFile'
+
 buildscript {
     repositories {
         mavenCentral()
@@ -17,7 +19,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.7.2-1.0.0.2"
+version = "1.7.2-1.0.0.3"
 group= "com.azanor.baubles" 
 archivesBaseName = "Baubles"
 
@@ -25,6 +27,7 @@ minecraft {
     version = "1.7.2-10.12.0.1046"
     assetDir = "eclipse/assets"
 }
+
 processResources
 {
     // replace stuff in mcmod.info, nothing else
@@ -40,26 +43,35 @@ processResources
         exclude 'mcmod.info'
     }
     
-    // Create deobf dev jars
-    task deobfJar(type: Jar) {
-        from(sourceSets.main.output) {
-            classifier = 'deobf' 
-        }
-    } 
-    
-    // Create API library zip
-    task apiZip(type: Zip) {    
-        from(sourceSets.main.java) {        
-            include "baubles/api/**"    
-         }    
-         classifier = 'api'
-    }
-    
-    artifacts { 
-        archives deobfJar 
-        archives apiZip
-    }
 }
 
+// Create deobf dev jars
+task deobfJar(type: Jar) {
+    from(sourceSets.main.output) {
+        classifier = 'deobf' 
+    }
+} 
+
+// Create API library zip
+task apiZip(type: Zip) {   
+    from(sourceSets.main.java) {        
+        include "baubles/api/**"    
+     }    
+     classifier = 'api'
+}
+
+task copyFile(type: Copy)  {
+    from "build/libs"
+    into "build/distributions"
+    rename '(.*)-(.*)-(.*)-deobf.jar', '$1-deobf-$2-$3.jar'
+}
+
+apiZip.mustRunAfter deobfJar
+
+
+artifacts { 
+    archives deobfJar 
+    archives apiZip
+}
 
 
