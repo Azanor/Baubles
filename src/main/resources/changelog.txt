@@ -1,2 +1,5 @@
+1.0.0.2
+- baubles inventory now opens when it's hotkey is pressed in creative 
+
 1.0.0.1
 - properly trigger unequip event when shift clicking out of bauble slot

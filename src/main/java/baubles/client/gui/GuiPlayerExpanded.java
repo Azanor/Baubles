@@ -44,10 +44,6 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
     @Override 
     public void updateScreen()
     {
-//        if (this.mc.playerController.isInCreativeMode())
-//        {
-//            this.mc.displayGuiScreen(new GuiContainerCreative(this.mc.thePlayer));
-//        }
     }
 
     /**
@@ -57,15 +53,7 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
     public void initGui()
     {
         this.buttonList.clear();
-
-//        if (this.mc.playerController.isInCreativeMode())
-//        {
-//            this.mc.displayGuiScreen(new GuiContainerCreative(this.mc.thePlayer));
-//        }
-//        else
-//        {
-            super.initGui();
-//        }
+        super.initGui();
     }
 
     /**
