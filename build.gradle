@@ -40,14 +40,24 @@ processResources
         exclude 'mcmod.info'
     }
     
+    // Create deobf dev jars
     task deobfJar(type: Jar) {
         from(sourceSets.main.output) {
             classifier = 'deobf' 
         }
     } 
     
+    // Create API library zip
+    task apiZip(type: Zip) {    
+        from(sourceSets.main.java) {        
+            include "baubles/api/**"    
+         }    
+         classifier = 'api'
+    }
+    
     artifacts { 
         archives deobfJar 
+        archives apiZip
     }
 }
 
