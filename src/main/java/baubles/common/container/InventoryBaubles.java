@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
+import baubles.common.lib.PlayerHandler;
 
 public class InventoryBaubles implements IInventory {
 	public ItemStack[] stackList;
@@ -140,7 +141,11 @@ public class InventoryBaubles implements IInventory {
 	 * to disk later - the game won't think it hasn't changed and skip it.
 	 */
 	@Override
-	public void markDirty() {	}
+	public void markDirty() {	
+		try {
+			PlayerHandler.updatePlayerBaubles(player.get());
+		} catch (Exception e) {		}
+	}
 
 	/**
 	 * Do not make give this method the name canInteractWith because it clashes

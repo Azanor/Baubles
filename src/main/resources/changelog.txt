@@ -1,3 +1,6 @@
+1.0.0.4
+- allow other mods to force a save by marking the inventory as dirty
+
 1.0.0.3
 - example ring can now be rightclicked like armor to equip it
 
