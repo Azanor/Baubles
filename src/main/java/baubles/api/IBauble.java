@@ -34,4 +34,13 @@ public interface IBauble {
 	 */
 	public void onUnequipped(ItemStack itemstack, EntityLivingBase player);
 
+	/**
+	 * can this bauble be placed in a bauble slot
+	 */
+	public boolean canEquip(ItemStack itemstack, EntityLivingBase player);
+	
+	/**
+	 * Can this bauble be removed from a bauble slot
+	 */
+	public boolean canUnequip(ItemStack itemstack, EntityLivingBase player);
 }

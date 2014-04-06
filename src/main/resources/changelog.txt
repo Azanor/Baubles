@@ -1,3 +1,6 @@
+1.0.0.5
+- API: added a few new methods. I know there is nothing more annoying than constantly changing api's, but hopefully these kinds of changes will be few and far between.
+
 1.0.0.4
 - allow other mods to force a save by marking the inventory as dirty
 
