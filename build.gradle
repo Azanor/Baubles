@@ -1,5 +1,3 @@
-defaultTasks 'build', 'copyFile'
-
 buildscript {
     repositories {
         mavenCentral()
@@ -48,7 +46,7 @@ processResources
 // Create deobf dev jars
 task deobfJar(type: Jar) {
     from(sourceSets.main.output) {
-        classifier = 'deobf' 
+        appendix = 'deobf' 
     }
 } 
 
@@ -58,12 +56,6 @@ task apiZip(type: Zip) {
         include "baubles/api/**"    
      }    
      classifier = 'api'
-}
-
-task copyFile(type: Copy)  {
-    from "build/libs"
-    into "build/distributions"
-    rename '(.*)-(.*)-(.*)-deobf.jar', '$1-deobf-$2-$3.jar'
 }
 
 apiZip.mustRunAfter deobfJar
