@@ -172,7 +172,8 @@ public class InventoryBaubles implements IInventory {
 	 */
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack stack) {
-		if (stack == null || !(stack.getItem() instanceof IBauble))
+		if (stack == null || !(stack.getItem() instanceof IBauble)
+				|| !((IBauble) stack.getItem()).canEquip(stack, player.get()))
 			return false;
 		if (i == 0
 				&& ((IBauble) stack.getItem()).getBaubleType(stack) == BaubleType.AMULET)
