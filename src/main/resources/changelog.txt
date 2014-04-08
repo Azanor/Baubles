@@ -1,3 +1,6 @@
+1.0.0.6
+- additional checks to prevent the wrong items getting into the wrong slots
+
 1.0.0.5
 - API: added a few new methods. I know there is nothing more annoying than constantly changing api's, but hopefully these kinds of changes will be few and far between.
 
