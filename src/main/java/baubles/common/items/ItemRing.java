@@ -62,7 +62,9 @@ public class ItemRing  extends Item implements IBauble
 			for(int i = 0; i < baubles.getSizeInventory(); i++)
 				if(baubles.getStackInSlot(i) == null && baubles.isItemValidForSlot(i, par1ItemStack)) {
 					baubles.setInventorySlotContents(i, par1ItemStack.copy());
-					par3EntityPlayer.inventory.setInventorySlotContents(par3EntityPlayer.inventory.currentItem, null);
+					if(!par3EntityPlayer.capabilities.isCreativeMode){
+						par3EntityPlayer.inventory.setInventorySlotContents(par3EntityPlayer.inventory.currentItem, null);
+					}
 					onEquipped(par1ItemStack, par3EntityPlayer);
 					break;
 				}
