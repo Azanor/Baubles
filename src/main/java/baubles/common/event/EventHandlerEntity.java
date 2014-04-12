@@ -30,7 +30,7 @@ public class EventHandlerEntity  {
 	
 	@SubscribeEvent
 	public void playerDeath(LivingDeathEvent event) {
-		if (event.entity instanceof EntityPlayer && !event.entity.worldObj.isRemote) {
+		if (event.entity instanceof EntityPlayer && !event.entity.worldObj.isRemote && !event.entity.worldObj.getGameRules().getGameRuleBooleanValue("keepInventory")) {
 			EntityPlayer player = (EntityPlayer)event.entity;
 			PlayerHandler.getPlayerBaubles(player).dropItems(player);
 		}
