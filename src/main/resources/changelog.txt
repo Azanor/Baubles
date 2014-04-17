@@ -1,3 +1,7 @@
+1.0.0.7
+- the baubles hotkey can now be used to close any gui the player has open
+- check for "keepInventory" game rule to prevent baubles from dropping on death
+
 1.0.0.6
 - additional checks to prevent the wrong items getting into the wrong slots
 - minor changes to te example ring so it doesn't get used when you right-click to equip in creative mode
