@@ -15,6 +15,8 @@ public class EventHandlerNetwork {
 		Side side = FMLCommonHandler.instance().getEffectiveSide();        
 		if (side == Side.SERVER) {
 			PlayerHandler.loadPlayerBaubles(event.player);
+			for (int a=0;a<4;a++)
+				PlayerHandler.getPlayerBaubles(event.player).syncSlotToClient(a);
 		}
 	}
 	

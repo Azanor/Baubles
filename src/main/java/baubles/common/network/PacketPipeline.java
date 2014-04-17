@@ -118,6 +118,7 @@ public class PacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Abstra
         
         //packets
         registerPacket(PacketOpenBaublesInventory.class);
+        registerPacket(PacketSyncBauble.class);
         
     }
 
