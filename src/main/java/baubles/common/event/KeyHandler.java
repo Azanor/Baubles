@@ -1,8 +1,5 @@
 package baubles.common.event;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.settings.KeyBinding;
 
 import org.lwjgl.input.Keyboard;
@@ -25,29 +22,16 @@ public class KeyHandler {
 	public KeyHandler() {
 		 ClientRegistry.registerKeyBinding(key);
 	}
-	
-	boolean keyDown = false;
 
 	@SideOnly(value=Side.CLIENT)
 	@SubscribeEvent
 	public void playerTick(PlayerTickEvent event) {
 		if (event.side == Side.SERVER) return;
 		if (event.phase == Phase.START ) {
-			if (GameSettings.isKeyDown(key))
-            {
-				if (!keyDown) {
-					if (FMLClientHandler.instance().getClient().inGameHasFocus) {
-						Baubles.packetPipeline.sendToServer(new PacketOpenBaublesInventory(event.player));					
-					} else 
-					if (Minecraft.getMinecraft().currentScreen!=null && 
-						Minecraft.getMinecraft().currentScreen instanceof GuiContainer){
-						Minecraft.getMinecraft().thePlayer.closeScreen();
-					}
-				}
-                keyDown = true;
-            } else {
-            	keyDown = false;
-            }
+			if (key.getIsKeyPressed() && FMLClientHandler.instance().getClient().inGameHasFocus) {
+					Baubles.packetPipeline.sendToServer(new PacketOpenBaublesInventory(event.player));
+			}
 		}
 	}
 }
+

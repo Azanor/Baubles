@@ -1,3 +1,6 @@
+1.0.0.9
+- undoing the "baubles hotkey closes all inventories" change. It was messing with anything that allows text input
+
 1.0.0.8
 - sync baubles itemstack data between client and server if changed outside the baubles GUI
 
