@@ -20,7 +20,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
-@Mod(modid = Baubles.MODID, name = Baubles.MODNAME, version = Baubles.VERSION, dependencies="required-after:Forge@[10.12.0.1046,);")
+@Mod(modid = Baubles.MODID, name = Baubles.MODNAME, version = Baubles.VERSION, dependencies="required-after:Forge@[10.12.0.1056,);")
 
 public class Baubles {
 	
