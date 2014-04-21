@@ -1,3 +1,8 @@
+1.0.0.10
+- moved baubles data from player data to custom savefiles (*.baub)
+- a backup file is also saved each time in case the main one becomes corrupt.
+- automatically revert to backup file if main one cannot be loaded. If both cannot be loaded revert to old player data format. This will also insure that data from previous baubles versions will be loaded the first time.
+
 1.0.0.9
 - undoing the "baubles hotkey closes all inventories" change. It was messing with anything that allows text input
 

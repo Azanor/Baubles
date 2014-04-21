@@ -118,7 +118,7 @@ public class ContainerPlayerExpanded extends Container
         this.craftResult.setInventorySlotContents(0, (ItemStack)null);
         if (!player.worldObj.isRemote) {
         	PlayerHandler.setPlayerBaubles(player, baubles);
-        	PlayerHandler.updatePlayerBaubles(player);
+        	PlayerHandler.savePlayerBaubles(player);
         }
     }
 

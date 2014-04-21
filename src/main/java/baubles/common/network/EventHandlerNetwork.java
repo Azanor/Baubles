@@ -20,13 +20,11 @@ public class EventHandlerNetwork {
 		}
 	}
 	
-	HashMap<Integer,Long> lastPlayerUpdate = new HashMap<Integer,Long>();
-	
 	@SubscribeEvent    
 	public void playerUpdateEvent (PlayerEvent event)    {  
 		Side side = FMLCommonHandler.instance().getEffectiveSide();        
 		if (side == Side.SERVER) {
-			PlayerHandler.updatePlayerBaubles(event.player);
+			PlayerHandler.savePlayerBaubles(event.player);
 		}
 	}
 	

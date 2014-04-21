@@ -149,7 +149,7 @@ public class InventoryBaubles implements IInventory {
 	@Override
 	public void markDirty() {	
 		try {
-			PlayerHandler.updatePlayerBaubles(player.get());
+			PlayerHandler.savePlayerBaubles(player.get());
 		} catch (Exception e) {		}
 	}
 
@@ -195,6 +195,10 @@ public class InventoryBaubles implements IInventory {
 
 	public void saveNBT(EntityPlayer player) {
 		NBTTagCompound tags = player.getEntityData();
+		saveNBT(tags);
+	}
+	
+	public void saveNBT(NBTTagCompound tags) {
 		NBTTagList tagList = new NBTTagList();
 		NBTTagCompound invSlot;
 		for (int i = 0; i < this.stackList.length; ++i) {
@@ -210,6 +214,10 @@ public class InventoryBaubles implements IInventory {
 
 	public void readNBT(EntityPlayer player) {
 		NBTTagCompound tags = player.getEntityData();
+		readNBT(tags);
+	}
+	
+	public void readNBT(NBTTagCompound tags) {
 		NBTTagList tagList = tags.getTagList("Baubles.Inventory", 10);
 		for (int i = 0; i < tagList.tagCount(); ++i) {
 			NBTTagCompound nbttagcompound = (NBTTagCompound) tagList.getCompoundTagAt(i);
