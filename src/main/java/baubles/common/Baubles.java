@@ -40,7 +40,7 @@ public class Baubles {
 	public File modDir;
 	
 	public static final PacketPipeline packetPipeline = new PacketPipeline();
-	public static final Logger logger = LogManager.getLogger("Baubles");
+	public static final Logger log = LogManager.getLogger("Baubles");
 	public static final int GUI = 0;
 	
 	@EventHandler
@@ -51,7 +51,7 @@ public class Baubles {
 		try {
 			Config.initialize(event.getSuggestedConfigurationFile());
 		} catch (Exception e) {
-			Baubles.logger.error("BAUBLES has a problem loading it's configuration");
+			Baubles.log.error("BAUBLES has a problem loading it's configuration");
 		} finally {
 			if (Config.config!=null) Config.save();
 		}
