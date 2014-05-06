@@ -99,7 +99,7 @@ public class InventoryBaubles implements IInventory {
 				}
 				
 				if (eventHandler!=null) this.eventHandler.onCraftMatrixChanged(this);
-				syncSlotToClient(par1);
+				syncSlotToClients(par1);
 				return itemstack;
 			} else {
 				itemstack = this.stackList[par1].splitStack(par2);
@@ -112,7 +112,7 @@ public class InventoryBaubles implements IInventory {
 					((IBauble)itemstack.getItem()).onUnequipped(itemstack, player.get());
 				}
 				if (eventHandler!=null) this.eventHandler.onCraftMatrixChanged(this);
-				syncSlotToClient(par1);
+				syncSlotToClients(par1);
 				return itemstack;
 			}
 		} else {
@@ -131,7 +131,7 @@ public class InventoryBaubles implements IInventory {
 			((IBauble)stack.getItem()).onEquipped(stack, player.get());
 		}
 		if (eventHandler!=null) this.eventHandler.onCraftMatrixChanged(this);
-		syncSlotToClient(par1);
+		syncSlotToClients(par1);
 	}
 
 	/**
@@ -234,15 +234,15 @@ public class InventoryBaubles implements IInventory {
 			if (this.stackList[i] != null) {
 				player.dropPlayerItemWithRandomChoice(this.stackList[i], true);
 				this.stackList[i] = null;
-				syncSlotToClient(i);
+				syncSlotToClients(i);
 			}
 		}
 	}
 	
-	public void syncSlotToClient(int slot) {
+	public void syncSlotToClients(int slot) {
 		try {
 			if (Baubles.proxy.getClientWorld()==null)
-				Baubles.packetPipeline.sendTo(new PacketSyncBauble(player.get(),slot), (EntityPlayerMP) player.get());
+				Baubles.packetPipeline.sendToAll(new PacketSyncBauble(player.get(),slot));
 		} catch (Exception e) { e.printStackTrace();	}
 	}
 }

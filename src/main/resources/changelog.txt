@@ -1,3 +1,6 @@
+1.0.0.11
+- baubles are now synced to all clients on a server, allowing modders to add visual components or other client-side stuff for baubles.
+
 1.0.0.10
 - moved baubles data from player data to custom savefiles (*.baub)
 - a backup file is also saved each time in case the main one becomes corrupt.

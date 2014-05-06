@@ -1,7 +1,5 @@
 package baubles.common.network;
 
-import java.util.HashMap;
-
 import baubles.common.lib.PlayerHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -16,7 +14,7 @@ public class EventHandlerNetwork {
 		if (side == Side.SERVER) {
 			PlayerHandler.loadPlayerBaubles(event.player);
 			for (int a=0;a<4;a++)
-				PlayerHandler.getPlayerBaubles(event.player).syncSlotToClient(a);
+				PlayerHandler.getPlayerBaubles(event.player).syncSlotToClients(a);
 		}
 	}
 	
