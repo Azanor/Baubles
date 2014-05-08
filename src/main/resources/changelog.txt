@@ -1,3 +1,6 @@
+1.0.0.12
+- fix for baubles being synced to the wrong player on the client
+
 1.0.0.11
 - baubles are now synced to all clients on a server, allowing modders to add visual components or other client-side stuff for baubles.
 
