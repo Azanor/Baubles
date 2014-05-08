@@ -17,7 +17,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.7.2-1.0.0.11"
+version = "1.7.2-1.0.0.12"
 group= "com.azanor.baubles" 
 archivesBaseName = "Baubles"
 
