@@ -19,8 +19,9 @@ public class EventHandlerEntity  {
 			
 			InventoryBaubles baubles = PlayerHandler.getPlayerBaubles(player);
 			for (int a=0;a<baubles.getSizeInventory();a++) {
-				if (baubles.getStackInSlot(a)!=null && baubles.getStackInSlot(a).getItem() instanceof IBauble) {
-					((IBauble)baubles.getStackInSlot(a).getItem()).onWornTick(baubles.getStackInSlot(a), player);
+				ItemStack bauble = baubles.getStackInSlot(a);
+				if (bauble!=null && bauble.getItem() instanceof IBauble) {
+					((IBauble)bauble.getItem()).onWornTick(bauble, player);
 				}
 			}
 			
@@ -29,10 +30,17 @@ public class EventHandlerEntity  {
 	}
 	
 	@SubscribeEvent
-	public void playerDeath(LivingDeathEvent event) {
+	public void playerDeath(LivingDropsEvent event) {
 		if (event.entity instanceof EntityPlayer && !event.entity.worldObj.isRemote) {
 			EntityPlayer player = (EntityPlayer)event.entity;
-			PlayerHandler.getPlayerBaubles(player).dropItems(player);
+			
+			InventoryBaubles baubles = PlayerHandler.getPlayerBaubles(player);
+			for (int a=0;a<baubles.getSizeInventory();a++) {
+				ItemStack bauble = baubles.getStackInSlot(a);
+				if (bauble!=null) {
+					drops.add(bauble);
+				}
+			}
 		}
 	}
 		
