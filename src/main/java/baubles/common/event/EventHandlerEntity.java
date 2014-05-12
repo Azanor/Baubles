@@ -1,7 +1,7 @@
 package baubles.common.event;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import baubles.api.IBauble;
 import baubles.common.container.InventoryBaubles;
@@ -29,7 +29,7 @@ public class EventHandlerEntity  {
 	}
 	
 	@SubscribeEvent
-	public void playerDeath(LivingDeathEvent event) {
+	public void playerDeath(PlayerDropsEvent event) {
 		if (event.entity instanceof EntityPlayer && !event.entity.worldObj.isRemote && !event.entity.worldObj.getGameRules().getGameRuleBooleanValue("keepInventory")) {
 			EntityPlayer player = (EntityPlayer)event.entity;
 			PlayerHandler.getPlayerBaubles(player).dropItems(player);
