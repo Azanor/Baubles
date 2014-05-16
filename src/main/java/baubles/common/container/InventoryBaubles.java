@@ -148,6 +148,7 @@ public class InventoryBaubles implements IInventory {
 	 */
 	@Override
 	public void markDirty() {	
+		
 		try {
 			PlayerHandler.savePlayerBaubles(player.get());
 		} catch (Exception e) {		}
