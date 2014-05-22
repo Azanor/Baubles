@@ -10,13 +10,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
 import baubles.common.lib.PlayerHandler;
 
 public class PacketSyncBauble extends AbstractPacket {
 	
 	int slot;
-	int dim, playerId;
+	int playerId;
 	ItemStack bauble=null;
 	
 	public PacketSyncBauble() {}
@@ -25,14 +24,12 @@ public class PacketSyncBauble extends AbstractPacket {
 		this.slot = slot;
 		this.bauble = PlayerHandler.getPlayerBaubles(player).getStackInSlot(slot);
 		this.playerId = player.getEntityId();
-		this.dim = player.dimension;
 	}
 
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
 		buffer.writeByte(slot);
 		buffer.writeInt(playerId);
-		buffer.writeInt(dim);
 		PacketBuffer pb = new PacketBuffer(buffer);
 		try { pb.writeItemStackToBuffer(bauble); } catch (IOException e) {}
 	}
@@ -42,18 +39,15 @@ public class PacketSyncBauble extends AbstractPacket {
 	{
 		slot = buffer.readByte();
 		playerId = buffer.readInt();
-		dim = buffer.readInt();
 		PacketBuffer pb = new PacketBuffer(buffer);
 		try { bauble = pb.readItemStackFromBuffer(); } catch (IOException e) {}
 	}
 
 	@Override
 	public void handleClientSide(EntityPlayer player) {
-		World world = DimensionManager.getWorld(dim);
+		World world = player.worldObj;
 		if (world==null) return;
-		
 		Entity p = world.getEntityByID(playerId);
-        
 		if (p !=null && p instanceof EntityPlayer) {
 			PlayerHandler.getPlayerBaubles((EntityPlayer) p).stackList[slot]=bauble;
 		}

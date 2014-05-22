@@ -1,14 +1,16 @@
 package baubles.common.container;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.MathHelper;
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import baubles.common.Baubles;
@@ -230,10 +232,17 @@ public class InventoryBaubles implements IInventory {
 		}
 	}
 
-	public void dropItems(EntityPlayer player) {
+	public void dropItems(ArrayList<EntityItem> drops) {
 		for (int i = 0; i < 4; ++i) {
 			if (this.stackList[i] != null) {
-				player.dropPlayerItemWithRandomChoice(this.stackList[i], true);
+				EntityItem ei = new EntityItem(player.get().worldObj, player.get().posX,player.get().posY+player.get().eyeHeight,player.get().posZ,this.stackList[i].copy());
+				ei.delayBeforeCanPickup = 40;
+				float f1 = player.get().worldObj.rand.nextFloat() * 0.5F;
+                float f2 = player.get().worldObj.rand.nextFloat() * (float)Math.PI * 2.0F;
+                ei.motionX = (double)(-MathHelper.sin(f2) * f1);
+                ei.motionZ = (double)(MathHelper.cos(f2) * f1);
+                ei.motionY = 0.20000000298023224D;
+				drops.add(ei);
 				this.stackList[i] = null;
 				syncSlotToClients(i);
 			}
@@ -242,8 +251,9 @@ public class InventoryBaubles implements IInventory {
 	
 	public void syncSlotToClients(int slot) {
 		try {
-			if (Baubles.proxy.getClientWorld()==null)
+			if (Baubles.proxy.getClientWorld()==null) {
 				Baubles.packetPipeline.sendToAll(new PacketSyncBauble(player.get(),slot));
+			}
 		} catch (Exception e) { e.printStackTrace();	}
 	}
 }

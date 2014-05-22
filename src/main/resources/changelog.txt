@@ -1,3 +1,6 @@
+1.0.0.14
+- prevent loss of non-baubles items on death
+
 1.0.0.13
 - properly clear player baubles inventory before he enters the world and reset file pointers
 - only attempt to load or save baubles server-side
