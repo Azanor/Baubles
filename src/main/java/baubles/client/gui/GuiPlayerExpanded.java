@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
@@ -84,6 +85,16 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
         int k = this.guiLeft;
         int l = this.guiTop;
         this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
+        
+        for (int i1 = 0; i1 < this.inventorySlots.inventorySlots.size(); ++i1)
+        {
+            Slot slot = (Slot)this.inventorySlots.inventorySlots.get(i1);
+            if (slot.getHasStack() && slot.getSlotStackLimit()==1)
+            {
+            	this.drawTexturedModalRect(k+slot.xDisplayPosition, l+slot.yDisplayPosition, 200, 0, 16, 16);
+            }
+        }
+        
         drawPlayerModel(k + 51, l + 75, 30, (float)(k + 51) - this.xSizeFloat, (float)(l + 75 - 50) - this.ySizeFloat, this.mc.thePlayer);
     }
 

@@ -1,3 +1,6 @@
+1.0.0.15
+- hide slot background when drawing slots with items in baubles inventory
+
 1.0.0.14
 - prevent loss of non-baubles items on death
 
