@@ -1,7 +1,6 @@
 package baubles.common.network;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
 
 import java.io.IOException;
 
@@ -10,9 +9,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.World;
+import baubles.common.Baubles;
 import baubles.common.lib.PlayerHandler;
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 
-public class PacketSyncBauble extends AbstractPacket {
+public class PacketSyncBauble implements IMessage, IMessageHandler<PacketSyncBauble, IMessage> {
 	
 	int slot;
 	int playerId;
@@ -27,7 +30,7 @@ public class PacketSyncBauble extends AbstractPacket {
 	}
 
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
+	public void toBytes(ByteBuf buffer) {
 		buffer.writeByte(slot);
 		buffer.writeInt(playerId);
 		PacketBuffer pb = new PacketBuffer(buffer);
@@ -35,7 +38,7 @@ public class PacketSyncBauble extends AbstractPacket {
 	}
 
 	@Override
-	public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer) 
+	public void fromBytes(ByteBuf buffer) 
 	{
 		slot = buffer.readByte();
 		playerId = buffer.readInt();
@@ -44,17 +47,15 @@ public class PacketSyncBauble extends AbstractPacket {
 	}
 
 	@Override
-	public void handleClientSide(EntityPlayer player) {
-		World world = player.worldObj;
-		if (world==null) return;
-		Entity p = world.getEntityByID(playerId);
+	public IMessage onMessage(PacketSyncBauble message, MessageContext ctx) {
+		World world = Baubles.proxy.getClientWorld();
+		if (world==null) return null;
+		Entity p = world.getEntityByID(message.playerId);
 		if (p !=null && p instanceof EntityPlayer) {
-			PlayerHandler.getPlayerBaubles((EntityPlayer) p).stackList[slot]=bauble;
+			PlayerHandler.getPlayerBaubles((EntityPlayer) p).stackList[message.slot]=message.bauble;
 		}
+		return null;
 	}
-
-	@Override
-	public void handleServerSide(EntityPlayer player) {}
 
 
 }

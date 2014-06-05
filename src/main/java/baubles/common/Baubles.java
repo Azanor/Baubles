@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 import baubles.common.event.EventHandlerEntity;
 import baubles.common.network.EventHandlerNetwork;
-import baubles.common.network.PacketPipeline;
+import baubles.common.network.PacketHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -20,13 +20,13 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
-@Mod(modid = Baubles.MODID, name = Baubles.MODNAME, version = Baubles.VERSION, dependencies="required-after:Forge@[10.12.0.1056,);")
+@Mod(modid = Baubles.MODID, name = Baubles.MODNAME, version = Baubles.VERSION, dependencies="required-after:Forge@[10.12.1.1110,);")
 
 public class Baubles {
 	
 	public static final String MODID = "Baubles";
 	public static final String MODNAME = "Baubles";
-	public static final String VERSION = "1.0.0.15";
+	public static final String VERSION = "1.0.0.16";
 
 	@SidedProxy(clientSide = "baubles.client.ClientProxy", serverSide = "baubles.common.CommonProxy")
 	public static CommonProxy proxy;
@@ -39,7 +39,6 @@ public class Baubles {
 	public EventHandlerEntity entityEventHandler;
 	public File modDir;
 	
-	public static final PacketPipeline packetPipeline = new PacketPipeline();
 	public static final Logger log = LogManager.getLogger("Baubles");
 	public static final int GUI = 0;
 	
@@ -56,6 +55,8 @@ public class Baubles {
 			if (Config.config!=null) Config.save();
 		}
 		
+		PacketHandler.init();
+		
 		entityEventHandler = new EventHandlerEntity();
 		
 		MinecraftForge.EVENT_BUS.register(entityEventHandler);
@@ -69,7 +70,6 @@ public class Baubles {
 
 	@EventHandler
 	public void init(FMLInitializationEvent evt) {
-		packetPipeline.initialise();
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
   		proxy.registerKeyBindings();
 	}
@@ -77,7 +77,6 @@ public class Baubles {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent evt) {
 		Config.initRecipe();
-		packetPipeline.postInitialise();
 	}
 		
 }

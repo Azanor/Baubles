@@ -1,3 +1,7 @@
+1.0.0.16
+- switch to SimpleNetworkWrapper
+- now requires Forge 10.12.1.1110
+
 1.0.0.15
 - hide slot background when drawing slots with items in baubles inventory
 

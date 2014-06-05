@@ -15,6 +15,7 @@ import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import baubles.common.Baubles;
 import baubles.common.lib.PlayerHandler;
+import baubles.common.network.PacketHandler;
 import baubles.common.network.PacketSyncBauble;
 
 public class InventoryBaubles implements IInventory {
@@ -252,7 +253,7 @@ public class InventoryBaubles implements IInventory {
 	public void syncSlotToClients(int slot) {
 		try {
 			if (Baubles.proxy.getClientWorld()==null) {
-				Baubles.packetPipeline.sendToAll(new PacketSyncBauble(player.get(),slot));
+				PacketHandler.INSTANCE.sendToAll(new PacketSyncBauble(player.get(),slot));
 			}
 		} catch (Exception e) { e.printStackTrace();	}
 	}
