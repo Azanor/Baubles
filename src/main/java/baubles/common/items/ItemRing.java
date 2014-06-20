@@ -76,7 +76,7 @@ public class ItemRing  extends Item implements IBauble
 	@Override
 	public void onWornTick(ItemStack itemstack, EntityLivingBase player) {
 		if (itemstack.getItemDamage()==0 && !player.isPotionActive(Potion.digSpeed)) {
-			player.addPotionEffect(new PotionEffect(Potion.digSpeed.id,40,0));
+			player.addPotionEffect(new PotionEffect(Potion.digSpeed.id,40,0,true));
 		}
 	}
 
