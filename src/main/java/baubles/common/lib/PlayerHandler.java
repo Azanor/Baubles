@@ -34,7 +34,7 @@ public class PlayerHandler {
 	public static File getFileFromPlayer(EntityPlayer player)
     {
 		try {
-			File playersDirectory = new File(player.worldObj.getSaveHandler().getWorldDirectory(), "players");
+			File playersDirectory = new File(player.worldObj.getSaveHandler().getWorldDirectory(), "playerdata");
 			return new File(playersDirectory, player.getCommandSenderName() + ".baub");
 		} catch (Exception e) { e.printStackTrace(); }
 		return null;
@@ -43,7 +43,7 @@ public class PlayerHandler {
 	public static File getBackupFileFromPlayer(EntityPlayer player)
     {
 		try {
-			File playersDirectory = new File(player.worldObj.getSaveHandler().getWorldDirectory(), "players");
+			File playersDirectory = new File(player.worldObj.getSaveHandler().getWorldDirectory(), "playerdata");
 			return new File(playersDirectory, player.getCommandSenderName() + ".baubback");
 		} catch (Exception e) { e.printStackTrace(); }
         return null;
