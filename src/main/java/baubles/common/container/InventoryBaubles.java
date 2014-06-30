@@ -129,6 +129,9 @@ public class InventoryBaubles implements IInventory {
 	 */
 	@Override
 	public void setInventorySlotContents(int par1, ItemStack stack) {
+		if(this.stackList[par1] != null) {
+        	    ((IBauble)stackList[par1].getItem()).onUnequipped(stackList[par1], player.get());
+		}
 		this.stackList[par1] = stack;
 		if (stack !=null && stack.getItem() instanceof IBauble) {
 			((IBauble)stack.getItem()).onEquipped(stack, player.get());
