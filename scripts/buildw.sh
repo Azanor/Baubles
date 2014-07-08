@@ -1,1 +1,1 @@
-bash gradlew setupDecompWorkspace && bash gradlew eclipse
+gradlew setupDecompWorkspace && gradlew eclipse
