@@ -1,11 +1,7 @@
-Baubles
-=======
+![logo](http://i.imgur.com/zByZdks.png)
 
-A mod api that adds 4 bauble slots to the players inventory.
+Baubles is a small addon mod and API that is intended to be used by other mods to add additional inventory slots to a character.
 
-The mod has no real content - the idea is that other mods will use this one and its API to add their own baubles.
+![demo](http://i.imgur.com/lL1kdZh.png)
 
-The 4 slots added are an amulet, belt and 2 ring slots.
-
-Baubles is distributed under the Attribution-NonCommercial-ShareAlike 3.0 Unported (CC BY-NC-SA 3.0) license.
-
+It adds 4 new slots: an amulet, belt and two rings slots. The baubles inventory is accessed by pressing the 'b' hotkey. It is probably a good idea to remap your normal inventory hotkey to the baubles inventory if you are going to be accessing it a lot.
