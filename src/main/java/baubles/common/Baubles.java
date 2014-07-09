@@ -38,7 +38,7 @@ public class Baubles {
 	public EventHandlerNetwork networkEventHandler;
 	public EventHandlerEntity entityEventHandler;
 
-	public static final Logger log = LogManager.getLogger("Baubles");
+	public static final Logger logger = LogManager.getLogger(modid);
 	public static final int GUI = 0;
 
 	public static CreativeTabs tabBaubles = new CreativeTabs(modid) {

@@ -35,7 +35,7 @@ public class PlayerHandler {
 			File playersDirectory = new File(player.worldObj.getSaveHandler().getWorldDirectory(), "players");
 			return new File(playersDirectory, player.getCommandSenderName() + ".baub");
 		} catch (Exception e) {
-			e.printStackTrace();
+			Baubles.logger.error("Could not load data!", e);
 		}
 		return null;
 	}
@@ -45,7 +45,7 @@ public class PlayerHandler {
 			File playersDirectory = new File(player.worldObj.getSaveHandler().getWorldDirectory(), "players");
 			return new File(playersDirectory, player.getCommandSenderName() + ".baubback");
 		} catch (Exception e) {
-			e.printStackTrace();
+			Baubles.logger.error("Could not load data!", e);
 		}
 		return null;
 	}
@@ -62,12 +62,12 @@ public class PlayerHandler {
 						data = CompressedStreamTools.readCompressed(fileinputstream);
 						fileinputstream.close();
 					} catch (Exception e) {
-						e.printStackTrace();
+						Baubles.logger.error("Could not load data!", e);
 					}
 				}
 
 				if (file == null || !file.exists() || data == null || data.hasNoTags()) {
-					Baubles.log.warn("Data not found for " + player.getCommandSenderName() + ". Trying to load backup data.");
+					Baubles.logger.warn("Data not found for " + player.getCommandSenderName() + ". Trying to load backup data.");
 					file = getBackupFileFromPlayer(player);
 					if (file != null && file.exists()) {
 						try {
@@ -76,13 +76,13 @@ public class PlayerHandler {
 							fileinputstream.close();
 							save = true;
 						} catch (Exception e) {
-							e.printStackTrace();
+							Baubles.logger.error("Could not load data!", e);
 						}
 					}
 				}
 
 				if (file == null || !file.exists() || data == null || data.hasNoTags()) { // legacy data
-					Baubles.log.warn("Data not found for " + player.getCommandSenderName() + ". Trying to load legacy data.");
+					Baubles.logger.warn("Data not found for " + player.getCommandSenderName() + ". Trying to load legacy data.");
 					data = player.getEntityData();
 					save = true;
 				}
@@ -94,9 +94,8 @@ public class PlayerHandler {
 					if (save)
 						savePlayerBaubles(player);
 				}
-			} catch (Exception exception1) {
-				Baubles.log.fatal("Error loading baubles inventory");
-				exception1.printStackTrace();
+			} catch (Exception ex) {
+				Baubles.logger.fatal("Error loading baubles inventory!", ex);
 			}
 		}
 	}
@@ -109,7 +108,7 @@ public class PlayerHandler {
 					try {
 						file2.delete();
 					} catch (Exception e) {
-						Baubles.log.error("Could not delete backup file for player " + player.getCommandSenderName());
+						Baubles.logger.error("Could not delete backup file for player " + player.getCommandSenderName(), e);
 					}
 				}
 
@@ -119,7 +118,7 @@ public class PlayerHandler {
 					try {
 						file1.renameTo(file2);
 					} catch (Exception e) {
-						Baubles.log.error("Could not backup old baubles file for player " + player.getCommandSenderName());
+						Baubles.logger.error("Could not backup old baubles file for player " + player.getCommandSenderName(), e);
 					}
 				}
 
@@ -136,8 +135,7 @@ public class PlayerHandler {
 
 					}
 				} catch (Exception e) {
-					Baubles.log.error("Could not save baubles file for player " + player.getCommandSenderName());
-					e.printStackTrace();
+					Baubles.logger.error("Could not save baubles file for player " + player.getCommandSenderName(), e);
 					if (file1.exists()) {
 						try {
 							file1.delete();
@@ -146,9 +144,8 @@ public class PlayerHandler {
 						}
 					}
 				}
-			} catch (Exception exception1) {
-				Baubles.log.fatal("Error saving baubles inventory!");
-				exception1.printStackTrace();
+			} catch (Exception ex) {
+				Baubles.logger.fatal("Error saving baubles inventory!", ex);
 			}
 		}
 	}
