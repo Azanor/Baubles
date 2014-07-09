@@ -57,7 +57,7 @@ public class InventoryBaubles implements IInventory {
 	 */
 	@Override
 	public String getInventoryName() {
-		return ""; // modid?
+		return ""; // modid? null?
 	}
 
 	/**
@@ -70,8 +70,7 @@ public class InventoryBaubles implements IInventory {
 
 	/**
 	 * When some containers are closed they call this on each slot, then drop
-	 * whatever it returns as an EntityItem - like when you close a workbench
-	 * GUI.
+	 * whatever it returns as an EntityItem - like when you close a workbench GUI.
 	 */
 	@Override
 	public ItemStack getStackInSlotOnClosing(int par1) {

@@ -54,10 +54,9 @@ public class PacketSyncBauble implements IMessage, IMessageHandler<PacketSyncBau
 		World world = Baubles.proxy.getClientWorld();
 		if (world == null)
 			return null;
-		Entity p = world.getEntityByID(message.playerId);
-		if (p != null && p instanceof EntityPlayer) {
-			PlayerHandler.getPlayerBaubles((EntityPlayer) p).stackList[message.slot] = message.bauble;
-		}
+		EntityPlayer p = (EntityPlayer) world.getEntityByID(message.playerId);
+		if (p != null) // null check required?
+			PlayerHandler.getPlayerBaubles(p).stackList[message.slot] = message.bauble;
 		return null;
 	}
 }

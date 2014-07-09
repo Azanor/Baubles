@@ -56,10 +56,10 @@ public class ContainerPlayerExpanded extends Container {
 				}
 
 				@Override
-				public boolean isItemValid(ItemStack par1ItemStack) {
-					if (par1ItemStack == null)
+				public boolean isItemValid(ItemStack is) {
+					if (is == null)
 						return false;
-					return par1ItemStack.getItem().isValidArmor(par1ItemStack, k, thePlayer);
+					return is.getItem().isValidArmor(is, k, thePlayer);
 				}
 			});
 		}
@@ -114,7 +114,7 @@ public class ContainerPlayerExpanded extends Container {
 	}
 
 	@Override
-	public boolean canInteractWith(EntityPlayer par1EntityPlayer) {
+	public boolean canInteractWith(EntityPlayer player) {
 		return true;
 	}
 
@@ -123,7 +123,7 @@ public class ContainerPlayerExpanded extends Container {
 	 * you will crash when someone does that.
 	 */
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {
+	public ItemStack transferStackInSlot(EntityPlayer player, int par2) {
 		ItemStack itemstack = null;
 		Slot slot = (Slot) inventorySlots.get(par2);
 
@@ -194,7 +194,7 @@ public class ContainerPlayerExpanded extends Container {
 				return null;
 			}
 
-			slot.onPickupFromSlot(par1EntityPlayer, itemstack1);
+			slot.onPickupFromSlot(player, itemstack1);
 		}
 
 		return itemstack;
@@ -206,7 +206,7 @@ public class ContainerPlayerExpanded extends Container {
 		}
 	}
 
-	protected boolean mergeItemStack(ItemStack par1ItemStack, int par2, int par3, boolean par4, Slot ss) {
+	protected boolean mergeItemStack(ItemStack is, int par2, int par3, boolean par4, Slot ss) {
 		boolean flag1 = false;
 		int k = par2;
 
@@ -217,25 +217,25 @@ public class ContainerPlayerExpanded extends Container {
 		Slot slot;
 		ItemStack itemstack1;
 
-		if (par1ItemStack.isStackable()) {
-			while (par1ItemStack.stackSize > 0 && (!par4 && k < par3 || par4 && k >= par2)) {
+		if (is.isStackable()) {
+			while (is.stackSize > 0 && (!par4 && k < par3 || par4 && k >= par2)) {
 				slot = (Slot) inventorySlots.get(k);
 				itemstack1 = slot.getStack();
 
-				if (itemstack1 != null && itemstack1.getItem() == par1ItemStack.getItem() && (!par1ItemStack.getHasSubtypes() || par1ItemStack.getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(par1ItemStack, itemstack1)) {
-					int l = itemstack1.stackSize + par1ItemStack.stackSize;
-					if (l <= par1ItemStack.getMaxStackSize()) {
+				if (itemstack1 != null && itemstack1.getItem() == is.getItem() && (!is.getHasSubtypes() || is.getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(is, itemstack1)) {
+					int l = itemstack1.stackSize + is.stackSize;
+					if (l <= is.getMaxStackSize()) {
 						if (ss instanceof SlotBauble)
-							unequipBauble(par1ItemStack);
-						par1ItemStack.stackSize = 0;
+							unequipBauble(is);
+						is.stackSize = 0;
 						itemstack1.stackSize = l;
 						slot.onSlotChanged();
 						flag1 = true;
-					} else if (itemstack1.stackSize < par1ItemStack.getMaxStackSize()) {
+					} else if (itemstack1.stackSize < is.getMaxStackSize()) {
 						if (ss instanceof SlotBauble)
-							unequipBauble(par1ItemStack);
-						par1ItemStack.stackSize -= par1ItemStack.getMaxStackSize() - itemstack1.stackSize;
-						itemstack1.stackSize = par1ItemStack.getMaxStackSize();
+							unequipBauble(is);
+						is.stackSize -= is.getMaxStackSize() - itemstack1.stackSize;
+						itemstack1.stackSize = is.getMaxStackSize();
 						slot.onSlotChanged();
 						flag1 = true;
 					}
@@ -249,7 +249,7 @@ public class ContainerPlayerExpanded extends Container {
 			}
 		}
 
-		if (par1ItemStack.stackSize > 0) {
+		if (is.stackSize > 0) {
 			if (par4) {
 				k = par3 - 1;
 			} else {
@@ -262,10 +262,10 @@ public class ContainerPlayerExpanded extends Container {
 
 				if (itemstack1 == null) {
 					if (ss instanceof SlotBauble)
-						unequipBauble(par1ItemStack);
-					slot.putStack(par1ItemStack.copy());
+						unequipBauble(is);
+					slot.putStack(is.copy());
 					slot.onSlotChanged();
-					par1ItemStack.stackSize = 0;
+					is.stackSize = 0;
 					flag1 = true;
 					break;
 				}
@@ -281,7 +281,7 @@ public class ContainerPlayerExpanded extends Container {
 	}
 
 	@Override
-	public boolean func_94530_a(ItemStack par1ItemStack, Slot par2Slot) {
-		return par2Slot.inventory != craftResult && super.func_94530_a(par1ItemStack, par2Slot);
+	public boolean func_94530_a(ItemStack is, Slot slot) {
+		return slot.inventory != craftResult && super.func_94530_a(is, slot);
 	}
 }

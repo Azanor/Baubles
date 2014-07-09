@@ -22,7 +22,7 @@ public class BaublesApi {
 				getBaubles = Class.forName("baubles.common.lib.PlayerHandler").getMethod("getPlayerBaubles", EntityPlayer.class);
 			ot = (IInventory) getBaubles.invoke(null, player);
 		} catch (Exception e) {
-			FMLLog.warning("Could not invoke baubles.common.lib.PlayerHandler method getPlayerBaubles", e);
+			FMLLog.warning("Could not invoke baubles.common.lib.PlayerHandler method getPlayerBaubles!", e);
 		}
 		return ot;
 	}

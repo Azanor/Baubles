@@ -12,9 +12,6 @@ import cpw.mods.fml.common.FMLCommonHandler;
 
 public class ClientProxy extends CommonProxy {
 	@Override
-	public void registerHandlers() {}
-
-	@Override
 	public void registerKeyBindings() {
 		keyHandler = new KeyHandler();
 		FMLCommonHandler.instance().bus().register(keyHandler);

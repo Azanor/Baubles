@@ -59,7 +59,6 @@ public class Baubles {
 		MinecraftForge.EVENT_BUS.register(entityEventHandler);
 
 		FMLCommonHandler.instance().bus().register(new EventHandlerNetwork());
-		proxy.registerHandlers();
 	}
 
 	@EventHandler
