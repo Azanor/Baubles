@@ -18,15 +18,34 @@ buildscript {
 apply plugin: 'forge'
 
 version = "1.7.2-1.0.0.16"
-group= "com.azanor.baubles" 
+group= "com.azanor.baubles" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Baubles"
 
 minecraft {
-    version = "1.7.2-10.12.1.1110"
+    version = "1.7.2-10.12.2.1121"
     assetDir = "eclipse/assets"
 }
 
+dependencies {
+    // you may put jars on which you depend on in ./libs
+    // or you may define them like so..
+    //compile "some.group:artifact:version:classifier"
+    //compile "some.group:artifact:version"
+      
+    // real examples
+    //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev' // adds buildcraft to the dev env
+    //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
+
+    // for more info...
+    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
+    // http://www.gradle.org/docs/current/userguide/dependency_management.html
+}
+
 processResources {
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
@@ -39,26 +58,4 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
-}
-
-// generate developer jars
-task deobfJar(type: Jar) {
-    from(sourceSets.main.output) {
-        appendix = 'deobf' 
-    }
-} 
-
-// generate API library archive
-task apiZip(type: Zip) {   
-    from(sourceSets.main.java) {        
-        include "baubles/api/**"    
-     }    
-     classifier = 'api'
-}
-
-apiZip.mustRunAfter deobfJar
-
-artifacts { 
-    archives deobfJar 
-    archives apiZip
 }
