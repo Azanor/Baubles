@@ -23,17 +23,17 @@ public class InventoryBaubles implements IInventory {
 	private Container eventHandler;
 	public WeakReference<EntityPlayer> player;
 
-	public InventoryBaubles(EntityPlayer player) {
-		this.stackList = new ItemStack[4];
-		this.player = new WeakReference<EntityPlayer>(player);
+	public InventoryBaubles(EntityPlayer p) {
+		stackList = new ItemStack[4];
+		player = new WeakReference<EntityPlayer>(p);
 	}
 
 	public Container getEventHandler() {
 		return eventHandler;
 	}
 
-	public void setEventHandler(Container eventHandler) {
-		this.eventHandler = eventHandler;
+	public void setEventHandler(Container container) {
+		eventHandler = container;
 	}
 
 	/**
@@ -41,7 +41,7 @@ public class InventoryBaubles implements IInventory {
 	 */
 	@Override
 	public int getSizeInventory() {
-		return this.stackList.length;
+		return stackList.length;
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class InventoryBaubles implements IInventory {
 	 */
 	@Override
 	public ItemStack getStackInSlot(int par1) {
-		return par1 >= this.getSizeInventory() ? null : this.stackList[par1];
+		return par1 >= getSizeInventory() ? null : stackList[par1];
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class InventoryBaubles implements IInventory {
 	 */
 	@Override
 	public String getInventoryName() {
-		return "";
+		return ""; // modid?
 	}
 
 	/**
@@ -75,9 +75,9 @@ public class InventoryBaubles implements IInventory {
 	 */
 	@Override
 	public ItemStack getStackInSlotOnClosing(int par1) {
-		if (this.stackList[par1] != null) {
-			ItemStack itemstack = this.stackList[par1];
-			this.stackList[par1] = null;
+		if (stackList[par1] != null) {
+			ItemStack itemstack = stackList[par1];
+			stackList[par1] = null;
 			return itemstack;
 		} else {
 			return null;
@@ -90,31 +90,33 @@ public class InventoryBaubles implements IInventory {
 	 */
 	@Override
 	public ItemStack decrStackSize(int par1, int par2) {
-		if (this.stackList[par1] != null) {
+		if (stackList[par1] != null) {
 			ItemStack itemstack;
 
-			if (this.stackList[par1].stackSize <= par2) {
-				itemstack = this.stackList[par1];				
-				this.stackList[par1] = null;
-				
-				if (itemstack !=null && itemstack.getItem() instanceof IBauble) {
-					((IBauble)itemstack.getItem()).onUnequipped(itemstack, player.get());
+			if (stackList[par1].stackSize <= par2) {
+				itemstack = stackList[par1];
+				stackList[par1] = null;
+
+				if (itemstack != null && itemstack.getItem() instanceof IBauble) {
+					((IBauble) itemstack.getItem()).onUnequipped(itemstack, player.get());
 				}
-				
-				if (eventHandler!=null) this.eventHandler.onCraftMatrixChanged(this);
+
+				if (eventHandler != null)
+					eventHandler.onCraftMatrixChanged(this);
 				syncSlotToClients(par1);
 				return itemstack;
 			} else {
-				itemstack = this.stackList[par1].splitStack(par2);
-				
-				if (this.stackList[par1].stackSize == 0) {
-					this.stackList[par1] = null;
+				itemstack = stackList[par1].splitStack(par2);
+
+				if (stackList[par1].stackSize == 0) {
+					stackList[par1] = null;
 				}
 
-				if (itemstack !=null && itemstack.getItem() instanceof IBauble) {
-					((IBauble)itemstack.getItem()).onUnequipped(itemstack, player.get());
+				if (itemstack != null && itemstack.getItem() instanceof IBauble) {
+					((IBauble) itemstack.getItem()).onUnequipped(itemstack, player.get());
 				}
-				if (eventHandler!=null) this.eventHandler.onCraftMatrixChanged(this);
+				if (eventHandler != null)
+					eventHandler.onCraftMatrixChanged(this);
 				syncSlotToClients(par1);
 				return itemstack;
 			}
@@ -129,11 +131,12 @@ public class InventoryBaubles implements IInventory {
 	 */
 	@Override
 	public void setInventorySlotContents(int par1, ItemStack stack) {
-		this.stackList[par1] = stack;
-		if (stack !=null && stack.getItem() instanceof IBauble) {
-			((IBauble)stack.getItem()).onEquipped(stack, player.get());
+		stackList[par1] = stack;
+		if (stack != null && stack.getItem() instanceof IBauble) {
+			((IBauble) stack.getItem()).onEquipped(stack, player.get());
 		}
-		if (eventHandler!=null) this.eventHandler.onCraftMatrixChanged(this);
+		if (eventHandler != null)
+			eventHandler.onCraftMatrixChanged(this);
 		syncSlotToClients(par1);
 	}
 
@@ -150,11 +153,12 @@ public class InventoryBaubles implements IInventory {
 	 * to disk later - the game won't think it hasn't changed and skip it.
 	 */
 	@Override
-	public void markDirty() {	
-		
+	public void markDirty() {
 		try {
 			PlayerHandler.savePlayerBaubles(player.get());
-		} catch (Exception e) {		}
+		} catch (Exception e) {
+			// Baubles.log....
+		}
 	}
 
 	/**
@@ -167,14 +171,10 @@ public class InventoryBaubles implements IInventory {
 	}
 
 	@Override
-	public void openInventory() {
-		
-	}
+	public void openInventory() {}
 
 	@Override
-	public void closeInventory() {	
-		
-	}
+	public void closeInventory() {}
 
 	/**
 	 * Returns true if automation is allowed to insert the given stack (ignoring
@@ -182,17 +182,13 @@ public class InventoryBaubles implements IInventory {
 	 */
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack stack) {
-		if (stack == null || !(stack.getItem() instanceof IBauble)
-				|| !((IBauble) stack.getItem()).canEquip(stack, player.get()))
+		if (stack == null || !(stack.getItem() instanceof IBauble) || !((IBauble) stack.getItem()).canEquip(stack, player.get()))
 			return false;
-		if (i == 0
-				&& ((IBauble) stack.getItem()).getBaubleType(stack) == BaubleType.AMULET)
+		if (i == 0 && ((IBauble) stack.getItem()).getBaubleType(stack) == BaubleType.AMULET)
 			return true;
-		if ((i == 1 || i == 2)
-				&& ((IBauble) stack.getItem()).getBaubleType(stack) == BaubleType.RING)
+		if ((i == 1 || i == 2) && ((IBauble) stack.getItem()).getBaubleType(stack) == BaubleType.RING)
 			return true;
-		if (i == 3
-				&& ((IBauble) stack.getItem()).getBaubleType(stack) == BaubleType.BELT)
+		if (i == 3 && ((IBauble) stack.getItem()).getBaubleType(stack) == BaubleType.BELT)
 			return true;
 		return false;
 	}
@@ -201,15 +197,15 @@ public class InventoryBaubles implements IInventory {
 		NBTTagCompound tags = player.getEntityData();
 		saveNBT(tags);
 	}
-	
+
 	public void saveNBT(NBTTagCompound tags) {
 		NBTTagList tagList = new NBTTagList();
 		NBTTagCompound invSlot;
-		for (int i = 0; i < this.stackList.length; ++i) {
-			if (this.stackList[i] != null) {
+		for (int i = 0; i < stackList.length; ++i) {
+			if (stackList[i] != null) {
 				invSlot = new NBTTagCompound();
 				invSlot.setByte("Slot", (byte) i);
-				this.stackList[i].writeToNBT(invSlot);
+				stackList[i].writeToNBT(invSlot);
 				tagList.appendTag(invSlot);
 			}
 		}
@@ -220,41 +216,41 @@ public class InventoryBaubles implements IInventory {
 		NBTTagCompound tags = player.getEntityData();
 		readNBT(tags);
 	}
-	
+
 	public void readNBT(NBTTagCompound tags) {
 		NBTTagList tagList = tags.getTagList("Baubles.Inventory", 10);
 		for (int i = 0; i < tagList.tagCount(); ++i) {
-			NBTTagCompound nbttagcompound = (NBTTagCompound) tagList.getCompoundTagAt(i);
-			int j = nbttagcompound.getByte("Slot") & 255;
-			ItemStack itemstack = ItemStack.loadItemStackFromNBT(nbttagcompound);
-			if (itemstack != null) {
-				this.stackList[j] = itemstack;
-			}
+			NBTTagCompound nbt = (NBTTagCompound) tagList.getCompoundTagAt(i);
+			ItemStack itemstack = ItemStack.loadItemStackFromNBT(nbt);
+			if (itemstack != null)
+				stackList[nbt.getByte("Slot") & 255] = itemstack;
 		}
 	}
 
 	public void dropItems(ArrayList<EntityItem> drops) {
 		for (int i = 0; i < 4; ++i) {
-			if (this.stackList[i] != null) {
-				EntityItem ei = new EntityItem(player.get().worldObj, player.get().posX,player.get().posY+player.get().eyeHeight,player.get().posZ,this.stackList[i].copy());
+			if (stackList[i] != null) {
+				EntityItem ei = new EntityItem(player.get().worldObj, player.get().posX, player.get().posY + player.get().eyeHeight, player.get().posZ, stackList[i].copy());
 				ei.delayBeforeCanPickup = 40;
 				float f1 = player.get().worldObj.rand.nextFloat() * 0.5F;
-                float f2 = player.get().worldObj.rand.nextFloat() * (float)Math.PI * 2.0F;
-                ei.motionX = (double)(-MathHelper.sin(f2) * f1);
-                ei.motionZ = (double)(MathHelper.cos(f2) * f1);
-                ei.motionY = 0.20000000298023224D;
+				float f2 = player.get().worldObj.rand.nextFloat() * (float) Math.PI * 2.0F;
+				ei.motionX = (double) (-MathHelper.sin(f2) * f1);
+				ei.motionZ = (double) (MathHelper.cos(f2) * f1);
+				ei.motionY = 0.20000000298023224D;
 				drops.add(ei);
-				this.stackList[i] = null;
+				stackList[i] = null;
 				syncSlotToClients(i);
 			}
 		}
 	}
-	
+
 	public void syncSlotToClients(int slot) {
 		try {
-			if (Baubles.proxy.getClientWorld()==null) {
-				PacketHandler.INSTANCE.sendToAll(new PacketSyncBauble(player.get(),slot));
+			if (Baubles.proxy.getClientWorld() == null) {
+				PacketHandler.INSTANCE.sendToAll(new PacketSyncBauble(player.get(), slot));
 			}
-		} catch (Exception e) { e.printStackTrace();	}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

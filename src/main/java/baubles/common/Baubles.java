@@ -1,13 +1,16 @@
 package baubles.common;
 
-import java.io.File;
-
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import baubles.common.event.EventHandlerEntity;
+import baubles.common.config.Config;
+import baubles.common.config.ConfigItems;
+import baubles.common.config.ConfigRecipes;
+import baubles.common.lib.event.EventHandlerEntity;
 import baubles.common.network.EventHandlerNetwork;
 import baubles.common.network.PacketHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -19,64 +22,55 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
-@Mod(modid = Baubles.MODID, name = Baubles.MODNAME, version = Baubles.VERSION, dependencies="required-after:Forge@[10.12.1.1110,);")
-
+@Mod(modid = Baubles.modid, name = Baubles.modid, version = Baubles.version, dependencies="required-after:Forge@[10.12.1.1110,);")
 public class Baubles {
-	
-	public static final String MODID = "Baubles";
-	public static final String MODNAME = "Baubles";
-	public static final String VERSION = "1.0.0.16";
+	public static final String modid = "Baubles", version = "1.0.0.16";
 
 	@SidedProxy(clientSide = "baubles.client.ClientProxy", serverSide = "baubles.common.CommonProxy")
 	public static CommonProxy proxy;
-	
-	@Instance(value=Baubles.MODID)
+
+	@Instance(modid)
 	public static Baubles instance;
-	
-	
+
 	public EventHandlerNetwork networkEventHandler;
 	public EventHandlerEntity entityEventHandler;
-	public File modDir;
-	
+
 	public static final Logger log = LogManager.getLogger("Baubles");
 	public static final int GUI = 0;
-	
-	@EventHandler
-	public void preInit(FMLPreInitializationEvent event) {
-		event.getModMetadata().version = Baubles.VERSION;
-		modDir = event.getModConfigurationDirectory();		
-		
-		try {
-			Config.initialize(event.getSuggestedConfigurationFile());
-		} catch (Exception e) {
-			Baubles.log.error("BAUBLES has a problem loading it's configuration");
-		} finally {
-			if (Config.config!=null) Config.save();
+
+	public static CreativeTabs tabBaubles = new CreativeTabs(modid) {
+		@Override
+		@SideOnly(Side.CLIENT)
+		public Item getTabIconItem() {
+			return ConfigItems.itemRing;
 		}
-		
+	};
+
+	@EventHandler
+	public void preInit(FMLPreInitializationEvent e) {
+		Config.init(e.getSuggestedConfigurationFile());
+
 		PacketHandler.init();
-		
+
 		entityEventHandler = new EventHandlerEntity();
-		
 		MinecraftForge.EVENT_BUS.register(entityEventHandler);
+
 		FMLCommonHandler.instance().bus().register(new EventHandlerNetwork());
 		proxy.registerHandlers();
-		
-		/////////////////////
-			
-		Config.save();
 	}
 
 	@EventHandler
-	public void init(FMLInitializationEvent evt) {
+	public void init(FMLInitializationEvent e) {
+		ConfigItems.init();
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
-  		proxy.registerKeyBindings();
+		proxy.registerKeyBindings();
 	}
 
 	@EventHandler
-	public void postInit(FMLPostInitializationEvent evt) {
-		Config.initRecipe();
+	public void postInit(FMLPostInitializationEvent e) {
+		ConfigRecipes.init();
 	}
-		
 }

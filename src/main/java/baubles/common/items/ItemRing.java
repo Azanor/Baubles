@@ -15,39 +15,40 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
+import baubles.common.Baubles;
 import baubles.common.container.InventoryBaubles;
 import baubles.common.lib.PlayerHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemRing  extends Item implements IBauble
-{
+public class ItemRing extends Item implements IBauble {
+	@SideOnly(Side.CLIENT)
+	public static IIcon icon;
 
-	public ItemRing()
-	{
+	public ItemRing() {
 		super();
-		this.setMaxStackSize(1);
-		this.setHasSubtypes(true);
-		this.setMaxDamage(0);
-		setCreativeTab(CreativeTabs.tabTools);
+		setMaxStackSize(1);
+		setHasSubtypes(true);
+		setMaxDamage(0);
+		setCreativeTab(Baubles.tabBaubles);
 	}
 
-	public IIcon icon;
-	@SideOnly(Side.CLIENT)
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister ir) {
 		icon = ir.registerIcon("baubles:ring");
 	}
-	@SideOnly(Side.CLIENT)
+
 	@Override
+	@SideOnly(Side.CLIENT)
 	public IIcon getIconFromDamage(int meta) {
 		return icon;
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs,List par3List) {
-		par3List.add(new ItemStack(this,1,0));
+	@SideOnly(Side.CLIENT)
+	public void getSubItems(Item i, CreativeTabs t, List l) {
+		l.add(new ItemStack(i, 1, 0));
 	}
 
 	@Override
@@ -57,12 +58,12 @@ public class ItemRing  extends Item implements IBauble
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
-		if(!par2World.isRemote) { 
+		if (!par2World.isRemote) {
 			InventoryBaubles baubles = PlayerHandler.getPlayerBaubles(par3EntityPlayer);
-			for(int i = 0; i < baubles.getSizeInventory(); i++)
-				if(baubles.getStackInSlot(i) == null && baubles.isItemValidForSlot(i, par1ItemStack)) {
+			for (int i = 0; i < baubles.getSizeInventory(); i++)
+				if (baubles.getStackInSlot(i) == null && baubles.isItemValidForSlot(i, par1ItemStack)) {
 					baubles.setInventorySlotContents(i, par1ItemStack.copy());
-					if(!par3EntityPlayer.capabilities.isCreativeMode){
+					if (!par3EntityPlayer.capabilities.isCreativeMode) {
 						par3EntityPlayer.inventory.setInventorySlotContents(par3EntityPlayer.inventory.currentItem, null);
 					}
 					onEquipped(par1ItemStack, par3EntityPlayer);
@@ -70,14 +71,13 @@ public class ItemRing  extends Item implements IBauble
 				}
 		}
 
-		return par1ItemStack;	
+		return par1ItemStack;
 	}
 
 	@Override
 	public void onWornTick(ItemStack itemstack, EntityLivingBase player) {
-		if (itemstack.getItemDamage()==0 && !player.isPotionActive(Potion.digSpeed)) {
-			player.addPotionEffect(new PotionEffect(Potion.digSpeed.id,40,0,true));
-		}
+		if (itemstack.getItemDamage() == 0 && !player.isPotionActive(Potion.digSpeed))
+			player.addPotionEffect(new PotionEffect(Potion.digSpeed.id, 40, 0, true));
 	}
 
 	@Override
@@ -91,8 +91,7 @@ public class ItemRing  extends Item implements IBauble
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack par1ItemStack)
-	{
+	public String getUnlocalizedName(ItemStack par1ItemStack) {
 		return super.getUnlocalizedName() + "." + par1ItemStack.getItemDamage();
 	}
 
@@ -104,17 +103,15 @@ public class ItemRing  extends Item implements IBauble
 	}
 
 	@Override
-	public void onUnequipped(ItemStack itemstack, EntityLivingBase player) {
-	}
-	
+	public void onUnequipped(ItemStack itemstack, EntityLivingBase player) {}
+
 	@Override
 	public boolean canEquip(ItemStack itemstack, EntityLivingBase player) {
 		return true;
 	}
-	
+
 	@Override
 	public boolean canUnequip(ItemStack itemstack, EntityLivingBase player) {
 		return true;
 	}
-
 }
