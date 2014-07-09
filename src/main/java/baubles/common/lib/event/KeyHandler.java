@@ -1,4 +1,4 @@
-package baubles.common.event;
+package baubles.common.lib.event;
 
 import net.minecraft.client.settings.KeyBinding;
 

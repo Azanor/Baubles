@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 import baubles.common.config.Config;
 import baubles.common.config.ConfigItems;
 import baubles.common.config.ConfigRecipes;
-import baubles.common.event.EventHandlerEntity;
+import baubles.common.lib.event.EventHandlerEntity;
 import baubles.common.network.EventHandlerNetwork;
 import baubles.common.network.PacketHandler;
 import cpw.mods.fml.common.FMLCommonHandler;

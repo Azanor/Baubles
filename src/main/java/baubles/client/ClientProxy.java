@@ -6,7 +6,7 @@ import net.minecraft.world.World;
 import baubles.client.gui.GuiPlayerExpanded;
 import baubles.common.Baubles;
 import baubles.common.CommonProxy;
-import baubles.common.event.KeyHandler;
+import baubles.common.lib.event.KeyHandler;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 
