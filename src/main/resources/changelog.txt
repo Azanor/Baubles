@@ -1,3 +1,8 @@
+1.0.1.0
+- update for MC 1.7.10
+- no requires Forge 10.13.0.1177
+- removed support for legacy save format and moved saving/loading to new forge events
+
 1.0.0.16
 - switch to SimpleNetworkWrapper
 - now requires Forge 10.12.1.1110

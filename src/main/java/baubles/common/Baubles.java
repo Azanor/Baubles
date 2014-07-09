@@ -8,9 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import baubles.common.event.EventHandlerEntity;
-import baubles.common.network.EventHandlerNetwork;
 import baubles.common.network.PacketHandler;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -20,13 +18,13 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
-@Mod(modid = Baubles.MODID, name = Baubles.MODNAME, version = Baubles.VERSION, dependencies="required-after:Forge@[10.12.1.1110,);")
+@Mod(modid = Baubles.MODID, name = Baubles.MODNAME, version = Baubles.VERSION, dependencies="required-after:Forge@[10.13.0.1177,);")
 
 public class Baubles {
 	
 	public static final String MODID = "Baubles";
 	public static final String MODNAME = "Baubles";
-	public static final String VERSION = "1.0.0.16";
+	public static final String VERSION = "1.0.1.0";
 
 	@SidedProxy(clientSide = "baubles.client.ClientProxy", serverSide = "baubles.common.CommonProxy")
 	public static CommonProxy proxy;
@@ -34,8 +32,6 @@ public class Baubles {
 	@Instance(value=Baubles.MODID)
 	public static Baubles instance;
 	
-	
-	public EventHandlerNetwork networkEventHandler;
 	public EventHandlerEntity entityEventHandler;
 	public File modDir;
 	
@@ -60,7 +56,6 @@ public class Baubles {
 		entityEventHandler = new EventHandlerEntity();
 		
 		MinecraftForge.EVENT_BUS.register(entityEventHandler);
-		FMLCommonHandler.instance().bus().register(new EventHandlerNetwork());
 		proxy.registerHandlers();
 		
 		/////////////////////
