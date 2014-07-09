@@ -13,6 +13,6 @@ public class ConfigItems {
 	}
 
 	private static void initItems() {
-		GameRegistry.registerItem(itemRing = (new ItemRing()).setUnlocalizedName("Ring"), "Ring", Baubles.modid);
+		GameRegistry.registerItem(itemRing = new ItemRing().setCreativeTab(Baubles.tabBaubles).setMaxStackSize(1).setUnlocalizedName("Ring"), "Ring");
 	}
 }

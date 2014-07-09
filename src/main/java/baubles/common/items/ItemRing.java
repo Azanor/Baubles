@@ -15,7 +15,6 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
-import baubles.common.Baubles;
 import baubles.common.container.InventoryBaubles;
 import baubles.common.lib.PlayerHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -25,18 +24,10 @@ public class ItemRing extends Item implements IBauble {
 	@SideOnly(Side.CLIENT)
 	public static IIcon icon;
 
-	public ItemRing() {
-		super();
-		setMaxStackSize(1);
-		setHasSubtypes(true);
-		setMaxDamage(0);
-		setCreativeTab(Baubles.tabBaubles);
-	}
-
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister ir) {
-		icon = ir.registerIcon("baubles:ring");
+	public void registerIcons(IIconRegister r) {
+		icon = r.registerIcon("baubles:ring");
 	}
 
 	@Override
@@ -52,66 +43,64 @@ public class ItemRing extends Item implements IBauble {
 	}
 
 	@Override
-	public BaubleType getBaubleType(ItemStack itemstack) {
+	public BaubleType getBaubleType(ItemStack is) {
 		return BaubleType.RING;
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
-		if (!par2World.isRemote) {
-			InventoryBaubles baubles = PlayerHandler.getPlayerBaubles(par3EntityPlayer);
+	public ItemStack onItemRightClick(ItemStack is, World world, EntityPlayer player) {
+		if (!world.isRemote) {
+			InventoryBaubles baubles = PlayerHandler.getPlayerBaubles(player);
 			for (int i = 0; i < baubles.getSizeInventory(); i++)
-				if (baubles.getStackInSlot(i) == null && baubles.isItemValidForSlot(i, par1ItemStack)) {
-					baubles.setInventorySlotContents(i, par1ItemStack.copy());
-					if (!par3EntityPlayer.capabilities.isCreativeMode) {
-						par3EntityPlayer.inventory.setInventorySlotContents(par3EntityPlayer.inventory.currentItem, null);
+				if (baubles.getStackInSlot(i) == null && baubles.isItemValidForSlot(i, is)) {
+					baubles.setInventorySlotContents(i, is.copy());
+					if (!player.capabilities.isCreativeMode) {
+						player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
 					}
-					onEquipped(par1ItemStack, par3EntityPlayer);
+					onEquipped(is, player);
 					break;
 				}
 		}
-
-		return par1ItemStack;
+		return is;
 	}
 
 	@Override
-	public void onWornTick(ItemStack itemstack, EntityLivingBase player) {
-		if (itemstack.getItemDamage() == 0 && !player.isPotionActive(Potion.digSpeed))
+	public void onWornTick(ItemStack is, EntityLivingBase player) {
+		if (is.getItemDamage() == 0 && !player.isPotionActive(Potion.digSpeed))
 			player.addPotionEffect(new PotionEffect(Potion.digSpeed.id, 40, 0, true));
 	}
 
 	@Override
-	public boolean hasEffect(ItemStack par1ItemStack, int a) {
+	public boolean hasEffect(ItemStack is, int a) {
 		return true;
 	}
 
 	@Override
-	public EnumRarity getRarity(ItemStack par1ItemStack) {
+	public EnumRarity getRarity(ItemStack is) {
 		return EnumRarity.rare;
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack par1ItemStack) {
-		return super.getUnlocalizedName() + "." + par1ItemStack.getItemDamage();
+	public String getUnlocalizedName(ItemStack is) {
+		return new StringBuilder().append(getUnlocalizedName()).append(".").append(is.getItemDamage()).toString();
 	}
 
 	@Override
-	public void onEquipped(ItemStack itemstack, EntityLivingBase player) {
-		if (!player.worldObj.isRemote) {
+	public void onEquipped(ItemStack is, EntityLivingBase player) {
+		if (!player.worldObj.isRemote)
 			player.worldObj.playSoundAtEntity(player, "random.orb", 0.1F, 1.3f);
-		}
 	}
 
 	@Override
-	public void onUnequipped(ItemStack itemstack, EntityLivingBase player) {}
+	public void onUnequipped(ItemStack is, EntityLivingBase player) {}
 
 	@Override
-	public boolean canEquip(ItemStack itemstack, EntityLivingBase player) {
+	public boolean canEquip(ItemStack is, EntityLivingBase player) {
 		return true;
 	}
 
 	@Override
-	public boolean canUnequip(ItemStack itemstack, EntityLivingBase player) {
+	public boolean canUnequip(ItemStack is, EntityLivingBase player) {
 		return true;
 	}
 }
