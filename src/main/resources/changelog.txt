@@ -1,3 +1,6 @@
+1.0.1.1
+- added backwards compatibility for legacy (pre 1.7.10) savefiles
+
 1.0.1.0
 - update for MC 1.7.10
 - no requires Forge 10.13.0.1177
