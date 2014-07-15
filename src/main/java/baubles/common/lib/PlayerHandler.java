@@ -14,7 +14,6 @@ import baubles.common.container.InventoryBaubles;
 import com.google.common.io.Files;
 
 public class PlayerHandler {
-
 	private static HashMap<String, InventoryBaubles> playerBaubles = new HashMap<String, InventoryBaubles>();
 
 	public static void clearPlayerBaubles(EntityPlayer player) {
@@ -29,8 +28,7 @@ public class PlayerHandler {
 		return playerBaubles.get(player.getCommandSenderName());
 	}
 
-	public static void setPlayerBaubles(EntityPlayer player,
-			InventoryBaubles inventory) {
+	public static void setPlayerBaubles(EntityPlayer player, InventoryBaubles inventory) {
 		playerBaubles.put(player.getCommandSenderName(), inventory);
 	}
 
@@ -41,27 +39,20 @@ public class PlayerHandler {
 				boolean save = false;
 				if (file1 != null && file1.exists()) {
 					try {
-						FileInputStream fileinputstream = new FileInputStream(
-								file1);
-						data = CompressedStreamTools
-								.readCompressed(fileinputstream);
+						FileInputStream fileinputstream = new FileInputStream(file1);
+						data = CompressedStreamTools.readCompressed(fileinputstream);
 						fileinputstream.close();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
 
-				if (file1 == null || !file1.exists() || data == null
-						|| data.hasNoTags()) {
-					Baubles.log.warn("Data not found for "
-							+ player.getCommandSenderName()
-							+ ". Trying to load backup data.");
+				if (file1 == null || !file1.exists() || data == null || data.hasNoTags()) {
+					Baubles.logger.warn("Data not found for " + player.getCommandSenderName() + ". Trying to load backup data.");
 					if (file2 != null && file2.exists()) {
 						try {
-							FileInputStream fileinputstream = new FileInputStream(
-									file2);
-							data = CompressedStreamTools
-									.readCompressed(fileinputstream);
+							FileInputStream fileinputstream = new FileInputStream(file2);
+							data = CompressedStreamTools.readCompressed(fileinputstream);
 							fileinputstream.close();
 							save = true;
 						} catch (Exception e) {
@@ -78,7 +69,7 @@ public class PlayerHandler {
 						savePlayerBaubles(player, file1, file2);
 				}
 			} catch (Exception exception1) {
-				Baubles.log.fatal("Error loading baubles inventory");
+				Baubles.logger.fatal("Error loading baubles inventory");
 				exception1.printStackTrace();
 			}
 		}
@@ -91,9 +82,7 @@ public class PlayerHandler {
 					try {
 						Files.copy(file1, file2);
 					} catch (Exception e) {
-						Baubles.log
-								.error("Could not backup old baubles file for player "
-										+ player.getCommandSenderName());
+						Baubles.logger.error("Could not backup old baubles file for player " + player.getCommandSenderName(), e);
 					}
 				}
 
@@ -103,16 +92,13 @@ public class PlayerHandler {
 						NBTTagCompound data = new NBTTagCompound();
 						inventory.saveNBT(data);
 
-						FileOutputStream fileoutputstream = new FileOutputStream(
-								file1);
-						CompressedStreamTools.writeCompressed(data,
-								fileoutputstream);
+						FileOutputStream fileoutputstream = new FileOutputStream(file1);
+						CompressedStreamTools.writeCompressed(data, fileoutputstream);
 						fileoutputstream.close();
 
 					}
 				} catch (Exception e) {
-					Baubles.log.error("Could not save baubles file for player "
-							+ player.getCommandSenderName());
+					Baubles.logger.error("Could not save baubles file for player " + player.getCommandSenderName());
 					e.printStackTrace();
 					if (file1.exists()) {
 						try {
@@ -122,7 +108,7 @@ public class PlayerHandler {
 					}
 				}
 			} catch (Exception exception1) {
-				Baubles.log.fatal("Error saving baubles inventory");
+				Baubles.logger.fatal("Error saving baubles inventory");
 				exception1.printStackTrace();
 			}
 		}

@@ -20,101 +20,91 @@ import baubles.common.lib.PlayerHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemRing  extends Item implements IBauble
-{
+public class ItemRing extends Item implements IBauble {
+	@SideOnly(Side.CLIENT)
+	public static IIcon icon[];
 
-	public ItemRing()
-	{
-		super();
-		this.setMaxStackSize(1);
-		this.setHasSubtypes(true);
-		this.setMaxDamage(0);
-		setCreativeTab(CreativeTabs.tabTools);
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IIconRegister r) {
+		icon = new IIcon[1];
+		icon[0] = r.registerIcon("baubles:ring");
 	}
 
-	public IIcon icon;
-	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerIcons(IIconRegister ir) {
-		icon = ir.registerIcon("baubles:ring");
-	}
 	@SideOnly(Side.CLIENT)
-	@Override
 	public IIcon getIconFromDamage(int meta) {
-		return icon;
+		return icon[meta];
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
-	@Override
-	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs,List par3List) {
-		par3List.add(new ItemStack(this,1,0));
+	public void getSubItems(Item i, CreativeTabs t, List l) {
+		l.add(new ItemStack(i, 1, 0));
 	}
 
 	@Override
-	public BaubleType getBaubleType(ItemStack itemstack) {
+	public BaubleType getBaubleType(ItemStack is) {
 		return BaubleType.RING;
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
-		if(!par2World.isRemote) { 
-			InventoryBaubles baubles = PlayerHandler.getPlayerBaubles(par3EntityPlayer);
-			for(int i = 0; i < baubles.getSizeInventory(); i++)
-				if(baubles.getStackInSlot(i) == null && baubles.isItemValidForSlot(i, par1ItemStack)) {
-					baubles.setInventorySlotContents(i, par1ItemStack.copy());
-					if(!par3EntityPlayer.capabilities.isCreativeMode){
-						par3EntityPlayer.inventory.setInventorySlotContents(par3EntityPlayer.inventory.currentItem, null);
+	public ItemStack onItemRightClick(ItemStack is, World world, EntityPlayer player) {
+		if (!world.isRemote) {
+			InventoryBaubles baubles = PlayerHandler.getPlayerBaubles(player);
+			for (int i = 0; i < baubles.getSizeInventory(); i++)
+				if (baubles.getStackInSlot(i) == null && baubles.isItemValidForSlot(i, is)) {
+					baubles.setInventorySlotContents(i, is.copy());
+					if (!player.capabilities.isCreativeMode) {
+						player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
 					}
-					onEquipped(par1ItemStack, par3EntityPlayer);
+					onEquipped(is, player);
 					break;
 				}
 		}
 
-		return par1ItemStack;	
+		return is;
 	}
 
 	@Override
-	public void onWornTick(ItemStack itemstack, EntityLivingBase player) {
-		if (itemstack.getItemDamage()==0 && !player.isPotionActive(Potion.digSpeed)) {
-			player.addPotionEffect(new PotionEffect(Potion.digSpeed.id,40,0,true));
+	public void onWornTick(ItemStack is, EntityLivingBase player) {
+		if (is.getItemDamage() == 0 && !player.isPotionActive(Potion.digSpeed)) {
+			player.addPotionEffect(new PotionEffect(Potion.digSpeed.id, 40, 0, true));
 		}
 	}
 
 	@Override
-	public boolean hasEffect(ItemStack par1ItemStack, int a) {
+	public boolean hasEffect(ItemStack is, int a) {
 		return true;
 	}
 
 	@Override
-	public EnumRarity getRarity(ItemStack par1ItemStack) {
+	public EnumRarity getRarity(ItemStack is) {
 		return EnumRarity.rare;
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack par1ItemStack)
-	{
-		return super.getUnlocalizedName() + "." + par1ItemStack.getItemDamage();
+	public String getUnlocalizedName(ItemStack is) {
+		return super.getUnlocalizedName() + "." + is.getItemDamage();
 	}
 
 	@Override
-	public void onEquipped(ItemStack itemstack, EntityLivingBase player) {
+	public void onEquipped(ItemStack is, EntityLivingBase player) {
 		if (!player.worldObj.isRemote) {
 			player.worldObj.playSoundAtEntity(player, "random.orb", 0.1F, 1.3f);
 		}
 	}
 
 	@Override
-	public void onUnequipped(ItemStack itemstack, EntityLivingBase player) {
-	}
-	
+	public void onUnequipped(ItemStack is, EntityLivingBase player) {}
+
 	@Override
-	public boolean canEquip(ItemStack itemstack, EntityLivingBase player) {
-		return true;
-	}
-	
-	@Override
-	public boolean canUnequip(ItemStack itemstack, EntityLivingBase player) {
+	public boolean canEquip(ItemStack is, EntityLivingBase player) {
 		return true;
 	}
 
+	@Override
+	public boolean canUnequip(ItemStack is, EntityLivingBase player) {
+		return true;
+	}
 }
