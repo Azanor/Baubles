@@ -49,16 +49,16 @@ public class ItemRing extends Item implements IBauble {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack is, World par2World, EntityPlayer par3EntityPlayer) {
-		if (!par2World.isRemote) {
-			InventoryBaubles baubles = PlayerHandler.getPlayerBaubles(par3EntityPlayer);
+	public ItemStack onItemRightClick(ItemStack is, World world, EntityPlayer player) {
+		if (!world.isRemote) {
+			InventoryBaubles baubles = PlayerHandler.getPlayerBaubles(player);
 			for (int i = 0; i < baubles.getSizeInventory(); i++)
 				if (baubles.getStackInSlot(i) == null && baubles.isItemValidForSlot(i, is)) {
 					baubles.setInventorySlotContents(i, is.copy());
-					if (!par3EntityPlayer.capabilities.isCreativeMode) {
-						par3EntityPlayer.inventory.setInventorySlotContents(par3EntityPlayer.inventory.currentItem, null);
+					if (!player.capabilities.isCreativeMode) {
+						player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
 					}
-					onEquipped(is, par3EntityPlayer);
+					onEquipped(is, player);
 					break;
 				}
 		}

@@ -20,7 +20,7 @@ public class Config {
 	public static Item itemRing;
 
 	public static String itemName[] = {
-		"ring"
+		"Ring"
 	};
 
 	public static void preInit(File configFile) {
