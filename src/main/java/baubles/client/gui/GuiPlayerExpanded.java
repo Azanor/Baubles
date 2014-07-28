@@ -21,7 +21,7 @@ import baubles.common.container.ContainerPlayerExpanded;
 
 public class GuiPlayerExpanded extends InventoryEffectRenderer {
 	
-	protected static final ResourceLocation background = 
+	public static final ResourceLocation background = 
 			new ResourceLocation("baubles","textures/gui/expanded_inventory.png");
     
 	/**

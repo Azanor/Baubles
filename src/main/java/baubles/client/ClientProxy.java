@@ -4,6 +4,8 @@ package baubles.client;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import baubles.client.gui.GuiEvents;
 import baubles.client.gui.GuiPlayerExpanded;
 import baubles.common.Baubles;
 import baubles.common.CommonProxy;
@@ -20,6 +22,7 @@ public class ClientProxy extends CommonProxy {
 	public void registerKeyBindings() {
 		keyHandler = new KeyHandler();
 		FMLCommonHandler.instance().bus().register(keyHandler);
+		MinecraftForge.EVENT_BUS.register(new GuiEvents());
 	}
 	
 	@Override

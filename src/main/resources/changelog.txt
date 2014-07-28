@@ -1,3 +1,7 @@
+1.0.1.2
+- added a simple way to switch between the normal and baubles inventory. Thanks to Vazkii for the idea and permission to port it to base Baubles.
+- removed the Miners Ring crafting recipe... it is a bit op. I will leave the item in so it is attainable in creative and so it can still serve as an example bauble for devs.
+
 1.0.1.1
 - added backwards compatibility for legacy (pre 1.7.10) savefiles
 
