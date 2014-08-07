@@ -45,8 +45,13 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
     @Override 
     public void updateScreen()
     {
+    	try {
+			((ContainerPlayerExpanded)inventorySlots).baubles.blockEvents=false;
+		} catch (Exception e) {	}
     }
 
+    
+    
     /**
      * Adds the buttons (and other controls) to the screen in question.
      */
@@ -55,6 +60,7 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
     {
         this.buttonList.clear();
         super.initGui();
+        
     }
 
     /**

@@ -22,6 +22,7 @@ public class InventoryBaubles implements IInventory {
 	public ItemStack[] stackList;
 	private Container eventHandler;
 	public WeakReference<EntityPlayer> player;
+	public boolean blockEvents=false;
 
 	public InventoryBaubles(EntityPlayer player) {
 		this.stackList = new ItemStack[4];
@@ -95,12 +96,13 @@ public class InventoryBaubles implements IInventory {
 
 			if (this.stackList[par1].stackSize <= par2) {
 				itemstack = this.stackList[par1];
-				this.stackList[par1] = null;
 
 				if (itemstack != null && itemstack.getItem() instanceof IBauble) {
 					((IBauble) itemstack.getItem()).onUnequipped(itemstack,
 							player.get());
 				}
+				
+				this.stackList[par1] = null;
 
 				if (eventHandler != null)
 					this.eventHandler.onCraftMatrixChanged(this);
@@ -108,15 +110,16 @@ public class InventoryBaubles implements IInventory {
 				return itemstack;
 			} else {
 				itemstack = this.stackList[par1].splitStack(par2);
-
-				if (this.stackList[par1].stackSize == 0) {
-					this.stackList[par1] = null;
-				}
-
+				
 				if (itemstack != null && itemstack.getItem() instanceof IBauble) {
 					((IBauble) itemstack.getItem()).onUnequipped(itemstack,
 							player.get());
 				}
+				
+				if (this.stackList[par1].stackSize == 0) {
+					this.stackList[par1] = null;
+				}
+				
 				if (eventHandler != null)
 					this.eventHandler.onCraftMatrixChanged(this);
 				syncSlotToClients(par1);
@@ -133,11 +136,12 @@ public class InventoryBaubles implements IInventory {
 	 */
 	@Override
 	public void setInventorySlotContents(int par1, ItemStack stack) {
-		if(this.stackList[par1] != null) {
+		
+		if(!blockEvents && this.stackList[par1] != null) {
         	    ((IBauble)stackList[par1].getItem()).onUnequipped(stackList[par1], player.get());
 		}
 		this.stackList[par1] = stack;
-		if (stack != null && stack.getItem() instanceof IBauble) {
+		if (!blockEvents && stack != null && stack.getItem() instanceof IBauble) {
 			((IBauble) stack.getItem()).onEquipped(stack, player.get());
 		}
 		if (eventHandler != null)

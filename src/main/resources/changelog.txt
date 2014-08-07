@@ -1,3 +1,7 @@
+1.0.1.3
+- created workaround for unnecessary calls to onEquipped and onUneEquipped
+- fixed a bug where onUneEquipped wasn't being called if you pick an item up from a slot
+
 1.0.1.2
 - added a simple way to switch between the normal and baubles inventory. Thanks to Vazkii for the idea and permission to port it to base Baubles.
 - removed the Miners Ring crafting recipe... it is a bit op. I will leave the item in so it is attainable in creative and so it can still serve as an example bauble for devs.

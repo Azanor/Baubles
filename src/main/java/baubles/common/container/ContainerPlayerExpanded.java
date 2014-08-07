@@ -86,6 +86,7 @@ public class ContainerPlayerExpanded extends Container
         }
 
         this.onCraftMatrixChanged(this.craftMatrix);
+        
     }
 
     /**
@@ -264,7 +265,18 @@ public class ContainerPlayerExpanded extends Container
     	}
     }
     
-    protected boolean mergeItemStack(ItemStack par1ItemStack, int par2, int par3, boolean par4, Slot ss)
+    
+    
+    @Override
+	public void putStacksInSlots(ItemStack[] p_75131_1_) {
+		baubles.blockEvents=true;
+		super.putStacksInSlots(p_75131_1_);
+	}
+    
+    
+    
+
+	protected boolean mergeItemStack(ItemStack par1ItemStack, int par2, int par3, boolean par4, Slot ss)
     {
         boolean flag1 = false;
         int k = par2;
