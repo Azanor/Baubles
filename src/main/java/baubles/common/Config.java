@@ -2,9 +2,7 @@ package baubles.common;
 
 import java.io.File;
 
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import baubles.common.items.ItemRing;
 import cpw.mods.fml.common.registry.GameRegistry;

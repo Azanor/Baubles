@@ -24,7 +24,7 @@ public class Baubles {
 	
 	public static final String MODID = "Baubles";
 	public static final String MODNAME = "Baubles";
-	public static final String VERSION = "1.0.1.3";
+	public static final String VERSION = "1.0.1.4";
 
 	@SidedProxy(clientSide = "baubles.client.ClientProxy", serverSide = "baubles.common.CommonProxy")
 	public static CommonProxy proxy;
@@ -61,6 +61,7 @@ public class Baubles {
 		/////////////////////
 			
 		Config.save();
+		
 	}
 
 	@EventHandler
@@ -72,6 +73,7 @@ public class Baubles {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent evt) {
 		Config.initRecipe();
+		
 	}
 		
 }

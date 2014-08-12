@@ -1,5 +1,7 @@
 package baubles.client.gui;
 
+import java.lang.reflect.Method;
+
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.client.event.GuiScreenEvent;
@@ -24,7 +26,7 @@ public class GuiEvents {
 			int guiLeft = (event.gui.width - xSize) / 2;
 	        int guiTop = (event.gui.height - ySize) / 2;
 	        
-	        if (!event.gui.mc.thePlayer.getActivePotionEffects().isEmpty()) {
+	        if (!event.gui.mc.thePlayer.getActivePotionEffects().isEmpty() && shiftNei()) {
 	        	guiLeft = 160 + (event.gui.width - xSize - 200) / 2;
 	        }
 			
@@ -33,7 +35,6 @@ public class GuiEvents {
 		}
 		
 	}
-	
 
 	@SideOnly(value = Side.CLIENT)
 	@SubscribeEvent
@@ -51,5 +52,18 @@ public class GuiEvents {
 				PacketHandler.INSTANCE.sendToServer(new PacketOpenNormalInventory(event.gui.mc.thePlayer));
 			}
 		}
+	}
+	
+	static Method isNEIHidden;
+	boolean shiftNei() {
+		boolean hidden=false;
+		try {
+			if (isNEIHidden==null) {
+				Class fake = Class.forName("codechicken.nei.NEIClientConfig");
+			    isNEIHidden = fake.getMethod("isHidden");
+			}
+			hidden = (Boolean) isNEIHidden.invoke(null);
+	    } catch(Exception ex) { }		
+		return hidden;
 	}
 }
