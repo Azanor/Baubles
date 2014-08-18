@@ -5,10 +5,9 @@ import net.minecraft.item.ItemStack;
 
 /**
  * 
- * @author Azanor
- * 
  * This interface should be extended by items that can be worn in bauble slots
- *
+ * 
+ * @author Azanor
  */
 
 public interface IBauble {
