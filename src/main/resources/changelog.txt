@@ -1,3 +1,6 @@
+1.0.1.5
+- onUnequip will now only be called once if a bauble is removed via shift-click
+
 1.0.1.4
 - detect NEI so baubles "ring" button is placed correctly (most of the time). 
 

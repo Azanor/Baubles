@@ -260,9 +260,9 @@ public class ContainerPlayerExpanded extends Container
     }
     
     private void unequipBauble(ItemStack stack) {
-    	if (stack.getItem() instanceof IBauble) {
-    		((IBauble)stack.getItem()).onUnequipped(stack, thePlayer);
-    	}
+//    	if (stack.getItem() instanceof IBauble) {
+//    		((IBauble)stack.getItem()).onUnequipped(stack, thePlayer);
+//    	}
     }
     
     
