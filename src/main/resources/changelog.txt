@@ -1,3 +1,6 @@
+1.0.1.6
+- added a secondary client sync event in case a player logs off and then on again before his player gets unloaded from a server.
+
 1.0.1.5
 - onUnequip will now only be called once if a bauble is removed via shift-click
 

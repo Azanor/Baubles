@@ -8,7 +8,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import baubles.common.event.EventHandlerEntity;
+import baubles.common.event.EventHandlerNetwork;
 import baubles.common.network.PacketHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -24,7 +26,7 @@ public class Baubles {
 	
 	public static final String MODID = "Baubles";
 	public static final String MODNAME = "Baubles";
-	public static final String VERSION = "1.0.1.5";
+	public static final String VERSION = "1.0.1.6";
 
 	@SidedProxy(clientSide = "baubles.client.ClientProxy", serverSide = "baubles.common.CommonProxy")
 	public static CommonProxy proxy;
@@ -33,6 +35,7 @@ public class Baubles {
 	public static Baubles instance;
 	
 	public EventHandlerEntity entityEventHandler;
+	public EventHandlerNetwork entityEventNetwork;
 	public File modDir;
 	
 	public static final Logger log = LogManager.getLogger("Baubles");
@@ -54,8 +57,10 @@ public class Baubles {
 		PacketHandler.init();
 		
 		entityEventHandler = new EventHandlerEntity();
+		entityEventNetwork = new EventHandlerNetwork();
 		
 		MinecraftForge.EVENT_BUS.register(entityEventHandler);
+		FMLCommonHandler.instance().bus().register(entityEventNetwork);
 		proxy.registerHandlers();
 		
 		/////////////////////

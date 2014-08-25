@@ -65,12 +65,9 @@ public class EventHandlerEntity {
 		}
 		
 		PlayerHandler.loadPlayerBaubles(event.entityPlayer, file1, event.getPlayerFile("baubback"));
-		
-		for (int a = 0; a < 4; a++)
-			PlayerHandler.getPlayerBaubles(event.entityPlayer)
-					.syncSlotToClients(a);
-
+		EventHandlerNetwork.syncBaubles(event.entityPlayer);
 	}
+	
 	
 	public static File getLegacyFileFromPlayer(EntityPlayer player)
     {
