@@ -1,3 +1,6 @@
+1.0.1.7
+- fix for baubles shortcut "ring" suddenly not shifting like it should when potion effects are active
+
 1.0.1.6
 - added a secondary client sync event in case a player logs off and then on again before his player gets unloaded from a server.
 

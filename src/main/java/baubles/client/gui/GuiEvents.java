@@ -26,7 +26,7 @@ public class GuiEvents {
 			int guiLeft = (event.gui.width - xSize) / 2;
 	        int guiTop = (event.gui.height - ySize) / 2;
 	        
-	        if (!event.gui.mc.thePlayer.getActivePotionEffects().isEmpty() && shiftNei()) {
+	        if (!event.gui.mc.thePlayer.getActivePotionEffects().isEmpty() && isNeiHidden()) {
 	        	guiLeft = 160 + (event.gui.width - xSize - 200) / 2;
 	        }
 			
@@ -55,8 +55,8 @@ public class GuiEvents {
 	}
 	
 	static Method isNEIHidden;
-	boolean shiftNei() {
-		boolean hidden=false;
+	boolean isNeiHidden() {
+		boolean hidden=true;
 		try {
 			if (isNEIHidden==null) {
 				Class fake = Class.forName("codechicken.nei.NEIClientConfig");
