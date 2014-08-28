@@ -1,3 +1,7 @@
 #
 # ITEMS
 item.Ring.0.name=礦工戒指
+#
+# GUI
+button.baubles=飾品裝備欄
+button.normal=一般裝備欄
