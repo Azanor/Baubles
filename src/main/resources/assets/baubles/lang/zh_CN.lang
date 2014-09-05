@@ -1,3 +1,7 @@
 #
 # ITEMS
 item.Ring.0.name=矿工指环
+#
+# GUI
+button.baubles=饰品
+button.normal=普通
