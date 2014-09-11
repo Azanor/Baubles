@@ -1,3 +1,7 @@
+1.0.1.8
+- change save filenames back to using username instead of UUID to prevent issues in offline mode. 
+- saves will break if you change your username, but it is the lesser of two evils imo and easy enough to fix by hand
+
 1.0.1.7
 - fix for baubles shortcut "ring" suddenly not shifting like it should when potion effects are active
 

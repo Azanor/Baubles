@@ -53,21 +53,37 @@ public class EventHandlerEntity {
 	public void playerLoad(PlayerEvent.LoadFromFile event) {
 		PlayerHandler.clearPlayerBaubles(event.entityPlayer);
 		
-		File file1 = event.getPlayerFile("baub");
+		File file1 = getPlayerFile("baub", event.playerDirectory, event.entityPlayer.getCommandSenderName());
 		if (!file1.exists()) {
-			File filet = getLegacyFileFromPlayer(event.entityPlayer);
-			if (filet.exists()) {
+			File filep = event.getPlayerFile("baub");
+			if (filep.exists()) {
 				try {
-					Files.copy(filet, file1);
-					Baubles.log.info("Using pre MC 1.7.10 Baubles savefile for "+event.entityPlayer.getCommandSenderName());
+					Files.copy(filep, file1);					
+					Baubles.log.info("Using and converting UUID Baubles savefile for "+event.entityPlayer.getCommandSenderName());
+					filep.delete();
+					File fb = event.getPlayerFile("baubback");
+					if (fb.exists()) fb.delete();					
 				} catch (IOException e) {}
+			} else {
+				File filet = getLegacyFileFromPlayer(event.entityPlayer);
+				if (filet.exists()) {
+					try {
+						Files.copy(filet, file1);
+						Baubles.log.info("Using pre MC 1.7.10 Baubles savefile for "+event.entityPlayer.getCommandSenderName());
+					} catch (IOException e) {}
+				}
 			}
 		}
 		
-		PlayerHandler.loadPlayerBaubles(event.entityPlayer, file1, event.getPlayerFile("baubback"));
+		PlayerHandler.loadPlayerBaubles(event.entityPlayer, file1, getPlayerFile("baubback", event.playerDirectory, event.entityPlayer.getCommandSenderName()));
 		EventHandlerNetwork.syncBaubles(event.entityPlayer);
 	}
 	
+	public File getPlayerFile(String suffix, File playerDirectory, String playername)
+    {
+        if ("dat".equals(suffix)) throw new IllegalArgumentException("The suffix 'dat' is reserved");
+        return new File(playerDirectory, playername+"."+suffix);
+    }
 	
 	public static File getLegacyFileFromPlayer(EntityPlayer player)
     {
@@ -80,7 +96,9 @@ public class EventHandlerEntity {
 
 	@SubscribeEvent
 	public void playerSave(PlayerEvent.SaveToFile event) {
-		PlayerHandler.savePlayerBaubles(event.entityPlayer, event.getPlayerFile("baub"), event.getPlayerFile("baubback"));
+		PlayerHandler.savePlayerBaubles(event.entityPlayer, 
+				getPlayerFile("baub", event.playerDirectory, event.entityPlayer.getCommandSenderName()), 
+				getPlayerFile("baubback", event.playerDirectory, event.entityPlayer.getCommandSenderName()));
 	}
 
 }
