@@ -15,15 +15,17 @@ buildscript {
     }
 }
 
-apply plugin: 'forge'
+apply plugin: "forge"
+apply plugin: "maven-publish"
 
 version = "1.7.10-1.0.1.8"
-group= "com.azanor.baubles" 
+group = "com.azanor.baubles"
 archivesBaseName = "Baubles"
+description = "A mod API that adds 4 bauble slots to the player inventory."
 
 minecraft {
     version = "1.7.10-10.13.0.1177"
-    assetDir = "eclipse/assets"
+    runDir = "eclipse"
 }
 
 processResources
@@ -31,39 +33,67 @@ processResources
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-                
+
         // replace version and mcversion
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
-        
+
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
-    
+
 }
 
 // Create deobf dev jars
 task deobfJar(type: Jar) {
     from(sourceSets.main.output) {
-        appendix = 'deobf' 
+        appendix = 'deobf'
     }
-} 
+}
 
 // Create API library zip
-task apiZip(type: Zip) {   
-    from(sourceSets.main.java) {        
-        include "baubles/api/**"    
-     }    
+task apiZip(type: Zip) {
+    from(sourceSets.main.java) {
+        include "baubles/api/**"
+     }
      classifier = 'api'
 }
 
 apiZip.mustRunAfter deobfJar
 
 
-artifacts { 
-    archives deobfJar 
+artifacts {
+    archives deobfJar
     archives apiZip
 }
 
+task sourceJar(type: Jar) {
+    from sourceSets.main.java
+}
 
+publishing {
+    publications {
+        Baubles(MavenPublication) {
+            from components.java
+
+            artifact deobfJar {
+                appendix = ""
+                classifier "deobf"
+            }
+
+            artifact sourceJar {
+                classifier "sources"
+            }
+
+            pom.withXml {
+                asNode().appendNode("description",
+                                    project.description)
+            }
+        }
+    }
+
+    repositories {
+        //Add Repositories here
+    }
+}
