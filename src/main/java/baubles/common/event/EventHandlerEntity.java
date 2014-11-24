@@ -43,8 +43,8 @@ public class EventHandlerEntity {
 				&& !event.entity.worldObj.isRemote
 				&& !event.entity.worldObj.getGameRules()
 						.getGameRuleBooleanValue("keepInventory")) {
-			PlayerHandler.getPlayerBaubles(event.entityPlayer).dropItems(
-					event.drops);
+			PlayerHandler.getPlayerBaubles(event.entityPlayer).dropItemsAt(
+					event.drops,event.entityPlayer);
 		}
 
 	}
