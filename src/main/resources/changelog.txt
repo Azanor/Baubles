@@ -1,3 +1,7 @@
+1.0.1.10
+- api package-info.java cleanup (closes #80)
+- now you won't lose items in bauble crafting grid when switching back to vanilla inventory 
+
 1.0.1.9
 - Update to Forge 10.13.2+ 
 - possible fix for baubles dropping near player spawn location instead of at where he died.

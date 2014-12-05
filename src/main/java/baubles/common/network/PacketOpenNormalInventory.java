@@ -20,6 +20,7 @@ public class PacketOpenNormalInventory implements IMessage, IMessageHandler<Pack
 
 	@Override
 	public IMessage onMessage(PacketOpenNormalInventory message, MessageContext ctx) {
+		ctx.getServerHandler().playerEntity.openContainer.onContainerClosed(ctx.getServerHandler().playerEntity);		
 		ctx.getServerHandler().playerEntity.openContainer = ctx.getServerHandler().playerEntity.inventoryContainer;
 		return null;
 	}

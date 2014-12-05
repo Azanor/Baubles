@@ -105,7 +105,6 @@ public class ContainerPlayerExpanded extends Container
     public void onContainerClosed(EntityPlayer player)
     {
         super.onContainerClosed(player);
-
         for (int i = 0; i < 4; ++i)
         {
             ItemStack itemstack = this.craftMatrix.getStackInSlotOnClosing(i);
@@ -119,7 +118,6 @@ public class ContainerPlayerExpanded extends Container
         this.craftResult.setInventorySlotContents(0, (ItemStack)null);
         if (!player.worldObj.isRemote) {
         	PlayerHandler.setPlayerBaubles(player, baubles);
-//        	PlayerHandler.savePlayerBaubles(player);
         }
     }
 
@@ -372,5 +370,7 @@ public class ContainerPlayerExpanded extends Container
     {
         return par2Slot.inventory != this.craftResult && super.func_94530_a(par1ItemStack, par2Slot);
     }
+    
+    
 
 }
