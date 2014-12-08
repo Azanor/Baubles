@@ -45,25 +45,25 @@ processResources
 
 // Create deobf dev jars
 task deobfJar(type: Jar) {
-    from(sourceSets.main.output) {
-        appendix = 'deobf' 
-    }
-} 
+    from sourceSets.main.output
+    classifier = 'deobf'
+}
 
 // Create API library zip
-task apiZip(type: Zip) {   
-    from(sourceSets.main.java) {        
-        include "baubles/api/**"    
-     }    
-     classifier = 'api'
+task apiJar(type: Jar) {
+    from(sourceSets.main.java) {
+        include "baubles/api/**"
+    }
+    classifier = 'api'
 }
 
-apiZip.mustRunAfter deobfJar
-
-
-artifacts { 
-    archives deobfJar 
-    archives apiZip
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
 }
 
-
+artifacts {
+    archives deobfJar
+    archives apiJar
+    archives sourcesJar
+}
