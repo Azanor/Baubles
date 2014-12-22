@@ -4,9 +4,8 @@ import java.io.File;
 
 import net.minecraft.item.Item;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import baubles.common.items.ItemRing;
-import cpw.mods.fml.common.registry.GameRegistry;
-
 
 public class Config {
 	
@@ -17,11 +16,11 @@ public class Config {
     {
 		config = new Configuration(file);
         config.load();
-        
+
         itemRing =(new ItemRing()).setUnlocalizedName("Ring");
-		GameRegistry.registerItem(itemRing, "Ring", Baubles.MODID);        
-        
-        //save it
+		GameRegistry.registerItem(itemRing, "Ring");
+
+		//save it
 		config.save();
     }
 
@@ -38,8 +37,5 @@ public class Config {
 //					Character.valueOf('I'), new ItemStack(Items.iron_ingot), 
 //					Character.valueOf('P'), new ItemStack(Items.potionitem,1,8226)});
 	}
-	
-
-	
 	
 }

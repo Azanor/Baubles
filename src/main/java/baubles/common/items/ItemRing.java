@@ -2,7 +2,6 @@ package baubles.common.items;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,14 +10,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.IIcon;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.world.World;
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import baubles.common.container.InventoryBaubles;
 import baubles.common.lib.PlayerHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemRing  extends Item implements IBauble
 {
@@ -30,18 +28,6 @@ public class ItemRing  extends Item implements IBauble
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
 		setCreativeTab(CreativeTabs.tabTools);
-	}
-
-	public IIcon icon;
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerIcons(IIconRegister ir) {
-		icon = ir.registerIcon("baubles:ring");
-	}
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIconFromDamage(int meta) {
-		return icon;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -76,18 +62,18 @@ public class ItemRing  extends Item implements IBauble
 	@Override
 	public void onWornTick(ItemStack itemstack, EntityLivingBase player) {
 		if (itemstack.getItemDamage()==0 && !player.isPotionActive(Potion.digSpeed)) {
-			player.addPotionEffect(new PotionEffect(Potion.digSpeed.id,40,0,true));
+			player.addPotionEffect(new PotionEffect(Potion.digSpeed.id,40,0,true,true));
 		}
 	}
 
 	@Override
-	public boolean hasEffect(ItemStack par1ItemStack, int a) {
+	public boolean hasEffect(ItemStack par1ItemStack) {
 		return true;
 	}
 
 	@Override
 	public EnumRarity getRarity(ItemStack par1ItemStack) {
-		return EnumRarity.rare;
+		return EnumRarity.RARE;
 	}
 
 	@Override

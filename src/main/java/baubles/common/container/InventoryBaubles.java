@@ -2,6 +2,7 @@ package baubles.common.container;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -11,6 +12,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
@@ -57,7 +59,7 @@ public class InventoryBaubles implements IInventory {
 	 * Returns the name of the inventory
 	 */
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "";
 	}
 
@@ -65,8 +67,13 @@ public class InventoryBaubles implements IInventory {
 	 * Returns if the inventory is named
 	 */
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean hasCustomName() {
 		return false;
+	}
+
+	@Override
+	public IChatComponent getDisplayName() {
+		return null;
 	}
 
 	/**
@@ -179,12 +186,12 @@ public class InventoryBaubles implements IInventory {
 	}
 
 	@Override
-	public void openInventory() {
+	public void openInventory(EntityPlayer player) {
 
 	}
 
 	@Override
-	public void closeInventory() {
+	public void closeInventory(EntityPlayer player) {
 
 	}
 
@@ -207,6 +214,28 @@ public class InventoryBaubles implements IInventory {
 				&& ((IBauble) stack.getItem()).getBaubleType(stack) == BaubleType.BELT)
 			return true;
 		return false;
+	}
+
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+
+	}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+		for(int i = 0; i < stackList.length; i++) {
+			stackList[i] = null;
+		}
 	}
 
 	public void saveNBT(EntityPlayer player) {
@@ -252,9 +281,9 @@ public class InventoryBaubles implements IInventory {
 			if (this.stackList[i] != null) {
 				EntityItem ei = new EntityItem(player.get().worldObj,
 						player.get().posX, player.get().posY
-								+ player.get().eyeHeight, player.get().posZ,
+								+ player.get().getEyeHeight(), player.get().posZ,
 						this.stackList[i].copy());
-				ei.delayBeforeCanPickup = 40;
+				ei.setPickupDelay(40);
 				float f1 = player.get().worldObj.rand.nextFloat() * 0.5F;
 				float f2 = player.get().worldObj.rand.nextFloat()
 						* (float) Math.PI * 2.0F;
@@ -268,13 +297,13 @@ public class InventoryBaubles implements IInventory {
 		}
 	}
 	
-	public void dropItemsAt(ArrayList<EntityItem> drops, Entity e) {
+	public void dropItemsAt(List<EntityItem> drops, Entity e) {
 		for (int i = 0; i < 4; ++i) {
 			if (this.stackList[i] != null) {
 				EntityItem ei = new EntityItem(e.worldObj,
 						e.posX, e.posY + e.getEyeHeight(), e.posZ,
 						this.stackList[i].copy());
-				ei.delayBeforeCanPickup = 40;
+				ei.setPickupDelay(40);
 				float f1 = e.worldObj.rand.nextFloat() * 0.5F;
 				float f2 = e.worldObj.rand.nextFloat() * (float) Math.PI * 2.0F;
 				ei.motionX = (double) (-MathHelper.sin(f2) * f1);
@@ -290,8 +319,7 @@ public class InventoryBaubles implements IInventory {
 	public void syncSlotToClients(int slot) {
 		try {
 			if (Baubles.proxy.getClientWorld() == null) {
-				PacketHandler.INSTANCE.sendToAll(new PacketSyncBauble(player
-						.get(), slot));
+				PacketHandler.INSTANCE.sendToAll(new PacketSyncBauble(player.get(), slot));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

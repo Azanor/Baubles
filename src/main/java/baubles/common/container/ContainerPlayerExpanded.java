@@ -366,11 +366,9 @@ public class ContainerPlayerExpanded extends Container
     }
 
     @Override
-    public boolean func_94530_a(ItemStack par1ItemStack, Slot par2Slot)
+    public boolean canMergeSlot(ItemStack par1ItemStack, Slot par2Slot)
     {
-        return par2Slot.inventory != this.craftResult && super.func_94530_a(par1ItemStack, par2Slot);
+        return par2Slot.inventory != this.craftResult && super.canMergeSlot(par1ItemStack, par2Slot);
     }
-    
-    
 
 }

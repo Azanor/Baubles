@@ -17,13 +17,14 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.7.10-1.0.1.10"
+version = "1.8-1.1.0.0"
 group= "com.azanor.baubles" 
 archivesBaseName = "Baubles"
 
 minecraft {
-    version = "1.7.10-10.13.2.1236"
-    assetDir = "eclipse/assets"
+    version = "1.8-11.14.0.1273-1.8"
+    runDir = "run"
+    mappings = "snapshot_20141221"
 }
 
 processResources
@@ -50,7 +51,7 @@ task deobfJar(type: Jar) {
 }
 
 // Create API library zip
-task apiJar(type: Jar) {
+task apiZip(type: Zip) {
     from(sourceSets.main.java) {
         include "baubles/api/**"
     }
@@ -58,12 +59,12 @@ task apiJar(type: Jar) {
 }
 
 task sourcesJar(type: Jar) {
-    from sourceSets.main.allSource
+    from sourceSets.main.allJava
     classifier = 'sources'
 }
 
 artifacts {
     archives deobfJar
-    archives apiJar
+    archives apiZip
     archives sourcesJar
 }

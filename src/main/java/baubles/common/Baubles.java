@@ -2,7 +2,19 @@ package baubles.common;
 
 import java.io.File;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,23 +22,13 @@ import org.apache.logging.log4j.Logger;
 import baubles.common.event.EventHandlerEntity;
 import baubles.common.event.EventHandlerNetwork;
 import baubles.common.network.PacketHandler;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
 
-@Mod(modid = Baubles.MODID, name = Baubles.MODNAME, version = Baubles.VERSION, dependencies="required-after:Forge@[10.13.2,);")
-
+@Mod(modid = Baubles.MODID, name = Baubles.MODNAME, version = Baubles.VERSION, dependencies="required-after:Forge@[11.14,);")
 public class Baubles {
 	
 	public static final String MODID = "Baubles";
 	public static final String MODNAME = "Baubles";
-	public static final String VERSION = "1.0.1.10";
+	public static final String VERSION = "1.1.0.0";
 
 	@SidedProxy(clientSide = "baubles.client.ClientProxy", serverSide = "baubles.common.CommonProxy")
 	public static CommonProxy proxy;
@@ -44,8 +46,8 @@ public class Baubles {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		event.getModMetadata().version = Baubles.VERSION;
-		modDir = event.getModConfigurationDirectory();		
-		
+		modDir = event.getModConfigurationDirectory();
+
 		try {
 			Config.initialize(event.getSuggestedConfigurationFile());
 		} catch (Exception e) {
@@ -62,15 +64,17 @@ public class Baubles {
 		MinecraftForge.EVENT_BUS.register(entityEventHandler);
 		FMLCommonHandler.instance().bus().register(entityEventNetwork);
 		proxy.registerHandlers();
-		
+
 		/////////////////////
-			
+
 		Config.save();
 		
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent evt) {
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Config.itemRing, 0, new ModelResourceLocation(Baubles.MODID + ":ring", "inventory"));
+		ModelBakery.addVariantName(Config.itemRing, Baubles.MODID + ":ring");
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
   		proxy.registerKeyBindings();
 	}
@@ -78,7 +82,6 @@ public class Baubles {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent evt) {
 		Config.initRecipe();
-		
 	}
 		
 }
