@@ -3,7 +3,8 @@
 #################
 build/
 eclipse/
-.gradle
+run/
+.gradle/
 
 #################
 ## Eclipse
@@ -39,9 +40,11 @@ local.properties
 ## Idea
 #############
 
+.idea/
 *.iml
 *.ipr
 *.iws
+out/
 
 #############
 ## Windows detritus

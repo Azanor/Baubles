@@ -9,11 +9,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import baubles.common.Baubles;
 import baubles.common.lib.PlayerHandler;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 
 public class PacketSyncBauble implements IMessage, IMessageHandler<PacketSyncBauble, IMessage> {
 	
@@ -33,8 +34,7 @@ public class PacketSyncBauble implements IMessage, IMessageHandler<PacketSyncBau
 	public void toBytes(ByteBuf buffer) {
 		buffer.writeByte(slot);
 		buffer.writeInt(playerId);
-		PacketBuffer pb = new PacketBuffer(buffer);
-		try { pb.writeItemStackToBuffer(bauble); } catch (IOException e) {}
+		ByteBufUtils.writeItemStack(buffer, bauble);
 	}
 
 	@Override
@@ -42,8 +42,7 @@ public class PacketSyncBauble implements IMessage, IMessageHandler<PacketSyncBau
 	{
 		slot = buffer.readByte();
 		playerId = buffer.readInt();
-		PacketBuffer pb = new PacketBuffer(buffer);
-		try { bauble = pb.readItemStackFromBuffer(); } catch (IOException e) {}
+		bauble = ByteBufUtils.readItemStack(buffer);
 	}
 
 	@Override

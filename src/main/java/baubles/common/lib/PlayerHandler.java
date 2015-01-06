@@ -18,20 +18,20 @@ public class PlayerHandler {
 	private static HashMap<String, InventoryBaubles> playerBaubles = new HashMap<String, InventoryBaubles>();
 
 	public static void clearPlayerBaubles(EntityPlayer player) {
-		playerBaubles.remove(player.getCommandSenderName());
+		playerBaubles.remove(player.getDisplayNameString());
 	}
 
 	public static InventoryBaubles getPlayerBaubles(EntityPlayer player) {
-		if (!playerBaubles.containsKey(player.getCommandSenderName())) {
+		if (!playerBaubles.containsKey(player.getDisplayNameString())) {
 			InventoryBaubles inventory = new InventoryBaubles(player);
-			playerBaubles.put(player.getCommandSenderName(), inventory);
+			playerBaubles.put(player.getDisplayNameString(), inventory);
 		}
-		return playerBaubles.get(player.getCommandSenderName());
+		return playerBaubles.get(player.getDisplayNameString());
 	}
 
 	public static void setPlayerBaubles(EntityPlayer player,
 			InventoryBaubles inventory) {
-		playerBaubles.put(player.getCommandSenderName(), inventory);
+		playerBaubles.put(player.getDisplayNameString(), inventory);
 	}
 
 	public static void loadPlayerBaubles(EntityPlayer player, File file1, File file2) {
@@ -54,7 +54,7 @@ public class PlayerHandler {
 				if (file1 == null || !file1.exists() || data == null
 						|| data.hasNoTags()) {
 					Baubles.log.warn("Data not found for "
-							+ player.getCommandSenderName()
+							+ player.getDisplayNameString()
 							+ ". Trying to load backup data.");
 					if (file2 != null && file2.exists()) {
 						try {
@@ -73,7 +73,7 @@ public class PlayerHandler {
 				if (data != null) {
 					InventoryBaubles inventory = new InventoryBaubles(player);
 					inventory.readNBT(data);
-					playerBaubles.put(player.getCommandSenderName(), inventory);
+					playerBaubles.put(player.getDisplayNameString(), inventory);
 					if (save)
 						savePlayerBaubles(player, file1, file2);
 				}
@@ -93,7 +93,7 @@ public class PlayerHandler {
 					} catch (Exception e) {
 						Baubles.log
 								.error("Could not backup old baubles file for player "
-										+ player.getCommandSenderName());
+										+ player.getDisplayNameString());
 					}
 				}
 
@@ -112,7 +112,7 @@ public class PlayerHandler {
 					}
 				} catch (Exception e) {
 					Baubles.log.error("Could not save baubles file for player "
-							+ player.getCommandSenderName());
+							+ player.getDisplayNameString());
 					e.printStackTrace();
 					if (file1.exists()) {
 						try {

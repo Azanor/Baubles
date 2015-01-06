@@ -1,3 +1,6 @@
+1.1.0.0
+- update for MC 1.8
+
 1.0.1.10
 - api package-info.java cleanup (closes #80)
 - now you won't lose items in bauble crafting grid when switching back to vanilla inventory 

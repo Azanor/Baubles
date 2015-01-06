@@ -2,9 +2,9 @@ package baubles.common.lib;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import baubles.common.Config;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public final class CreativeTabBaubles extends CreativeTabs
 {
@@ -13,11 +13,10 @@ public final class CreativeTabBaubles extends CreativeTabs
         super(par1, par2Str);
     }
 
-    @SideOnly(Side.CLIENT)
-
     /**
-     * the itemID for the item to be displayed on the tab
+     * the item to be displayed on the tab
      */
+    @SideOnly(Side.CLIENT)
     @Override
     public Item getTabIconItem()
     {

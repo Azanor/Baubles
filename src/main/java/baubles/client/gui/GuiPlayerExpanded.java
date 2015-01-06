@@ -1,8 +1,12 @@
 package baubles.client.gui;
 
+import java.io.IOException;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.achievement.GuiAchievements;
 import net.minecraft.client.gui.achievement.GuiStats;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
@@ -12,9 +16,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 import baubles.common.Baubles;
 import baubles.common.container.ContainerPlayerExpanded;
@@ -48,6 +49,7 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
     	try {
 			((ContainerPlayerExpanded)inventorySlots).baubles.blockEvents=false;
 		} catch (Exception e) {	}
+        this.updateActivePotionEffects();
     }
 
     
@@ -86,7 +88,7 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
     @Override
     protected void drawGuiContainerBackgroundLayer(float p_146976_1_, int p_146976_2_, int p_146976_3_)
     {
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.getTextureManager().bindTexture(background);
         int k = this.guiLeft;
         int l = this.guiTop;
@@ -106,39 +108,42 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
 
     public static void drawPlayerModel(int x, int y, int scale, float yaw, float pitch, EntityLivingBase playerdrawn)
     {
-        GL11.glEnable(GL11.GL_COLOR_MATERIAL);
-        GL11.glPushMatrix();
-        GL11.glTranslatef((float)x, (float)y, 50.0F);
-        GL11.glScalef((float)(-scale), (float)scale, (float)scale);
-        GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
+        GlStateManager.enableColorMaterial();
+        GlStateManager.pushMatrix();
+        GlStateManager.translate((float)x, (float)y, 50.0F);
+        GlStateManager.scale((float)(-scale), (float)scale, (float)scale);
+        GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
         float f2 = playerdrawn.renderYawOffset;
         float f3 = playerdrawn.rotationYaw;
         float f4 = playerdrawn.rotationPitch;
         float f5 = playerdrawn.prevRotationYawHead;
         float f6 = playerdrawn.rotationYawHead;
-        GL11.glRotatef(135.0F, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(135.0F, 0.0F, 1.0F, 0.0F);
         RenderHelper.enableStandardItemLighting();
-        GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
-        GL11.glRotatef(-((float)Math.atan((double)(pitch / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
+        GlStateManager.rotate(-135.0F, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(-((float)Math.atan((double)(pitch / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
         playerdrawn.renderYawOffset = (float)Math.atan((double)(yaw / 40.0F)) * 20.0F;
         playerdrawn.rotationYaw = (float)Math.atan((double)(yaw / 40.0F)) * 40.0F;
         playerdrawn.rotationPitch = -((float)Math.atan((double)(pitch / 40.0F))) * 20.0F;
         playerdrawn.rotationYawHead = playerdrawn.rotationYaw;
         playerdrawn.prevRotationYawHead = playerdrawn.rotationYaw;
-        GL11.glTranslatef(0.0F, playerdrawn.yOffset, 0.0F);
-        RenderManager.instance.playerViewY = 180.0F;
-        RenderManager.instance.renderEntityWithPosYaw(playerdrawn, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
+        GlStateManager.translate(0.0F, 0.0F, 0.0F);
+        RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
+        renderManager.setPlayerViewY(180.0F);
+        renderManager.setRenderShadow(false);
+        renderManager.renderEntityWithPosYaw(playerdrawn, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
+        renderManager.setRenderShadow(true);
         playerdrawn.renderYawOffset = f2;
         playerdrawn.rotationYaw = f3;
         playerdrawn.rotationPitch = f4;
         playerdrawn.prevRotationYawHead = f5;
         playerdrawn.rotationYawHead = f6;
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
         RenderHelper.disableStandardItemLighting();
-        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-        OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
+        GlStateManager.disableRescaleNormal();
+        GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+        GlStateManager.disableTexture2D();
+        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
     }
 
     @Override
@@ -156,7 +161,7 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
     }
 
 	@Override
-	protected void keyTyped(char par1, int par2) {
+	protected void keyTyped(char par1, int par2) throws IOException {
 		if (par2 == Baubles.proxy.keyHandler.key.getKeyCode())
         {
             this.mc.thePlayer.closeScreen();
