@@ -12,7 +12,10 @@ public class Config {
 	
 	public static Configuration config;
 	public static Item itemRing;
-		
+	
+    // config properties
+    private static boolean splitSurvivalCreative = false;
+	
 	public static void initialize(File file)
     {
 		config = new Configuration(file);
@@ -21,6 +24,8 @@ public class Config {
         itemRing =(new ItemRing()).setUnlocalizedName("Ring");
 		GameRegistry.registerItem(itemRing, "Ring", Baubles.MODID);        
         
+		splitSurvivalCreative = config.getBoolean("splitSurvivalCreative", "server", splitSurvivalCreative, "Split Baubles inventory for survival and creative game modes.");
+		
         //save it
 		config.save();
     }
@@ -39,7 +44,7 @@ public class Config {
 //					Character.valueOf('P'), new ItemStack(Items.potionitem,1,8226)});
 	}
 	
-
-	
-	
+    public static boolean isSplitSurvivalCreative() {
+        return splitSurvivalCreative;
+    }
 }
