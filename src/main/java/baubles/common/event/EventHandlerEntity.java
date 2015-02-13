@@ -4,12 +4,18 @@ import java.io.File;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import baubles.api.IBauble;
 import baubles.common.Baubles;
+import baubles.common.Config;
 import baubles.common.container.InventoryBaubles;
+import baubles.common.lib.BaublesIDHandler;
 import baubles.common.lib.PlayerHandler;
 
 import com.google.common.io.Files;
@@ -52,7 +58,7 @@ public class EventHandlerEntity {
 	public void playerLoad(PlayerEvent.LoadFromFile event) {
 		PlayerHandler.clearPlayerBaubles(event.entityPlayer);
 		
-		File file1 = getPlayerFile("baub", event.playerDirectory, event.entityPlayer.getDisplayNameString());
+		File file1 = getPlayerFile("baub", event.playerDirectory, "baublesNO" + BaublesIDHandler.get(event.entityPlayer).getID());
 		if (!file1.exists()) {
 			File filep = event.getPlayerFile("baub");
 			if (filep.exists()) {
@@ -74,14 +80,14 @@ public class EventHandlerEntity {
 			}
 		}
 		
-		PlayerHandler.loadPlayerBaubles(event.entityPlayer, file1, getPlayerFile("baubback", event.playerDirectory, event.entityPlayer.getDisplayNameString()));
+		PlayerHandler.loadPlayerBaubles(event.entityPlayer, file1, getPlayerFile("baubback", event.playerDirectory, "baublesNO" + BaublesIDHandler.get(event.entityPlayer).getID()));
 		EventHandlerNetwork.syncBaubles(event.entityPlayer);
 	}
 	
-	public File getPlayerFile(String suffix, File playerDirectory, String playername)
+	public File getPlayerFile(String suffix, File playerDirectory, String filename)
     {
         if ("dat".equals(suffix)) throw new IllegalArgumentException("The suffix 'dat' is reserved");
-        return new File(playerDirectory, playername+"."+suffix);
+        return new File(playerDirectory, filename+"."+suffix);
     }
 	
 	public static File getLegacyFileFromPlayer(EntityPlayer player)
@@ -96,8 +102,35 @@ public class EventHandlerEntity {
 	@SubscribeEvent
 	public void playerSave(PlayerEvent.SaveToFile event) {
 		PlayerHandler.savePlayerBaubles(event.entityPlayer, 
-				getPlayerFile("baub", event.playerDirectory, event.entityPlayer.getDisplayNameString()),
-				getPlayerFile("baubback", event.playerDirectory, event.entityPlayer.getDisplayNameString()));
+				getPlayerFile("baub", event.playerDirectory, "baublesNO" + BaublesIDHandler.get(event.entityPlayer).getID()),
+				getPlayerFile("baubback", event.playerDirectory, "baublesNO" + BaublesIDHandler.get(event.entityPlayer).getID()));
+	}
+	
+	@SubscribeEvent
+	public void onPlayerConstruct(EntityConstructing event){
+		if(event.entity instanceof EntityPlayer && 
+				BaublesIDHandler.get((EntityPlayer) event.entity) == null){
+			BaublesIDHandler.register((EntityPlayer) event.entity);
+			Config.addBaublesID();
+		}
+	}
+	
+	@SubscribeEvent
+	public void onLivingDeathEvent(LivingDeathEvent event){
+		if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayer){
+			NBTTagCompound baublesID = new NBTTagCompound();
+			((BaublesIDHandler)(event.entity.getExtendedProperties(BaublesIDHandler.EXT_PROP_NAME))).saveNBTData(baublesID);
+			Baubles.proxy.storeBaublesID(((EntityPlayer) event.entity).getDisplayNameString(), baublesID);
+			}
 	}
 
+	@SubscribeEvent
+	public void onEntityJoinWorld(EntityJoinWorldEvent event){
+		if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayer){
+			NBTTagCompound baublesID = Baubles.proxy.getBaublesID(((EntityPlayer) event.entity).getDisplayNameString());
+			if (baublesID != null){
+				((BaublesIDHandler)(event.entity.getExtendedProperties(BaublesIDHandler.EXT_PROP_NAME))).loadNBTData(baublesID);
+				}
+		}
+	}
 }

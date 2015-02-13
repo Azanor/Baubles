@@ -14,6 +14,10 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import org.apache.logging.log4j.LogManager;
@@ -42,6 +46,22 @@ public class Baubles {
 	
 	public static final Logger log = LogManager.getLogger("Baubles");
 	public static final int GUI = 0;
+	
+	@EventHandler
+	public void serverPreStart(FMLServerAboutToStartEvent event) {
+		Config.loadBaublesID();
+	}
+	
+	@EventHandler
+	public void serverStop(FMLServerStoppedEvent event) {
+		Config.saveBaublesID();
+	}
+	
+	public File getPlayerFile(String suffix, File playerDirectory, String playername)
+    {
+        if ("dat".equals(suffix)) throw new IllegalArgumentException("The suffix 'dat' is reserved");
+        return new File(playerDirectory, playername+"."+suffix);
+    }
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {

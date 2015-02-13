@@ -1,7 +1,11 @@
 
 package baubles.common;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import baubles.common.container.ContainerPlayerExpanded;
@@ -12,6 +16,8 @@ public class CommonProxy implements IGuiHandler {
 	public KeyHandler keyHandler;
 	
 	public void registerHandlers() {}
+	
+	private static final Map<String, NBTTagCompound> baublesIDData = new HashMap<String, NBTTagCompound>();
 	
 
 	@Override
@@ -33,5 +39,12 @@ public class CommonProxy implements IGuiHandler {
 		
 	
 	public void registerKeyBindings() {}
+	
+	public static void storeBaublesID(String name, NBTTagCompound compound){
+		baublesIDData.put(name, compound);
+	}
 
+	public static NBTTagCompound getBaublesID(String name){
+	return baublesIDData.remove(name);
+	}
 }
