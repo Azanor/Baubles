@@ -108,7 +108,7 @@ public class EventHandlerEntity {
 	
 	@SubscribeEvent
 	public void onPlayerConstruct(EntityConstructing event){
-		if(event.entity instanceof EntityPlayer && 
+		if(!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayer && 
 				BaublesIDHandler.get((EntityPlayer) event.entity) == null){
 			BaublesIDHandler.register((EntityPlayer) event.entity);
 			Config.addBaublesID();
