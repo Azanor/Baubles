@@ -93,8 +93,7 @@ public class Baubles {
 
 	@EventHandler
 	public void init(FMLInitializationEvent evt) {
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Config.itemRing, 0, new ModelResourceLocation(Baubles.MODID + ":ring", "inventory"));
-		ModelBakery.addVariantName(Config.itemRing, Baubles.MODID + ":ring");
+		proxy.registerTextures();
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
   		proxy.registerKeyBindings();
 	}

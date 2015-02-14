@@ -47,4 +47,6 @@ public class CommonProxy implements IGuiHandler {
 	public static NBTTagCompound getBaublesID(String name){
 	return baublesIDData.remove(name);
 	}
+
+	public void registerTextures() {}
 }
