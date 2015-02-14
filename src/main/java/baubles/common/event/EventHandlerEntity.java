@@ -58,7 +58,7 @@ public class EventHandlerEntity {
 	public void playerLoad(PlayerEvent.LoadFromFile event) {
 		PlayerHandler.clearPlayerBaubles(event.entityPlayer);
 		
-		File file1 = getPlayerFile("baub", event.playerDirectory, "baublesNO" + BaublesIDHandler.get(event.entityPlayer).getID());
+		File file1 = getPlayerFile("baub", event.playerDirectory, "BaublesNO_" + BaublesIDHandler.get(event.entityPlayer).getID());
 		if (!file1.exists()) {
 			File filep = event.getPlayerFile("baub");
 			if (filep.exists()) {
@@ -80,7 +80,7 @@ public class EventHandlerEntity {
 			}
 		}
 		
-		PlayerHandler.loadPlayerBaubles(event.entityPlayer, file1, getPlayerFile("baubback", event.playerDirectory, "baublesNO" + BaublesIDHandler.get(event.entityPlayer).getID()));
+		PlayerHandler.loadPlayerBaubles(event.entityPlayer, file1, getPlayerFile("baubback", event.playerDirectory, "BaublesNO_" + BaublesIDHandler.get(event.entityPlayer).getID()));
 		EventHandlerNetwork.syncBaubles(event.entityPlayer);
 	}
 	
@@ -102,35 +102,35 @@ public class EventHandlerEntity {
 	@SubscribeEvent
 	public void playerSave(PlayerEvent.SaveToFile event) {
 		PlayerHandler.savePlayerBaubles(event.entityPlayer, 
-				getPlayerFile("baub", event.playerDirectory, "baublesNO" + BaublesIDHandler.get(event.entityPlayer).getID()),
-				getPlayerFile("baubback", event.playerDirectory, "baublesNO" + BaublesIDHandler.get(event.entityPlayer).getID()));
+				getPlayerFile("baub", event.playerDirectory, "BaublesNO_" + BaublesIDHandler.get(event.entityPlayer).getID()),
+				getPlayerFile("baubback", event.playerDirectory, "BaublesNO_" + BaublesIDHandler.get(event.entityPlayer).getID()));
 	}
 	
 	@SubscribeEvent
 	public void onPlayerConstruct(EntityConstructing event){
 		if(!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayer && 
-				BaublesIDHandler.get((EntityPlayer) event.entity) == null){
+				BaublesIDHandler.get((EntityPlayer) event.entity) == null)
 			BaublesIDHandler.register((EntityPlayer) event.entity);
-			Config.addBaublesID();
-		}
 	}
 	
 	@SubscribeEvent
-	public void onLivingDeathEvent(LivingDeathEvent event){
+	public void onPlayerDeath(LivingDeathEvent event){
 		if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayer){
 			NBTTagCompound baublesID = new NBTTagCompound();
-			((BaublesIDHandler)(event.entity.getExtendedProperties(BaublesIDHandler.EXT_PROP_NAME))).saveNBTData(baublesID);
+			BaublesIDHandler.get((EntityPlayer)event.entity).saveNBTData(baublesID);
 			Baubles.proxy.storeBaublesID(((EntityPlayer) event.entity).getDisplayNameString(), baublesID);
 			}
 	}
 
 	@SubscribeEvent
-	public void onEntityJoinWorld(EntityJoinWorldEvent event){
+	public void onPlayerJoinWorld(EntityJoinWorldEvent event){
 		if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayer){
 			NBTTagCompound baublesID = Baubles.proxy.getBaublesID(((EntityPlayer) event.entity).getDisplayNameString());
 			if (baublesID != null){
-				((BaublesIDHandler)(event.entity.getExtendedProperties(BaublesIDHandler.EXT_PROP_NAME))).loadNBTData(baublesID);
+				BaublesIDHandler.get((EntityPlayer)event.entity).loadNBTData(baublesID);
 				}
+			else if (BaublesIDHandler.get((EntityPlayer)event.entity).getID() == Config.getNewBaublesID())
+				Config.addBaublesID();
 		}
 	}
 }
