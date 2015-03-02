@@ -1,3 +1,6 @@
+1.1.1.0
+- make it work server-side
+
 1.1.0.0
 - update for MC 1.8
 

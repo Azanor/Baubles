@@ -10,9 +10,6 @@ import baubles.common.event.KeyHandler;
 public class CommonProxy implements IGuiHandler {
 	
 	public KeyHandler keyHandler;
-	
-	public void registerHandlers() {}
-	
 
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
@@ -33,5 +30,11 @@ public class CommonProxy implements IGuiHandler {
 		
 	
 	public void registerKeyBindings() {}
+
+
+	public void registerItemModels() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

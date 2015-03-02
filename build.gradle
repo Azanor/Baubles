@@ -17,14 +17,14 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.8-1.1.0.0"
+version = "1.8-1.1.1.0"
 group= "com.azanor.baubles" 
 archivesBaseName = "Baubles"
 
 minecraft {
-    version = "1.8-11.14.0.1273-1.8"
-    runDir = "run"
-    mappings = "snapshot_20141221"
+    version = "1.8-11.14.1.1333"
+    runDir = "eclipse"
+	mappings = "snapshot_nodoc_20141130"
 }
 
 processResources
