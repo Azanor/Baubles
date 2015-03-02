@@ -1,6 +1,7 @@
 package baubles.common.event;
 
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.util.StatCollector;
 
 import org.lwjgl.input.Keyboard;
 
@@ -16,7 +17,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class KeyHandler {
 	
-	public KeyBinding key = new KeyBinding("Baubles Inventory", 
+	public KeyBinding key = new KeyBinding(StatCollector.translateToLocal("keybind.baublesinventory"), 
 			Keyboard.KEY_B, "key.categories.inventory");
 	
 	public KeyHandler() {
