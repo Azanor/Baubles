@@ -19,8 +19,6 @@ import baubles.common.event.KeyHandler;
 
 public class ClientProxy extends CommonProxy {
 	
-	@Override
-	public void registerHandlers() {}
 	
 	@Override
 	public void registerKeyBindings() {
@@ -38,17 +36,15 @@ public class ClientProxy extends CommonProxy {
 		}
 		return null;
 	}
-	
-	@Override 
-	public void registerTextures(){
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Config.itemRing, 0, new ModelResourceLocation(Baubles.MODID + ":ring", "inventory"));
-		ModelBakery.addVariantName(Config.itemRing, Baubles.MODID + ":ring");
-	}
 				
 	@Override
 	public World getClientWorld() {
 		return FMLClientHandler.instance().getClient().theWorld;
 	}
 	
-		
+	@Override
+	public void registerItemModels() {
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Config.itemRing, 0, new ModelResourceLocation(Baubles.MODID + ":ring", "inventory"));
+		ModelBakery.addVariantName(Config.itemRing, Baubles.MODID + ":ring");
+	}
 }

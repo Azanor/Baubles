@@ -18,7 +18,6 @@ public class CommonProxy implements IGuiHandler {
 	public void registerHandlers() {}
 	
 	private static final Map<String, NBTTagCompound> baublesIDData = new HashMap<String, NBTTagCompound>();
-	
 
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
@@ -48,5 +47,9 @@ public class CommonProxy implements IGuiHandler {
 	return baublesIDData.remove(name);
 	}
 
-	public void registerTextures() {}
+
+	public void registerItemModels() {
+		// TODO Auto-generated method stub
+		
+	}
 }
