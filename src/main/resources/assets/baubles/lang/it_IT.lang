@@ -3,5 +3,8 @@
 item.Ring.0.name=Anello del minatore
 #
 # GUI
-button.baubles=Accessorio
+button.baubles=Accessori
 button.normal=Normale
+#
+# Keybinding
+keybind.baublesinventory=Inventario accessori
