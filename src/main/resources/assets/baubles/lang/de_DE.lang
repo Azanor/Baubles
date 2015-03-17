@@ -5,3 +5,6 @@ item.Ring.0.name=Bergarbeiterring
 # GUI
 button.baubles=Baubles
 button.normal=Normal
+#
+# Keybinding
+keybind.baublesinventory=Baubles-Inventar
