@@ -5,3 +5,6 @@ item.Ring.0.name=Anel do Minerador
 # GUI
 button.baubles=Baubles
 button.normal=Normal
+#
+# Keybinding
+keybind.baublesinventory=Inventário das Baubles
