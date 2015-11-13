@@ -1,0 +1,10 @@
+#
+# ITEMS
+item.Ring.0.name=Anillo de Minero
+#
+# GUI
+button.baubles=Ornamentos
+button.normal=Normal
+#
+# Keybinding
+keybind.baublesinventory=Inventario de Ornamentos
