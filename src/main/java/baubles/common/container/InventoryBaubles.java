@@ -58,10 +58,10 @@ public class InventoryBaubles implements IInventory {
 	/**
 	 * Returns the name of the inventory
 	 */
-	@Override
-	public String getName() {
-		return "";
-	}
+//	@Override
+//	public String getName() {
+//		return "";
+//	}
 
 	/**
 	 * Returns if the inventory is named
@@ -324,5 +324,10 @@ public class InventoryBaubles implements IInventory {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public String getCommandSenderName() {
+		return null;
 	}
 }
