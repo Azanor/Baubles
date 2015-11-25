@@ -56,14 +56,6 @@ public class InventoryBaubles implements IInventory {
 	}
 
 	/**
-	 * Returns the name of the inventory
-	 */
-//	@Override
-//	public String getName() {
-//		return "";
-//	}
-
-	/**
 	 * Returns if the inventory is named
 	 */
 	@Override
