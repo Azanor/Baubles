@@ -40,8 +40,7 @@ public class EventHandlerEntity {
 	public void playerDeath(PlayerDropsEvent event) {
 		if (event.entity instanceof EntityPlayer
 				&& !event.entity.worldObj.isRemote
-				&& !event.entity.worldObj.getGameRules()
-						.getGameRuleBooleanValue("keepInventory")) {
+				&& !event.entity.worldObj.getGameRules().getBoolean("keepInventory")){
 			PlayerHandler.getPlayerBaubles(event.entityPlayer).dropItemsAt(
 					event.drops,event.entityPlayer);
 		}

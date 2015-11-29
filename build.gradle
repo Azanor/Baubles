@@ -11,20 +11,19 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
     }
 }
+apply plugin: 'net.minecraftforge.gradle.forge'
 
-apply plugin: 'forge'
-
-version = "1.8-1.1.1.0"
+version = "1.8.8-1.2.1.0"
 group= "com.azanor.baubles" 
 archivesBaseName = "Baubles"
 
 minecraft {
-    version = "1.8-11.14.1.1333"
-    runDir = "eclipse"
-	mappings = "snapshot_nodoc_20141130"
+    version = "1.8.8-11.15.0.1595-1.8.8"
+    runDir = "run"
+	mappings = "snapshot_20151129"
 }
 
 processResources
