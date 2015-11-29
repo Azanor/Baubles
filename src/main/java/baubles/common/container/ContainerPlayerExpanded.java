@@ -107,7 +107,7 @@ public class ContainerPlayerExpanded extends Container
         super.onContainerClosed(player);
         for (int i = 0; i < 4; ++i)
         {
-            ItemStack itemstack = this.craftMatrix.getStackInSlotOnClosing(i);
+            ItemStack itemstack = this.craftMatrix.removeStackFromSlot(i);
 
             if (itemstack != null)
             {

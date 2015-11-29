@@ -54,6 +54,14 @@ public class InventoryBaubles implements IInventory {
 	public ItemStack getStackInSlot(int par1) {
 		return par1 >= this.getSizeInventory() ? null : this.stackList[par1];
 	}
+	
+	/**
+	 * Returns the name of the inventory
+	 */
+	@Override
+	public String getName() {
+		return "";
+	}
 
 	/**
 	 * Returns if the inventory is named
@@ -74,7 +82,7 @@ public class InventoryBaubles implements IInventory {
 	 * GUI.
 	 */
 	@Override
-	public ItemStack getStackInSlotOnClosing(int par1) {
+	public ItemStack removeStackFromSlot(int par1) {
 		if (this.stackList[par1] != null) {
 			ItemStack itemstack = this.stackList[par1];
 			this.stackList[par1] = null;
@@ -316,10 +324,5 @@ public class InventoryBaubles implements IInventory {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public String getCommandSenderName() {
-		return null;
 	}
 }
