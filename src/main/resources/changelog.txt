@@ -1,3 +1,7 @@
+1.1.1.1
+- change filename format to account for players with names that are forbidden normally
+- fixed for client-side syncing event not firing on initial player login
+
 1.1.1.0
 - make it work server-side
 

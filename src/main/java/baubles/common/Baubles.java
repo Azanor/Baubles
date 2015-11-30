@@ -3,6 +3,7 @@ package baubles.common;
 import java.io.File;
 
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -19,12 +20,16 @@ import baubles.common.event.EventHandlerEntity;
 import baubles.common.event.EventHandlerNetwork;
 import baubles.common.network.PacketHandler;
 
-@Mod(modid = Baubles.MODID, name = Baubles.MODNAME, version = Baubles.VERSION, dependencies="required-after:Forge@[11.14.1,);")
+@Mod(
+		modid = Baubles.MODID, 
+		name = Baubles.MODNAME, 
+		version = Baubles.VERSION, 
+		dependencies="required-after:Forge@[11.14.3,);")
 public class Baubles {
 	
 	public static final String MODID = "Baubles";
 	public static final String MODNAME = "Baubles";
-	public static final String VERSION = "1.1.1.0";
+	public static final String VERSION = "1.1.1.1";
 
 	@SidedProxy(clientSide = "baubles.client.ClientProxy", serverSide = "baubles.common.CommonProxy")
 	public static CommonProxy proxy;
@@ -58,7 +63,9 @@ public class Baubles {
 		entityEventNetwork = new EventHandlerNetwork();
 		
 		MinecraftForge.EVENT_BUS.register(entityEventHandler);
-		MinecraftForge.EVENT_BUS.register(entityEventNetwork);
+		MinecraftForge.EVENT_BUS.register(entityEventNetwork);		
+		FMLCommonHandler.instance().bus().register(entityEventHandler);
+		FMLCommonHandler.instance().bus().register(entityEventNetwork);
 
 		/////////////////////
 
