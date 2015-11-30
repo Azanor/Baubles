@@ -13,7 +13,7 @@ public class EventHandlerNetwork {
 	public void playerLoggedInEvent (PlayerEvent.PlayerLoggedInEvent event)    {    
 		Side side = FMLCommonHandler.instance().getEffectiveSide();        
 		if (side == Side.SERVER)        {
-			syncBaubles(event.player);
+			EventHandlerEntity.syncSchedule.add(event.player.getEntityId());
 		}
 	}
 	

@@ -2,6 +2,7 @@ package baubles.common.event;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
@@ -15,6 +16,8 @@ import baubles.common.lib.PlayerHandler;
 import com.google.common.io.Files;
 
 public class EventHandlerEntity {
+	
+	static HashSet<Integer> syncSchedule = new HashSet<Integer>();
 
 	@SubscribeEvent
 	public void playerTick(PlayerEvent.LivingUpdateEvent event) {
@@ -22,6 +25,11 @@ public class EventHandlerEntity {
 		// player events
 		if (event.entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) event.entity;
+			
+			if (!syncSchedule.isEmpty() && syncSchedule.contains(player.getEntityId())) {
+				EventHandlerNetwork.syncBaubles(player);
+				syncSchedule.remove(player.getEntityId());
+			}
 
 			InventoryBaubles baubles = PlayerHandler.getPlayerBaubles(player);
 			for (int a = 0; a < baubles.getSizeInventory(); a++) {
@@ -85,7 +93,7 @@ public class EventHandlerEntity {
 		}
 		
 		PlayerHandler.loadPlayerBaubles(event.entityPlayer, file1, getPlayerFile("baubback", event.playerDirectory, event.entityPlayer.getDisplayNameString()));
-		EventHandlerNetwork.syncBaubles(event.entityPlayer);
+		EventHandlerEntity.syncSchedule.add(event.entityPlayer.getEntityId());
 	}
 	
 	public File getPlayerFile(String suffix, File playerDirectory, String playername)
