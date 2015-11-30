@@ -40,7 +40,7 @@ public class EventHandlerEntity {
 	public void playerDeath(PlayerDropsEvent event) {
 		if (event.entity instanceof EntityPlayer
 				&& !event.entity.worldObj.isRemote
-				&& !event.entity.worldObj.getGameRules().getBoolean("keepInventory")){
+				&& !event.entity.worldObj.getGameRules().getBoolean("keepInventory")) {
 			PlayerHandler.getPlayerBaubles(event.entityPlayer).dropItemsAt(
 					event.drops,event.entityPlayer);
 		}
@@ -62,14 +62,24 @@ public class EventHandlerEntity {
 					File fb = event.getPlayerFile("baubback");
 					if (fb.exists()) fb.delete();					
 				} catch (IOException e) {}
-			} else {
-				File filet = getLegacyFileFromPlayer(event.entityPlayer);
-				if (filet.exists()) {
+			} else {				 
+				File fileq = getLegacy1110FileFromPlayer("baub", event.playerDirectory, event.entityPlayer.getDisplayNameString());
+				if (fileq.exists()) {
 					try {
-						Files.copy(filet, file1);
-						Baubles.log.info("Using pre MC 1.7.10 Baubles savefile for "+event.entityPlayer.getDisplayNameString());
+						Files.copy(fileq, file1);
+						fileq.deleteOnExit();
+						Baubles.log.info("Using pre 1.1.1.1 Baubles savefile for "+event.entityPlayer.getDisplayNameString());
 					} catch (IOException e) {}
-				}
+				} else {
+					File filet = getLegacy1710FileFromPlayer(event.entityPlayer);
+					if (filet.exists()) {
+						try {
+							Files.copy(filet, file1);
+							filet.deleteOnExit();
+							Baubles.log.info("Using pre MC 1.7.10 Baubles savefile for "+event.entityPlayer.getDisplayNameString());
+						} catch (IOException e) {}
+					}
+				}				
 			}
 		}
 		
@@ -80,10 +90,10 @@ public class EventHandlerEntity {
 	public File getPlayerFile(String suffix, File playerDirectory, String playername)
     {
         if ("dat".equals(suffix)) throw new IllegalArgumentException("The suffix 'dat' is reserved");
-        return new File(playerDirectory, playername+"."+suffix);
+        return new File(playerDirectory, "_"+playername+"."+suffix);
     }
 	
-	public static File getLegacyFileFromPlayer(EntityPlayer player)
+	public static File getLegacy1710FileFromPlayer(EntityPlayer player)
     {
 		try {
 			File playersDirectory = new File(player.worldObj.getSaveHandler().getWorldDirectory(), "players");
@@ -91,6 +101,14 @@ public class EventHandlerEntity {
 		} catch (Exception e) { e.printStackTrace(); }
 		return null;
     }
+	
+	public File getLegacy1110FileFromPlayer(String suffix, File playerDirectory, String playername)
+    {
+		if ("dat".equals(suffix)) throw new IllegalArgumentException("The suffix 'dat' is reserved");
+        return new File(playerDirectory, playername+"."+suffix);
+    }
+	
+	
 
 	@SubscribeEvent
 	public void playerSave(PlayerEvent.SaveToFile event) {

@@ -3,6 +3,7 @@ package baubles.common;
 import java.io.File;
 
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -59,6 +60,9 @@ public class Baubles {
 		
 		MinecraftForge.EVENT_BUS.register(entityEventHandler);
 		MinecraftForge.EVENT_BUS.register(entityEventNetwork);
+		
+		FMLCommonHandler.instance().bus().register(entityEventHandler);
+		FMLCommonHandler.instance().bus().register(entityEventNetwork);
 
 		/////////////////////
 
