@@ -82,7 +82,7 @@ public class InventoryBaubles implements IInventory {
 	 * GUI.
 	 */
 	@Override
-	public ItemStack getStackInSlotOnClosing(int par1) {
+	public ItemStack removeStackFromSlot(int par1) {
 		if (this.stackList[par1] != null) {
 			ItemStack itemstack = this.stackList[par1];
 			this.stackList[par1] = null;

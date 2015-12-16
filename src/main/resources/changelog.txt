@@ -1,3 +1,6 @@
+1.1.2.0
+- update to MC 1.8.8
+
 1.1.1.1
 - change filename format to account for players with names that are forbidden normally
 - fixed for client-side syncing event not firing on initial player login
