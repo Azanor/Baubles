@@ -149,7 +149,8 @@ public class InventoryBaubles implements IInventory {
 		}
 		this.stackList[par1] = stack;
 		if (!blockEvents && stack != null && stack.getItem() instanceof IBauble) {
-			((IBauble) stack.getItem()).onEquipped(stack, player.get());
+			if (player.get()!=null)
+				((IBauble) stack.getItem()).onEquipped(stack, player.get());
 		}
 		if (eventHandler != null)
 			this.eventHandler.onCraftMatrixChanged(this);

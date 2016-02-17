@@ -30,12 +30,6 @@ public class Config {
         config.save();
     }	
 		
-	public static void initRecipe() {	
-//		GameRegistry.addShapedRecipe(
-//				new ItemStack(itemRing), new Object[] {
-//					"PIP", "IPI", "PIP", 
-//					Character.valueOf('I'), new ItemStack(Items.iron_ingot), 
-//					Character.valueOf('P'), new ItemStack(Items.potionitem,1,8226)});
-	}
+	public static void initRecipe() {	}
 	
 }
