@@ -131,7 +131,8 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
         RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
         renderManager.setPlayerViewY(180.0F);
         renderManager.setRenderShadow(false);
-        renderManager.renderEntityWithPosYaw(playerdrawn, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
+        renderManager.doRenderEntity(playerdrawn, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
+
         renderManager.setRenderShadow(true);
         playerdrawn.renderYawOffset = f2;
         playerdrawn.rotationYaw = f3;
@@ -168,7 +169,4 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
         } else
 		super.keyTyped(par1, par2);
 	}
-    
-    
-    
 }

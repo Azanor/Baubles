@@ -4,6 +4,11 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import baubles.api.BaubleType;
+import baubles.api.IBauble;
+import baubles.common.Baubles;
+import baubles.common.network.PacketHandler;
+import baubles.common.network.PacketSyncBauble;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,13 +17,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.util.MathHelper;
-import baubles.api.BaubleType;
-import baubles.api.IBauble;
-import baubles.common.Baubles;
-import baubles.common.network.PacketHandler;
-import baubles.common.network.PacketSyncBauble;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
 
 public class InventoryBaubles implements IInventory {
 	public ItemStack[] stackList;
@@ -72,7 +72,7 @@ public class InventoryBaubles implements IInventory {
 	}
 
 	@Override
-	public IChatComponent getDisplayName() {
+	public ITextComponent getDisplayName() {
 		return null;
 	}
 

@@ -1,21 +1,22 @@
 
 package baubles.client;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import baubles.client.gui.GuiEvents;
 import baubles.client.gui.GuiPlayerExpanded;
 import baubles.common.Baubles;
 import baubles.common.CommonProxy;
 import baubles.common.Config;
 import baubles.common.event.KeyHandler;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class ClientProxy extends CommonProxy {
 	
@@ -45,6 +46,6 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void registerItemModels() {
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Config.itemRing, 0, new ModelResourceLocation(Baubles.MODID + ":ring", "inventory"));
-		ModelBakery.addVariantName(Config.itemRing, Baubles.MODID + ":ring");
+		ModelBakery.registerItemVariants(Config.itemRing, new ResourceLocation(Baubles.MODID + ":ring"));
 	}
 }

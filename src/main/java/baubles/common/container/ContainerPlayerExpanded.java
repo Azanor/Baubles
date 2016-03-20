@@ -3,6 +3,7 @@ package baubles.common.container;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.InventoryCrafting;
@@ -54,7 +55,7 @@ public class ContainerPlayerExpanded extends Container
         for (i = 0; i < 4; ++i)
         {
             final int k = i;
-            this.addSlotToContainer(new Slot(playerInv, playerInv.getSizeInventory() - 1 - i, 8, 8 + i * 18)
+            this.addSlotToContainer(new Slot(playerInv, playerInv.getSizeInventory() - 2 - i, 8, 8 + i * 18)
             {
                 @Override
                 public int getSlotStackLimit() { return 1; }
@@ -62,7 +63,7 @@ public class ContainerPlayerExpanded extends Container
                 public boolean isItemValid(ItemStack par1ItemStack)
                 {
                     if (par1ItemStack == null) return false;
-                    return par1ItemStack.getItem().isValidArmor(par1ItemStack, k, thePlayer);
+                    return par1ItemStack.getItem().isValidArmor(par1ItemStack, EntityEquipmentSlot.CHEST, thePlayer) || par1ItemStack.getItem().isValidArmor(par1ItemStack, EntityEquipmentSlot.FEET, thePlayer) || par1ItemStack.getItem().isValidArmor(par1ItemStack, EntityEquipmentSlot.HEAD, thePlayer) || par1ItemStack.getItem().isValidArmor(par1ItemStack, EntityEquipmentSlot.LEGS, thePlayer);
                 }
             });
         }
@@ -164,16 +165,16 @@ public class ContainerPlayerExpanded extends Container
                     return null;
                 }
             }
-            else if (itemstack.getItem() instanceof ItemArmor && 
-            		!((Slot)this.inventorySlots.get(5 + ((ItemArmor)itemstack.getItem()).armorType)).getHasStack())
-            {
-                int j = 5 + ((ItemArmor)itemstack.getItem()).armorType;
-
-                if (!this.mergeItemStack(itemstack1, j, j + 1, false))
-                {
-                    return null;
-                }
-            }
+//            else if (itemstack.getItem() instanceof ItemArmor && 
+//            		!((Slot)this.inventorySlots.get(5 + ((ItemArmor)itemstack.getItem()).armorType)).getHasStack())
+//            {
+//                int j = 5 + ((ItemArmor)itemstack.getItem()).armorType;
+//
+//                if (!this.mergeItemStack(itemstack1, j, j + 1, false))
+//                {
+//                    return null;
+//                }
+//            }
             else if (itemstack.getItem() instanceof IBauble && 
             		((IBauble)itemstack.getItem()).getBaubleType(itemstack)==BaubleType.AMULET &&
     				((IBauble)itemstack.getItem()).canEquip(itemstack, thePlayer) &&
