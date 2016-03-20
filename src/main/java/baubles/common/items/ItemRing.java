@@ -16,6 +16,7 @@ import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.world.World;
@@ -90,7 +91,7 @@ public class ItemRing  extends Item implements IBauble
 	@Override
 	public void onEquipped(ItemStack itemstack, EntityLivingBase player) {
 		if (!player.worldObj.isRemote) {
-//			player.worldObj.playSoundAtEntity(player, "random.orb", 0.1F, 1.3f);
+			player.worldObj.playAuxSFXAtEntity((EntityPlayer) player, 1, new BlockPos(player.posX, player.posY, player.posZ), 1);
 		}
 	}
 
