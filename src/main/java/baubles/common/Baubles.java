@@ -66,14 +66,12 @@ public class Baubles {
 		MinecraftForge.EVENT_BUS.register(entityEventNetwork);		
 
 		/////////////////////
-
-		Config.save();
-		
+		proxy.registerItemModels();
+		Config.save();	
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent evt) {
-		proxy.registerItemModels();
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
   		proxy.registerKeyBindings();  		
 	}

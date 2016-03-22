@@ -65,7 +65,7 @@ public class ItemRing  extends Item implements IBauble
 					break;
 				}
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.PASS, par1ItemStack);	
+		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, par1ItemStack);	
 	}
 
 	@Override
