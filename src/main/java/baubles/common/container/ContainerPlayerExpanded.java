@@ -64,7 +64,7 @@ public class ContainerPlayerExpanded extends Container
 				@Override
 				public boolean isItemValid(ItemStack stack) 
 				{
-					return stack != null && stack.getItem().isValidArmor(stack, slot, player);
+					return stack != null && stack.getItem().isValidArmor(stack, slot, thePlayer);
 				}
 			});
 		}
