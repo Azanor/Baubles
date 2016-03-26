@@ -23,8 +23,8 @@ public class EventHandlerEntity {
 	public void playerTick(PlayerEvent.LivingUpdateEvent event) {
 
 		// player events
-		if (event.entity instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) event.entity;
+		if (event.getEntity() instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) event.getEntity();
 			
 			if (!syncSchedule.isEmpty() && syncSchedule.contains(player.getEntityId())) {
 				EventHandlerNetwork.syncBaubles(player);
@@ -46,53 +46,53 @@ public class EventHandlerEntity {
 
 	@SubscribeEvent
 	public void playerDeath(PlayerDropsEvent event) {
-		if (event.entity instanceof EntityPlayer
-				&& !event.entity.worldObj.isRemote
-				&& !event.entity.worldObj.getGameRules().getBoolean("keepInventory")) {
-			PlayerHandler.getPlayerBaubles(event.entityPlayer).dropItemsAt(
-					event.drops,event.entityPlayer);
+		if (event.getEntity() instanceof EntityPlayer
+				&& !event.getEntity().worldObj.isRemote
+				&& !event.getEntity().worldObj.getGameRules().getBoolean("keepInventory")) {
+			PlayerHandler.getPlayerBaubles(event.getEntityPlayer()).dropItemsAt(
+					event.getDrops(),event.getEntityPlayer());
 		}
 
 	}
 
 	@SubscribeEvent
 	public void playerLoad(PlayerEvent.LoadFromFile event) {
-		PlayerHandler.clearPlayerBaubles(event.entityPlayer);
+		PlayerHandler.clearPlayerBaubles(event.getEntityPlayer());
 		
-		File file1 = getPlayerFile("baub", event.playerDirectory, event.entityPlayer.getDisplayNameString());
+		File file1 = getPlayerFile("baub", event.getPlayerDirectory(), event.getEntityPlayer().getDisplayNameString());
 		if (!file1.exists()) {
 			File filep = event.getPlayerFile("baub");
 			if (filep.exists()) {
 				try {
 					Files.copy(filep, file1);					
-					Baubles.log.info("Using and converting UUID Baubles savefile for "+event.entityPlayer.getDisplayNameString());
+					Baubles.log.info("Using and converting UUID Baubles savefile for "+event.getEntityPlayer().getDisplayNameString());
 					filep.delete();
 					File fb = event.getPlayerFile("baubback");
 					if (fb.exists()) fb.delete();					
 				} catch (IOException e) {}
 			} else {				 
-				File fileq = getLegacy1110FileFromPlayer("baub", event.playerDirectory, event.entityPlayer.getDisplayNameString());
+				File fileq = getLegacy1110FileFromPlayer("baub", event.getPlayerDirectory(), event.getEntityPlayer().getDisplayNameString());
 				if (fileq.exists()) {
 					try {
 						Files.copy(fileq, file1);
 						fileq.deleteOnExit();
-						Baubles.log.info("Using pre 1.1.1.1 Baubles savefile for "+event.entityPlayer.getDisplayNameString());
+						Baubles.log.info("Using pre 1.1.1.1 Baubles savefile for "+event.getEntityPlayer().getDisplayNameString());
 					} catch (IOException e) {}
 				} else {
-					File filet = getLegacy1710FileFromPlayer(event.entityPlayer);
+					File filet = getLegacy1710FileFromPlayer(event.getEntityPlayer());
 					if (filet.exists()) {
 						try {
 							Files.copy(filet, file1);
 							filet.deleteOnExit();
-							Baubles.log.info("Using pre MC 1.7.10 Baubles savefile for "+event.entityPlayer.getDisplayNameString());
+							Baubles.log.info("Using pre MC 1.7.10 Baubles savefile for "+event.getEntityPlayer().getDisplayNameString());
 						} catch (IOException e) {}
 					}
 				}				
 			}
 		}
 		
-		PlayerHandler.loadPlayerBaubles(event.entityPlayer, file1, getPlayerFile("baubback", event.playerDirectory, event.entityPlayer.getDisplayNameString()));
-		EventHandlerEntity.syncSchedule.add(event.entityPlayer.getEntityId());
+		PlayerHandler.loadPlayerBaubles(event.getEntityPlayer(), file1, getPlayerFile("baubback", event.getPlayerDirectory(), event.getEntityPlayer().getDisplayNameString()));
+		EventHandlerEntity.syncSchedule.add(event.getEntityPlayer().getEntityId());
 	}
 	
 	public File getPlayerFile(String suffix, File playerDirectory, String playername)
@@ -120,9 +120,9 @@ public class EventHandlerEntity {
 
 	@SubscribeEvent
 	public void playerSave(PlayerEvent.SaveToFile event) {
-		PlayerHandler.savePlayerBaubles(event.entityPlayer, 
-				getPlayerFile("baub", event.playerDirectory, event.entityPlayer.getDisplayNameString()),
-				getPlayerFile("baubback", event.playerDirectory, event.entityPlayer.getDisplayNameString()));
+		PlayerHandler.savePlayerBaubles(event.getEntityPlayer(), 
+				getPlayerFile("baub", event.getPlayerDirectory(), event.getEntityPlayer().getDisplayNameString()),
+				getPlayerFile("baubback", event.getPlayerDirectory(), event.getEntityPlayer().getDisplayNameString()));
 	}
 
 }

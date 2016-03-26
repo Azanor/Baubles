@@ -18,20 +18,20 @@ public class GuiEvents {
 	@SubscribeEvent
 	public void guiPostInit(GuiScreenEvent.InitGuiEvent.Post event) {
 
-		if (event.gui instanceof GuiInventory || event.gui instanceof GuiPlayerExpanded) {
+		if (event.getGui() instanceof GuiInventory || event.getGui() instanceof GuiPlayerExpanded) {
 			
 			int xSize = 176;
 		    int ySize = 166;
 			
-			int guiLeft = (event.gui.width - xSize) / 2;
-	        int guiTop = (event.gui.height - ySize) / 2;
+			int guiLeft = (event.getGui().width - xSize) / 2;
+	        int guiTop = (event.getGui().height - ySize) / 2;
 	        
-	        if (!event.gui.mc.thePlayer.getActivePotionEffects().isEmpty() && isNeiHidden()) {
-	        	guiLeft = 160 + (event.gui.width - xSize - 200) / 2;
+	        if (!event.getGui().mc.thePlayer.getActivePotionEffects().isEmpty()) {
+	        	guiLeft = 160 + (event.getGui().width - xSize - 200) / 2;
 	        }
 			
-			event.buttonList.add(new GuiBaublesButton(55, guiLeft + 64, guiTop + 9, 10, 10, 
-					I18n.format((event.gui instanceof GuiInventory)?"button.baubles":"button.normal", new Object[0])));
+			event.getButtonList().add(new GuiBaublesButton(55, guiLeft + 64, guiTop + 9, 10, 10, 
+					I18n.format((event.getGui() instanceof GuiInventory)?"button.baubles":"button.normal", new Object[0])));
 		}
 		
 	}
@@ -40,30 +40,17 @@ public class GuiEvents {
 	@SubscribeEvent
 	public void guiPostAction(GuiScreenEvent.ActionPerformedEvent.Post event) {
 
-		if (event.gui instanceof GuiInventory) {
-			if (event.button.id == 55) {
-				PacketHandler.INSTANCE.sendToServer(new PacketOpenBaublesInventory(event.gui.mc.thePlayer));
+		if (event.getGui() instanceof GuiInventory) {
+			if (event.getButton().id == 55) {
+				PacketHandler.INSTANCE.sendToServer(new PacketOpenBaublesInventory(event.getGui().mc.thePlayer));
 			}
 		}
 		
-		if (event.gui instanceof GuiPlayerExpanded) {
-			if (event.button.id == 55) {
-				event.gui.mc.displayGuiScreen(new GuiInventory(event.gui.mc.thePlayer));
-				PacketHandler.INSTANCE.sendToServer(new PacketOpenNormalInventory(event.gui.mc.thePlayer));
+		if (event.getGui() instanceof GuiPlayerExpanded) {
+			if (event.getButton().id == 55) {
+				event.getGui().mc.displayGuiScreen(new GuiInventory(event.getGui().mc.thePlayer));
+				PacketHandler.INSTANCE.sendToServer(new PacketOpenNormalInventory(event.getGui().mc.thePlayer));
 			}
 		}
-	}
-	
-	static Method isNEIHidden;
-	boolean isNeiHidden() {
-		boolean hidden=true;
-		try {
-			if (isNEIHidden==null) {
-				Class fake = Class.forName("codechicken.nei.NEIClientConfig");
-			    isNEIHidden = fake.getMethod("isHidden");
-			}
-			hidden = (Boolean) isNEIHidden.invoke(null);
-	    } catch(Exception ex) { }		
-		return hidden;
 	}
 }
