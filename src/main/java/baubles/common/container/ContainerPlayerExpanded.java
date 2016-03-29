@@ -12,6 +12,8 @@ import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import baubles.common.lib.PlayerHandler;
@@ -41,15 +43,13 @@ public class ContainerPlayerExpanded extends Container
         	baubles.stackList = PlayerHandler.getPlayerBaubles(player).stackList;
         }
         
-        this.addSlotToContainer(new SlotCrafting(playerInv.player, this.craftMatrix, this.craftResult, 0, 144, 36));
-        int i;
-        int j;
-
-        for (i = 0; i < 2; ++i)
+        this.addSlotToContainer(new SlotCrafting(playerInv.player, this.craftMatrix, this.craftResult, 0, 154, 28));
+        
+        for (int i = 0; i < 2; ++i)
         {
-            for (j = 0; j < 2; ++j)
+            for (int j = 0; j < 2; ++j)
             {
-                this.addSlotToContainer(new Slot(this.craftMatrix, j + i * 2, 106 + j * 18, 26 + i * 18));
+                this.addSlotToContainer(new Slot(this.craftMatrix, j + i * 2, 98 + j * 18, 18 + i * 18));
             }
         }
 
@@ -57,35 +57,68 @@ public class ContainerPlayerExpanded extends Container
 		for (int k = 0; k < 4; k++) 
 		{
 			final EntityEquipmentSlot slot = equipmentSlots[k];
-			addSlotToContainer(new Slot(playerInv, playerInv.getSizeInventory() - 2 - k, 8, 8 + k * 18) 
-			{
-				@Override
-				public int getSlotStackLimit() { return 1; }
-				@Override
-				public boolean isItemValid(ItemStack stack) 
-				{
-					return stack != null && stack.getItem().isValidArmor(stack, slot, thePlayer);
-				}
-			});
+			this.addSlotToContainer(new Slot(playerInv, 36 + (3 - k), 8, 8 + k * 18)
+            {
+                @Override
+                public int getSlotStackLimit()
+                {
+                    return 1;
+                }
+                @Override
+                public boolean isItemValid(ItemStack stack)
+                {
+                    if (stack == null)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return stack.getItem().isValidArmor(stack, slot, thePlayer);
+                    }
+                }
+                @Override
+                @SideOnly(Side.CLIENT)
+                public String getSlotTexture()
+                {
+                    return ItemArmor.EMPTY_SLOT_NAMES[slot.getIndex()];
+                }
+            });
 		}
+		
+		
         
-        this.addSlotToContainer(new SlotBauble(baubles,BaubleType.AMULET,0,80,8 + 0 * 18));
-        this.addSlotToContainer(new SlotBauble(baubles,BaubleType.RING,1,80,8 + 1 * 18));
-        this.addSlotToContainer(new SlotBauble(baubles,BaubleType.RING,2,80,8 + 2 * 18));
-        this.addSlotToContainer(new SlotBauble(baubles,BaubleType.BELT,3,80,8 + 3 * 18));
+        this.addSlotToContainer(new SlotBauble(baubles,BaubleType.AMULET,0,77,8 ));
+        this.addSlotToContainer(new SlotBauble(baubles,BaubleType.RING,1,77,8 + 1 * 18));
+        this.addSlotToContainer(new SlotBauble(baubles,BaubleType.RING,2,77,8 + 2 * 18));
+        this.addSlotToContainer(new SlotBauble(baubles,BaubleType.BELT,3,77,8 + 3 * 18));
 
-        for (i = 0; i < 3; ++i)
+        for (int i = 0; i < 3; ++i)
         {
-            for (j = 0; j < 9; ++j)
+            for (int j = 0; j < 9; ++j)
             {
                 this.addSlotToContainer(new Slot(playerInv, j + (i + 1) * 9, 8 + j * 18, 84 + i * 18));
             }
         }
 
-        for (i = 0; i < 9; ++i)
+        for (int i = 0; i < 9; ++i)
         {
             this.addSlotToContainer(new Slot(playerInv, i, 8 + i * 18, 142));
         }
+        
+        this.addSlotToContainer(new Slot(playerInv, 40, 97, 62)
+        {
+        	@Override
+            public boolean isItemValid(ItemStack stack)
+            {
+                return super.isItemValid(stack);
+            }
+        	@Override
+            @SideOnly(Side.CLIENT)
+            public String getSlotTexture()
+            {
+                return "minecraft:items/empty_armor_slot_shield";
+            }
+        });
 
         this.onCraftMatrixChanged(this.craftMatrix);
         

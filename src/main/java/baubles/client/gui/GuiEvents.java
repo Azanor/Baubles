@@ -25,10 +25,6 @@ public class GuiEvents {
 			
 			int guiLeft = (event.getGui().width - xSize) / 2;
 	        int guiTop = (event.getGui().height - ySize) / 2;
-	        
-	        if (!event.getGui().mc.thePlayer.getActivePotionEffects().isEmpty()) {
-	        	guiLeft = 160 + (event.getGui().width - xSize - 200) / 2;
-	        }
 			
 			event.getButtonList().add(new GuiBaublesButton(55, guiLeft + 64, guiTop + 9, 10, 10, 
 					I18n.format((event.getGui() instanceof GuiInventory)?"button.baubles":"button.normal", new Object[0])));
