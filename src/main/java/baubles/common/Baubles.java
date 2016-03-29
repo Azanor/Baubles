@@ -24,7 +24,7 @@ import baubles.common.network.PacketHandler;
 		modid = Baubles.MODID, 
 		name = Baubles.MODNAME, 
 		version = Baubles.VERSION, 
-		dependencies="required-after:Forge@[11.15.0,);")
+		dependencies="required-after:Forge@[12.16.0.1809,);")
 public class Baubles {
 	
 	public static final String MODID = "Baubles";
@@ -66,14 +66,12 @@ public class Baubles {
 		MinecraftForge.EVENT_BUS.register(entityEventNetwork);		
 
 		/////////////////////
-
-		Config.save();
-		
+		proxy.registerItemModels();
+		Config.save();	
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent evt) {
-		proxy.registerItemModels();
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
   		proxy.registerKeyBindings();  		
 	}

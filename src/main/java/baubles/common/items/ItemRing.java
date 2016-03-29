@@ -5,11 +5,21 @@ import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.PotionType;
+import net.minecraft.potion.PotionUtils;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.world.World;
@@ -40,9 +50,9 @@ public class ItemRing  extends Item implements IBauble
 	public BaubleType getBaubleType(ItemStack itemstack) {
 		return BaubleType.RING;
 	}
-
+	
 	@Override
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
+	public ActionResult<ItemStack> onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer, EnumHand hand) {
 		if(!par2World.isRemote) { 
 			InventoryBaubles baubles = PlayerHandler.getPlayerBaubles(par3EntityPlayer);
 			for(int i = 0; i < baubles.getSizeInventory(); i++)
@@ -55,14 +65,13 @@ public class ItemRing  extends Item implements IBauble
 					break;
 				}
 		}
-
-		return par1ItemStack;	
+		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, par1ItemStack);	
 	}
 
 	@Override
 	public void onWornTick(ItemStack itemstack, EntityLivingBase player) {
-		if (itemstack.getItemDamage()==0 && !player.isPotionActive(Potion.digSpeed)) {
-			player.addPotionEffect(new PotionEffect(Potion.digSpeed.id,40,0,true,true));
+		if (itemstack.getItemDamage()==0 && !player.isPotionActive(MobEffects.digSpeed)) {
+			player.addPotionEffect(new PotionEffect(MobEffects.digSpeed,40,0,true,true));
 		}
 	}
 
@@ -85,7 +94,7 @@ public class ItemRing  extends Item implements IBauble
 	@Override
 	public void onEquipped(ItemStack itemstack, EntityLivingBase player) {
 		if (!player.worldObj.isRemote) {
-			player.worldObj.playSoundAtEntity(player, "random.orb", 0.1F, 1.3f);
+			player.playSound(SoundEvents.item_armor_equip_diamond, 0.1F, 1.3f);
 		}
 	}
 

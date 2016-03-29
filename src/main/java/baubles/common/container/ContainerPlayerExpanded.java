@@ -3,6 +3,7 @@ package baubles.common.container;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.InventoryCrafting;
@@ -28,6 +29,7 @@ public class ContainerPlayerExpanded extends Container
      */
     public boolean isLocalWorld;
     private final EntityPlayer thePlayer;
+    private static final EntityEquipmentSlot[] equipmentSlots = new EntityEquipmentSlot[] {EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET};
 
     public ContainerPlayerExpanded(InventoryPlayer playerInv, boolean par2, EntityPlayer player)
     {
@@ -51,21 +53,21 @@ public class ContainerPlayerExpanded extends Container
             }
         }
 
-        for (i = 0; i < 4; ++i)
-        {
-            final int k = i;
-            this.addSlotToContainer(new Slot(playerInv, playerInv.getSizeInventory() - 1 - i, 8, 8 + i * 18)
-            {
-                @Override
-                public int getSlotStackLimit() { return 1; }
-                @Override
-                public boolean isItemValid(ItemStack par1ItemStack)
-                {
-                    if (par1ItemStack == null) return false;
-                    return par1ItemStack.getItem().isValidArmor(par1ItemStack, k, thePlayer);
-                }
-            });
-        }
+
+		for (int k = 0; k < 4; k++) 
+		{
+			final EntityEquipmentSlot slot = equipmentSlots[k];
+			addSlotToContainer(new Slot(playerInv, playerInv.getSizeInventory() - 2 - k, 8, 8 + k * 18) 
+			{
+				@Override
+				public int getSlotStackLimit() { return 1; }
+				@Override
+				public boolean isItemValid(ItemStack stack) 
+				{
+					return stack != null && stack.getItem().isValidArmor(stack, slot, thePlayer);
+				}
+			});
+		}
         
         this.addSlotToContainer(new SlotBauble(baubles,BaubleType.AMULET,0,80,8 + 0 * 18));
         this.addSlotToContainer(new SlotBauble(baubles,BaubleType.RING,1,80,8 + 1 * 18));
@@ -164,12 +166,12 @@ public class ContainerPlayerExpanded extends Container
                     return null;
                 }
             }
-            else if (itemstack.getItem() instanceof ItemArmor && 
-            		!((Slot)this.inventorySlots.get(5 + ((ItemArmor)itemstack.getItem()).armorType)).getHasStack())
+            else if (itemstack.getItem() instanceof ItemArmor)
             {
-                int j = 5 + ((ItemArmor)itemstack.getItem()).armorType;
-
-                if (!this.mergeItemStack(itemstack1, j, j + 1, false))
+				ItemArmor armor = (ItemArmor) itemstack1.getItem();
+				int armorSlot = 8 - armor.armorType.getIndex();
+				
+                if (!this.mergeItemStack(itemstack1, armorSlot, armorSlot + 1, false))
                 {
                     return null;
                 }
