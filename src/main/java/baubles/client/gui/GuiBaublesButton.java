@@ -5,23 +5,23 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 
 public class GuiBaublesButton extends GuiButton {
 
-	public GuiBaublesButton(int buttonId, int x, int y, int width, int height, String buttonText) {
-		super(buttonId, x, y, width, height, buttonText);
+	private final int guiLeft;
+
+	public GuiBaublesButton(int buttonId, int guiLeft, int guiTop, int x, int y, int width, int height, String buttonText) {
+		super(buttonId, guiLeft + x, guiTop + y, width, height, buttonText);
+		this.guiLeft = guiLeft;
 	}
 	
 	
 	
 	@Override
 	public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
-		int potionShift = 0;
-    	if (mc.thePlayer!=null && !mc.thePlayer.getActivePotionEffects().isEmpty()) {
-        	potionShift = 60;
-        }
+		int potionShift = getPotionShift(mc);
 		return super.mousePressed(mc, mouseX - potionShift, mouseY);
 	}
 
@@ -32,10 +32,7 @@ public class GuiBaublesButton extends GuiButton {
     {
         if (this.visible)
         {
-        	int potionShift = 0;
-        	if (mc.thePlayer!=null && !mc.thePlayer.getActivePotionEffects().isEmpty()) {
-	        	potionShift = 60;
-	        }
+        	int potionShift = getPotionShift(mc);
         	
             FontRenderer fontrenderer = mc.fontRendererObj;
             mc.getTextureManager().bindTexture(GuiPlayerExpanded.background);
@@ -62,4 +59,11 @@ public class GuiBaublesButton extends GuiButton {
         }
     }
 
+	private int getPotionShift(Minecraft mc) {
+		if (mc.currentScreen instanceof GuiContainer) {
+			GuiContainer guiContainer = (GuiContainer) mc.currentScreen;
+			return this.guiLeft - guiContainer.guiLeft;
+		}
+		return 0;
+	}
 }

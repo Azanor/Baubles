@@ -38,6 +38,8 @@ processResources
         exclude 'mcmod.info'
     }
     
+    // Move access transformers to META-INF
+    rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
 // Create deobf dev jars

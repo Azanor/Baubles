@@ -1,7 +1,6 @@
 package baubles.client.gui;
 
-import java.lang.reflect.Method;
-
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.client.event.GuiScreenEvent;
@@ -19,14 +18,8 @@ public class GuiEvents {
 	public void guiPostInit(GuiScreenEvent.InitGuiEvent.Post event) {
 
 		if (event.getGui() instanceof GuiInventory || event.getGui() instanceof GuiPlayerExpanded) {
-			
-			int xSize = 176;
-		    int ySize = 166;
-			
-			int guiLeft = (event.getGui().width - xSize) / 2;
-	        int guiTop = (event.getGui().height - ySize) / 2;
-			
-			event.getButtonList().add(new GuiBaublesButton(55, guiLeft + 64, guiTop + 9, 10, 10, 
+			GuiContainer gui = (GuiContainer) event.getGui();
+			event.getButtonList().add(new GuiBaublesButton(55, gui.guiLeft, gui.guiTop, 64, 9, 10, 10,
 					I18n.format((event.getGui() instanceof GuiInventory)?"button.baubles":"button.normal", new Object[0])));
 		}
 		
