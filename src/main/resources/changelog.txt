@@ -1,3 +1,6 @@
+1.2.0.1
+- Fix bauble button alignment when potion shift is disabled (#129)
+
 1.2.0.0
 - update to MC 1.9
 - updated gui to account for new shield slot
