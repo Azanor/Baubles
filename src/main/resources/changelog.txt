@@ -1,3 +1,6 @@
+1.2.0.2
+- Fix manifest build issue (#130)
+
 1.2.0.1
 - Fix bauble button alignment when potion shift is disabled (#129)
 
