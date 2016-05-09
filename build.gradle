@@ -18,9 +18,9 @@ group= "com.azanor.baubles"
 archivesBaseName = "Baubles"
 
 minecraft {
-    version = "1.9-12.16.0.1811-1.9"
+    version = "1.9-12.16.1.1887"
     runDir = "run"
-    mappings = "snapshot_20160312"
+    mappings = "snapshot_20160506"
 }
 
 processResources
