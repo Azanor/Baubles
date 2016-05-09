@@ -146,7 +146,7 @@ public class ContainerPlayerExpanded extends Container
 
             if (itemstack != null)
             {
-                player.dropPlayerItemWithRandomChoice(itemstack, false);
+                player.dropItem(itemstack, false);
             }
         }
 
