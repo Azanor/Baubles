@@ -18,7 +18,7 @@ group= "com.azanor.baubles"
 archivesBaseName = "Baubles"
 
 minecraft {
-    version = "1.9.4-12.16.1.1909-1.9.4"
+    version = "1.9.4-12.17.0.1909-1.9.4"
     runDir = "run"
     mappings = "snapshot_20160518"
 }

@@ -23,7 +23,7 @@ import baubles.common.network.PacketHandler;
 		modid = Baubles.MODID, 
 		name = Baubles.MODNAME, 
 		version = Baubles.VERSION, 
-		dependencies="required-after:Forge@[12.16.1,);")
+		dependencies="required-after:Forge@[12.17.0,);")
 public class Baubles {
 	
 	public static final String MODID = "Baubles";
