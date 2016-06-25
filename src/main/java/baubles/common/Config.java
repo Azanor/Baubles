@@ -3,6 +3,7 @@ package baubles.common;
 import java.io.File;
 
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import baubles.common.items.ItemRing;
@@ -18,7 +19,7 @@ public class Config {
         config.load();
 
         itemRing =(new ItemRing()).setUnlocalizedName("Ring");
-		GameRegistry.registerItem(itemRing, "Ring");
+		GameRegistry.register(itemRing, new ResourceLocation(Baubles.MODID, "Ring"));
 
 		//save it
 		config.save();
