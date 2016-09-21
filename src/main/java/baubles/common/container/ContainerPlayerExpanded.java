@@ -1,5 +1,9 @@
 package baubles.common.container;
 
+import baubles.api.BaubleType;
+import baubles.api.IBauble;
+import baubles.api.cap.BaublesCapabilities;
+import baubles.api.cap.IBaublesItemHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -14,9 +18,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import baubles.api.BaubleType;
-import baubles.api.IBauble;
-import baubles.common.lib.PlayerHandler;
 
 public class ContainerPlayerExpanded extends Container
 {
@@ -25,7 +26,7 @@ public class ContainerPlayerExpanded extends Container
      */
     public InventoryCrafting craftMatrix = new InventoryCrafting(this, 2, 2);
     public IInventory craftResult = new InventoryCraftResult();
-    public InventoryBaubles baubles;
+    public IBaublesItemHandler baubles;
     /**
      * Determines if inventory manipulation should be handled.
      */
@@ -37,12 +38,8 @@ public class ContainerPlayerExpanded extends Container
     {
         this.isLocalWorld = par2;
         this.thePlayer = player;
-        baubles = new InventoryBaubles(player);
-        baubles.setEventHandler(this);
-        if (!player.worldObj.isRemote) {
-        	baubles.stackList = PlayerHandler.getPlayerBaubles(player).stackList;
-        }
-        
+        baubles = player.getCapability(BaublesCapabilities.CAPABILITY_BAUBLES, null);
+                
         this.addSlotToContainer(new SlotCrafting(playerInv.player, this.craftMatrix, this.craftResult, 0, 154, 28));
         
         for (int i = 0; i < 2; ++i)
@@ -87,10 +84,10 @@ public class ContainerPlayerExpanded extends Container
 		
 		
         
-        this.addSlotToContainer(new SlotBauble(baubles,BaubleType.AMULET,0,77,8 ));
-        this.addSlotToContainer(new SlotBauble(baubles,BaubleType.RING,1,77,8 + 1 * 18));
-        this.addSlotToContainer(new SlotBauble(baubles,BaubleType.RING,2,77,8 + 2 * 18));
-        this.addSlotToContainer(new SlotBauble(baubles,BaubleType.BELT,3,77,8 + 3 * 18));
+        this.addSlotToContainer(new SlotBauble(player,baubles,BaubleType.AMULET,0,77,8 ));
+        this.addSlotToContainer(new SlotBauble(player,baubles,BaubleType.RING,1,77,8 + 1 * 18));
+        this.addSlotToContainer(new SlotBauble(player,baubles,BaubleType.RING,2,77,8 + 2 * 18));
+        this.addSlotToContainer(new SlotBauble(player,baubles,BaubleType.BELT,3,77,8 + 3 * 18));
 
         for (int i = 0; i < 3; ++i)
         {
@@ -151,9 +148,6 @@ public class ContainerPlayerExpanded extends Container
         }
 
         this.craftResult.setInventorySlotContents(0, (ItemStack)null);
-        if (!player.worldObj.isRemote) {
-        	PlayerHandler.setPlayerBaubles(player, baubles);
-        }
     }
 
     @Override
@@ -302,7 +296,7 @@ public class ContainerPlayerExpanded extends Container
     
     @Override
 	public void putStacksInSlots(ItemStack[] p_75131_1_) {
-		baubles.blockEvents=true;
+    	baubles.setEventBlock(true);
 		super.putStacksInSlots(p_75131_1_);
 	}
     

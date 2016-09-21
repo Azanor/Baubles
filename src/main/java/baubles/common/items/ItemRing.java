@@ -1,9 +1,11 @@
 package baubles.common.items;
 
+import java.util.List;
+
 import baubles.api.BaubleType;
+import baubles.api.BaublesApi;
 import baubles.api.IBauble;
-import baubles.common.container.InventoryBaubles;
-import baubles.common.lib.PlayerHandler;
+import baubles.api.cap.IBaublesItemHandler;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,8 +21,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.List;
 
 public class ItemRing  extends Item implements IBauble
 {
@@ -46,20 +46,20 @@ public class ItemRing  extends Item implements IBauble
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer, EnumHand hand) {
-		if(!par2World.isRemote) { 
-			InventoryBaubles baubles = PlayerHandler.getPlayerBaubles(par3EntityPlayer);
-			for(int i = 0; i < baubles.getSizeInventory(); i++)
-				if(baubles.getStackInSlot(i) == null && baubles.isItemValidForSlot(i, par1ItemStack)) {
-					baubles.setInventorySlotContents(i, par1ItemStack.copy());
-					if(!par3EntityPlayer.capabilities.isCreativeMode){
-						par3EntityPlayer.inventory.setInventorySlotContents(par3EntityPlayer.inventory.currentItem, null);
+	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+		if(!world.isRemote) { 
+			IBaublesItemHandler baubles = BaublesApi.getBaubles(player);
+			for(int i = 0; i < baubles.getSlots(); i++)
+				if(baubles.getStackInSlot(i) == null && baubles.isItemValidForSlot(i, stack, player)) {
+					baubles.setStackInSlot(i, stack.copy());
+					if(!player.capabilities.isCreativeMode){
+						player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
 					}
-					onEquipped(par1ItemStack, par3EntityPlayer);
+					onEquipped(stack, player);
 					break;
 				}
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, par1ItemStack);	
+		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);	
 	}
 
 	@Override
