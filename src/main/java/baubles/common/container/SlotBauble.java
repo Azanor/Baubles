@@ -42,7 +42,6 @@ public class SlotBauble extends SlotItemHandler
 	public void onPickupFromSlot(EntityPlayer playerIn, ItemStack stack) {
 		if (!this.getHasStack() && !((IBaublesItemHandler)this.getItemHandler()).isEventBlocked()) {
 			((IBauble)stack.getItem()).onUnequipped(this.getStack(), playerIn);
-			System.out.println("onUnequipped "+playerIn.getEntityWorld());
 		}
 		super.onPickupFromSlot(playerIn, stack);		
 	}
@@ -52,7 +51,6 @@ public class SlotBauble extends SlotItemHandler
 		super.putStack(stack);		
 		if (this.getHasStack() && !((IBaublesItemHandler)this.getItemHandler()).isEventBlocked()) {
 			((IBauble)this.getStack().getItem()).onEquipped(this.getStack(), player);
-			System.out.println("onEquipped "+player.getEntityWorld());
 		}
 	}
 
