@@ -28,9 +28,9 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 		dependencies="required-after:Forge@[12.18.1,);")
 public class Baubles {
 	
-	public static final String MODID = "Baubles";
+	public static final String MODID = "baubles";
 	public static final String MODNAME = "Baubles";
-	public static final String VERSION = "1.3.BETA2";
+	public static final String VERSION = "1.3.BETA3";
 
 	@SidedProxy(clientSide = "baubles.client.ClientProxy", serverSide = "baubles.common.CommonProxy")
 	public static CommonProxy proxy;
@@ -41,12 +41,11 @@ public class Baubles {
 	public EventHandlerEntity entityEventHandler;
 	public File modDir;
 	
-	public static final Logger log = LogManager.getLogger("Baubles");
+	public static final Logger log = LogManager.getLogger(MODID.toUpperCase());
 	public static final int GUI = 0;
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		event.getModMetadata().version = Baubles.VERSION;
 		modDir = event.getModConfigurationDirectory();
 
 		try {

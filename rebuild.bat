@@ -1,1 +1,2 @@
 gradlew setupDecompWorkspace eclipse
+pause
