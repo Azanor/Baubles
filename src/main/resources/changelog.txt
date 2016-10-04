@@ -1,3 +1,7 @@
+1.3.BETA4
+- allow baubles to retain compatibility with mods created for older versions. 
+- BaublesApi.getBaubles now returns IInventory again and a new method has been created to return the new handler if you want to use that instead.
+
 1.3.BETA3
 - a few minor fixes / tweaks
 

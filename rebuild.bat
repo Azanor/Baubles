@@ -1,2 +1,1 @@
-gradlew setupDecompWorkspace eclipse
-pause
+cmd /k gradlew setupDecompWorkspace eclipse

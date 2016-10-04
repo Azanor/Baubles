@@ -13,7 +13,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 
-version = "1.10.2-1.3.BETA3"
+version = "1.10.2-1.3.BETA4"
 group= "com.azanor.baubles" 
 archivesBaseName = "Baubles"
 
@@ -21,7 +21,7 @@ srcCompat = JavaVersion.VERSION_1_8
 targetCompat = JavaVersion.VERSION_1_8
 
 minecraft {
-    version = "1.10.2-12.18.1.2076"
+    version = "1.10.2-12.18.1.2084"
     runDir = "run"
     mappings = "snapshot_20160518"
     makeObfSourceJar = false

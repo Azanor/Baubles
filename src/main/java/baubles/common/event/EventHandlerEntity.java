@@ -49,7 +49,7 @@ public class EventHandlerEntity {
 		if (event.getEntity() instanceof EntityPlayer) {
 			
 			EntityPlayer player = (EntityPlayer) event.getEntity();
-			IBaublesItemHandler baubles = BaublesApi.getBaubles(player);
+			IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
 			
 			for (int a = 0; a < baubles.getSlots(); a++) {
 				if (baubles.getStackInSlot(a) != null && baubles.getStackInSlot(a).getItem() instanceof IBauble) {
@@ -71,7 +71,7 @@ public class EventHandlerEntity {
 	}
 	
 	public void dropItemsAt(EntityPlayer player, List<EntityItem> drops, Entity e) {
-		IBaublesItemHandler baubles = BaublesApi.getBaubles(player);
+		IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
 		for (int i = 0; i < baubles.getSlots(); ++i) {
 			if (baubles.getStackInSlot(i) != null) {
 				EntityItem ei = new EntityItem(e.worldObj,
@@ -115,7 +115,7 @@ public class EventHandlerEntity {
 			}
 
 			if (data != null) {
-				IBaublesItemHandler baubles = BaublesApi.getBaubles(player);				
+				IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);				
 				NBTTagList tagList = data.getTagList("Baubles.Inventory", 10);
 				for (int i = 0; i < tagList.tagCount(); ++i) {
 					NBTTagCompound nbttagcompound = (NBTTagCompound) tagList.getCompoundTagAt(i);
