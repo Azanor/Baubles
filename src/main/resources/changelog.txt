@@ -1,3 +1,6 @@
+1.3.BETA5
+- change MODID back to 'Baubles' to preserve dependencies. This will need to change to lowercase for the MC 1.11 update.
+
 1.3.BETA4
 - allow baubles to retain compatibility with mods created for older versions. 
 - BaublesApi.getBaubles now returns IInventory again and a new method has been created to return the new handler if you want to use that instead.
