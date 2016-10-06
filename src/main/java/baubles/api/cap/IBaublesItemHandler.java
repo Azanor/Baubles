@@ -14,4 +14,11 @@ public interface IBaublesItemHandler extends IItemHandlerModifiable {
 	 */
 	public boolean isEventBlocked();
 	public void setEventBlock(boolean blockEvents);
+
+	/**
+	 * Used internally for syncing. Indicates if the inventory has changed since last sync
+	 * @return
+	 */
+	boolean isChanged(int slot);
+	void setChanged(int slot, boolean changed);
 }

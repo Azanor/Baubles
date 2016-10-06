@@ -10,6 +10,8 @@ import baubles.api.cap.BaublesContainer;
 import baubles.api.cap.BaublesContainerProvider;
 import baubles.api.cap.IBaublesItemHandler;
 import baubles.common.Baubles;
+import baubles.common.network.PacketHandler;
+import baubles.common.network.PacketSync;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,6 +22,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -30,35 +33,46 @@ public class EventHandlerEntity {
 	public void playerTick(AttachCapabilitiesEvent.Entity event) {
 		if (event.getEntity() instanceof EntityPlayer) {
 			event.addCapability(new ResourceLocation(Baubles.MODID,"container"), 
-					new BaublesContainerProvider(new BaublesContainer()));
-			
-			
+					new BaublesContainerProvider(new BaublesContainer()));	
+		}
+	}
+	
+	@SubscribeEvent
+	public void playerJoin(EntityJoinWorldEvent event) {
+		if (event.getEntity() instanceof EntityPlayer && !event.getWorld().isRemote) {		
+			IBaublesItemHandler baubles = BaublesApi.getBaublesHandler((EntityPlayer) event.getEntity());	
+			for (int a=0;a<baubles.getSlots();a++) baubles.setChanged(a,true);
+			for (EntityPlayer p:event.getEntity().getEntityWorld().playerEntities) {
+				if (p.getEntityId() != event.getEntity().getEntityId()) {
+					IBaublesItemHandler baubles2 = BaublesApi.getBaublesHandler(p);	
+					for (int a=0;a<baubles2.getSlots();a++) baubles2.setChanged(a,true);
+				}
+			}
 		}
 	}
 	
 	
-	
-	
-	
-//	static HashSet<Integer> syncSchedule = new HashSet<Integer>();
-
 	@SubscribeEvent
 	public void playerTick(PlayerEvent.LivingUpdateEvent event) {
-
 		// player events
-		if (event.getEntity() instanceof EntityPlayer) {
-			
+		if (event.getEntity() instanceof EntityPlayer) {			
 			EntityPlayer player = (EntityPlayer) event.getEntity();
-			IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
-			
+			IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);			
 			for (int a = 0; a < baubles.getSlots(); a++) {
 				if (baubles.getStackInSlot(a) != null && baubles.getStackInSlot(a).getItem() instanceof IBauble) {
 					((IBauble) baubles.getStackInSlot(a).getItem()).onWornTick(baubles.getStackInSlot(a), player);
 				}
 			}
-
+			//sync
+			if (!player.getEntityWorld().isRemote) {
+				for (int a=0;a<baubles.getSlots();a++) {
+					if (baubles.isChanged(a)) {
+						PacketHandler.INSTANCE.sendToDimension(
+								new PacketSync(player,a), player.getEntityWorld().provider.getDimension());				
+					}
+				}
+			}
 		}
-
 	}
 
 	@SubscribeEvent
