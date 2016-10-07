@@ -3,7 +3,8 @@ package baubles.api;
 public enum BaubleType {
 	AMULET(0),
 	RING(1,2),
-	BELT(3);
+	BELT(3),
+	TRINKET(0,1,2,3);
 	
 	int[] validSlots;
 

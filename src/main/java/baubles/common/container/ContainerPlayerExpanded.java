@@ -84,10 +84,10 @@ public class ContainerPlayerExpanded extends Container
 		
 		
         
-        this.addSlotToContainer(new SlotBauble(player,baubles,BaubleType.AMULET,0,77,8 ));
-        this.addSlotToContainer(new SlotBauble(player,baubles,BaubleType.RING,1,77,8 + 1 * 18));
-        this.addSlotToContainer(new SlotBauble(player,baubles,BaubleType.RING,2,77,8 + 2 * 18));
-        this.addSlotToContainer(new SlotBauble(player,baubles,BaubleType.BELT,3,77,8 + 3 * 18));
+        this.addSlotToContainer(new SlotBauble(player,baubles,0,77,8 ));
+        this.addSlotToContainer(new SlotBauble(player,baubles,1,77,8 + 1 * 18));
+        this.addSlotToContainer(new SlotBauble(player,baubles,2,77,8 + 2 * 18));
+        this.addSlotToContainer(new SlotBauble(player,baubles,3,77,8 + 3 * 18));
 
         for (int i = 0; i < 3; ++i)
         {
