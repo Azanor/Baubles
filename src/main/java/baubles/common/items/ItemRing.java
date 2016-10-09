@@ -49,7 +49,7 @@ public class ItemRing  extends Item implements IBauble
 	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
 		if(!world.isRemote) { 
 			IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
-			for(int i = 0; i < baubles.getSlots(); i++)
+			for(int i = 0; i < baubles.getSlots(); i++) 
 				if(baubles.getStackInSlot(i) == null && baubles.isItemValidForSlot(i, stack, player)) {
 					baubles.setStackInSlot(i, stack.copy());
 					if(!player.capabilities.isCreativeMode){

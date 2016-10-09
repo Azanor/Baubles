@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.List;
 
+import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.IBauble;
 import baubles.api.cap.BaublesContainer;
@@ -21,8 +22,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -103,6 +107,17 @@ public class EventHandlerEntity {
 		}
 	}
 
+	
+	@SubscribeEvent
+	public void tooltipEvent(ItemTooltipEvent event) {
+		if (event.getItemStack()!=null && event.getItemStack().getItem() instanceof IBauble) {
+			BaubleType bt = ((IBauble)event.getItemStack().getItem()).getBaubleType(event.getItemStack());
+			event.getToolTip().add(TextFormatting.GOLD+I18n.translateToLocal("name."+bt));
+		}
+	}
+	
+	
+	
 	@SubscribeEvent
 	public void playerLoad(PlayerEvent.LoadFromFile event) {		
 		File file1 = getPlayerFile("baub", event.getPlayerDirectory(), event.getEntityPlayer().getDisplayNameString());
@@ -114,38 +129,38 @@ public class EventHandlerEntity {
 	}
 	
 	public void loadPlayerBaubles(EntityPlayer player, File file1, File file2) {
-	if (player != null && !player.worldObj.isRemote) {
-		try {
-			NBTTagCompound data = null;
-			boolean save = false;
-			if (file1 != null && file1.exists()) {
-				try {
-					FileInputStream fileinputstream = new FileInputStream(file1);
-					data = CompressedStreamTools.readCompressed(fileinputstream);
-					fileinputstream.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-
-			if (data != null) {
-				IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);				
-				NBTTagList tagList = data.getTagList("Baubles.Inventory", 10);
-				for (int i = 0; i < tagList.tagCount(); ++i) {
-					NBTTagCompound nbttagcompound = (NBTTagCompound) tagList.getCompoundTagAt(i);
-					int j = nbttagcompound.getByte("Slot") & 255;
-					ItemStack itemstack = ItemStack.loadItemStackFromNBT(nbttagcompound);
-					if (itemstack != null && baubles.getStackInSlot(j)==null) {
-						baubles.setStackInSlot(j, itemstack);
+		if (player != null && !player.worldObj.isRemote) {
+			try {
+				NBTTagCompound data = null;
+				boolean save = false;
+				if (file1 != null && file1.exists()) {
+					try {
+						FileInputStream fileinputstream = new FileInputStream(file1);
+						data = CompressedStreamTools.readCompressed(fileinputstream);
+						fileinputstream.close();
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
-				}				
+				}
+	
+				if (data != null) {
+					IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);				
+					NBTTagList tagList = data.getTagList("Baubles.Inventory", 10);
+					for (int i = 0; i < tagList.tagCount(); ++i) {
+						NBTTagCompound nbttagcompound = (NBTTagCompound) tagList.getCompoundTagAt(i);
+						int j = nbttagcompound.getByte("Slot") & 255;
+						ItemStack itemstack = ItemStack.loadItemStackFromNBT(nbttagcompound);
+						if (itemstack != null && baubles.getStackInSlot(j)==null) {
+							baubles.setStackInSlot(j, itemstack);
+						}
+					}				
+				}
+			} catch (Exception exception1) {
+				Baubles.log.fatal("Error loading legacy baubles inventory");
+				exception1.printStackTrace();
 			}
-		} catch (Exception exception1) {
-			Baubles.log.fatal("Error loading legacy baubles inventory");
-			exception1.printStackTrace();
 		}
 	}
-}
 	
 	public File getPlayerFile(String suffix, File playerDirectory, String playername)
     {

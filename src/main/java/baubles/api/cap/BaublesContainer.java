@@ -11,7 +11,7 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
 
 	public BaublesContainer()
     {
-        super(4);
+        super(7);
     }
 
 	/**

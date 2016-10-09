@@ -4,6 +4,7 @@ import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import baubles.api.cap.BaublesCapabilities;
 import baubles.api.cap.IBaublesItemHandler;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -46,7 +47,7 @@ public class ContainerPlayerExpanded extends Container
         {
             for (int j = 0; j < 2; ++j)
             {
-                this.addSlotToContainer(new Slot(this.craftMatrix, j + i * 2, 98 + j * 18, 18 + i * 18));
+                this.addSlotToContainer(new Slot(this.craftMatrix, j + i * 2, 116 + j * 18, 18 + i * 18));
             }
         }
 
@@ -87,7 +88,10 @@ public class ContainerPlayerExpanded extends Container
         this.addSlotToContainer(new SlotBauble(player,baubles,0,77,8 ));
         this.addSlotToContainer(new SlotBauble(player,baubles,1,77,8 + 1 * 18));
         this.addSlotToContainer(new SlotBauble(player,baubles,2,77,8 + 2 * 18));
-        this.addSlotToContainer(new SlotBauble(player,baubles,3,77,8 + 3 * 18));
+        this.addSlotToContainer(new SlotBauble(player,baubles,3,77,8 + 3 * 18));        
+        this.addSlotToContainer(new SlotBauble(player,baubles,4,96,8 ));
+        this.addSlotToContainer(new SlotBauble(player,baubles,5,96,8 + 1 * 18));
+        this.addSlotToContainer(new SlotBauble(player,baubles,6,96,8 + 2 * 18));
 
         for (int i = 0; i < 3; ++i)
         {
@@ -102,7 +106,7 @@ public class ContainerPlayerExpanded extends Container
             this.addSlotToContainer(new Slot(playerInv, i, 8 + i * 18, 142));
         }
         
-        this.addSlotToContainer(new Slot(playerInv, 40, 97, 62)
+        this.addSlotToContainer(new Slot(playerInv, 40, 96, 62)
         {
         	@Override
             public boolean isItemValid(ItemStack stack)
@@ -169,10 +173,14 @@ public class ContainerPlayerExpanded extends Container
         {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
+            
+            EntityEquipmentSlot entityequipmentslot = EntityLiving.getSlotForItemStack(itemstack);
+            
+            int slotShift = baubles.getSlots();
 
             if (par2 == 0)
             {
-                if (!this.mergeItemStack(itemstack1, 9+4, 45+4, true))
+                if (!this.mergeItemStack(itemstack1, 9+ slotShift, 45+ slotShift, true))
                 {
                     return null;
                 }
@@ -181,87 +189,77 @@ public class ContainerPlayerExpanded extends Container
             }
             else if (par2 >= 1 && par2 < 5)
             {
-                if (!this.mergeItemStack(itemstack1, 9+4, 45+4, false))
+                if (!this.mergeItemStack(itemstack1, 9+ slotShift, 45+ slotShift, false))
                 {
                     return null;
                 }
             }
             else if (par2 >= 5 && par2 < 9)
             {
-                if (!this.mergeItemStack(itemstack1, 9+4, 45+4, false))
+                if (!this.mergeItemStack(itemstack1, 9+ slotShift, 45+ slotShift, false))
                 {
                     return null;
                 }
             }
-            else if (itemstack.getItem() instanceof ItemArmor)
+            
+            // baubles -> inv
+            else if (par2 >= 9 && par2 < 9+slotShift)
             {
-				ItemArmor armor = (ItemArmor) itemstack1.getItem();
-				int armorSlot = 8 - armor.armorType.getIndex();
-				
-                if (!this.mergeItemStack(itemstack1, armorSlot, armorSlot + 1, false))
+                if (!this.mergeItemStack(itemstack1, 9+ slotShift, 45+ slotShift, false))
                 {
                     return null;
                 }
             }
-            else if (itemstack.getItem() instanceof IBauble && 
-            		((IBauble)itemstack.getItem()).getBaubleType(itemstack)==BaubleType.AMULET &&
-    				((IBauble)itemstack.getItem()).canEquip(itemstack, thePlayer) &&
-            		!((Slot)this.inventorySlots.get(9)).getHasStack())
+            
+            // inv -> armor
+            else if (entityequipmentslot.getSlotType() == EntityEquipmentSlot.Type.ARMOR && !((Slot)this.inventorySlots.get(8 - entityequipmentslot.getIndex())).getHasStack())
             {
-                int j = 9;
-                if (!this.mergeItemStack(itemstack1, j, j + 1, false))
+                int i = 8 - entityequipmentslot.getIndex();
+
+                if (!this.mergeItemStack(itemstack1, i, i + 1, false))
                 {
                     return null;
                 }
             }
-            else if (par2>11 && itemstack.getItem() instanceof IBauble && 
-            		((IBauble)itemstack.getItem()).getBaubleType(itemstack)==BaubleType.RING &&
-    				((IBauble)itemstack.getItem()).canEquip(itemstack, thePlayer) &&
-            		!((Slot)this.inventorySlots.get(10)).getHasStack())
+            
+            // inv -> offhand
+            else if (entityequipmentslot == EntityEquipmentSlot.OFFHAND && !((Slot)this.inventorySlots.get(45+ slotShift)).getHasStack())
             {
-                int j = 10;
-                if (!this.mergeItemStack(itemstack1, j, j + 1, false))
+                if (!this.mergeItemStack(itemstack1, 45+ slotShift, 46+ slotShift, false))
                 {
                     return null;
                 }
             }
-            else if (par2>11 && itemstack.getItem() instanceof IBauble && 
-            		((IBauble)itemstack.getItem()).getBaubleType(itemstack)==BaubleType.RING &&
-    				((IBauble)itemstack.getItem()).canEquip(itemstack, thePlayer) &&
-            		!((Slot)this.inventorySlots.get(11)).getHasStack())
+            
+            // inv -> bauble
+            else if (itemstack.getItem() instanceof IBauble)
             {
-                int j = 11;
-                if (!this.mergeItemStack(itemstack1, j, j + 1, false))
-                {
-                    return null;
-                }
-            }
-            else if (itemstack.getItem() instanceof IBauble && 
-            		((IBauble)itemstack.getItem()).getBaubleType(itemstack)==BaubleType.BELT &&
-    				((IBauble)itemstack.getItem()).canEquip(itemstack, thePlayer) &&
-            		!((Slot)this.inventorySlots.get(12)).getHasStack())
+            	IBauble bauble = (IBauble) itemstack1.getItem();            	
+            	for (int baubleSlot : bauble.getBaubleType(itemstack).getValidSlots()) {				
+	                if ( bauble.canEquip(itemstack1, thePlayer) && !((Slot)this.inventorySlots.get(baubleSlot+9)).getHasStack() &&	                		
+	                		!this.mergeItemStack(itemstack1, baubleSlot+9, baubleSlot + 10, false))
+	                {
+	                    return null;
+	                } 
+	                if (itemstack1.stackSize == 0) break;
+            	}
+            }            
+            
+            else if (par2 >= 9+ slotShift && par2 < 36+ slotShift)
             {
-                int j = 12;
-                if (!this.mergeItemStack(itemstack1, j, j + 1, false))
+                if (!this.mergeItemStack(itemstack1, 36+ slotShift, 45+ slotShift, false))
                 {
                     return null;
                 }
             }
-            else if (par2 >= 9+4 && par2 < 36+4)
+            else if (par2 >= 36+ slotShift && par2 < 45+ slotShift)
             {
-                if (!this.mergeItemStack(itemstack1, 36+4, 45+4, false))
+                if (!this.mergeItemStack(itemstack1, 9+ slotShift, 36+ slotShift, false))
                 {
                     return null;
                 }
             }
-            else if (par2 >= 36+4 && par2 < 45+4)
-            {
-                if (!this.mergeItemStack(itemstack1, 9+4, 36+4, false))
-                {
-                    return null;
-                }
-            }
-            else if (!this.mergeItemStack(itemstack1, 9+4, 45+4, false, slot))
+            else if (!this.mergeItemStack(itemstack1, 9+ slotShift, 45+ slotShift, false))
             {
                 return null;
             }
@@ -287,9 +285,6 @@ public class ContainerPlayerExpanded extends Container
     }
     
     private void unequipBauble(ItemStack stack) {
-//    	if (stack.getItem() instanceof IBauble) {
-//    		((IBauble)stack.getItem()).onUnequipped(stack, thePlayer);
-//    	}
     }
     
     
@@ -302,97 +297,98 @@ public class ContainerPlayerExpanded extends Container
     
     
     
-
-	protected boolean mergeItemStack(ItemStack par1ItemStack, int par2, int par3, boolean par4, Slot ss)
-    {
-        boolean flag1 = false;
-        int k = par2;
-
-        if (par4)
-        {
-            k = par3 - 1;
-        }
-
-        Slot slot;
-        ItemStack itemstack1;
-
-        if (par1ItemStack.isStackable())
-        {
-            while (par1ItemStack.stackSize > 0 && (!par4 && k < par3 || par4 && k >= par2))
-            {
-                slot = (Slot)this.inventorySlots.get(k);
-                itemstack1 = slot.getStack();
-
-                if (itemstack1 != null && itemstack1.getItem() == par1ItemStack.getItem() && (!par1ItemStack.getHasSubtypes() || par1ItemStack.getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(par1ItemStack, itemstack1))
-                {
-                    int l = itemstack1.stackSize + par1ItemStack.stackSize;
-                    if (l <= par1ItemStack.getMaxStackSize())
-                    {
-                    	if (ss instanceof SlotBauble) unequipBauble(par1ItemStack);
-                    	par1ItemStack.stackSize = 0;
-                        itemstack1.stackSize = l;
-                        slot.onSlotChanged();
-                        flag1 = true;
-                    }
-                    else if (itemstack1.stackSize < par1ItemStack.getMaxStackSize())
-                    {
-                    	if (ss instanceof SlotBauble) unequipBauble(par1ItemStack);
-                        par1ItemStack.stackSize -= par1ItemStack.getMaxStackSize() - itemstack1.stackSize;
-                        itemstack1.stackSize = par1ItemStack.getMaxStackSize();
-                        slot.onSlotChanged();
-                        flag1 = true;
-                    }
-                }
-
-                if (par4)
-                {
-                    --k;
-                }
-                else
-                {
-                    ++k;
-                }
-            }
-        }
-
-        if (par1ItemStack.stackSize > 0)
-        {
-            if (par4)
-            {
-                k = par3 - 1;
-            }
-            else
-            {
-                k = par2;
-            }
-
-            while (!par4 && k < par3 || par4 && k >= par2)
-            {
-                slot = (Slot)this.inventorySlots.get(k);
-                itemstack1 = slot.getStack();
-
-                if (itemstack1 == null)
-                {
-                	if (ss instanceof SlotBauble) unequipBauble(par1ItemStack);
-                    slot.putStack(par1ItemStack.copy());
-                    slot.onSlotChanged();
-                    par1ItemStack.stackSize = 0;
-                    flag1 = true;
-                    break;
-                }
-
-                if (par4)
-                {
-                    --k;
-                }
-                else
-                {
-                    ++k;
-                }
-            }
-        }
-        return flag1;
-    }
+//
+//	protected boolean mergeItemStack(ItemStack par1ItemStack, int par2, int par3, boolean par4, Slot ss)
+//    {
+//        boolean flag1 = false;
+//        int k = par2;
+//
+//        if (par4)
+//        {
+//            k = par3 - 1;
+//        }
+//
+//        Slot slot;
+//        ItemStack itemstack1;
+//
+//        if (par1ItemStack.isStackable())
+//        {
+//            while (par1ItemStack.stackSize > 0 && (!par4 && k < par3 || par4 && k >= par2))
+//            {
+//                slot = (Slot)this.inventorySlots.get(k);
+//                itemstack1 = slot.getStack();
+//
+//                if (itemstack1 != null && itemstack1.getItem() == par1ItemStack.getItem() && (!par1ItemStack.getHasSubtypes() || par1ItemStack.getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(par1ItemStack, itemstack1))
+//                {
+//                    int l = itemstack1.stackSize + par1ItemStack.stackSize;
+//                    if (l <= par1ItemStack.getMaxStackSize())
+//                    {
+//                    	if (ss instanceof SlotBauble) unequipBauble(par1ItemStack);
+//                    	par1ItemStack.stackSize = 0;
+//                        itemstack1.stackSize = l;
+//                        slot.onSlotChanged();
+//                        flag1 = true;
+//                    }
+//                    else 
+//                    if (itemstack1.stackSize < par1ItemStack.getMaxStackSize())
+//                    {
+//                    	if (ss instanceof SlotBauble) unequipBauble(par1ItemStack);
+//                        par1ItemStack.stackSize -= par1ItemStack.getMaxStackSize() - itemstack1.stackSize;
+//                        itemstack1.stackSize = par1ItemStack.getMaxStackSize();
+//                        slot.onSlotChanged();
+//                        flag1 = true;
+//                    }
+//                }
+//
+//                if (par4)
+//                {
+//                    --k;
+//                }
+//                else
+//                {
+//                    ++k;
+//                }
+//            }
+//        }
+//
+//        if (par1ItemStack.stackSize > 0)
+//        {
+//            if (par4)
+//            {
+//                k = par3 - 1;
+//            }
+//            else
+//            {
+//                k = par2;
+//            }
+//
+//            while (!par4 && k < par3 || par4 && k >= par2)
+//            {
+//                slot = (Slot)this.inventorySlots.get(k);
+//                itemstack1 = slot.getStack();
+//
+//                if (itemstack1 == null)
+//                {
+//                	if (ss instanceof SlotBauble) unequipBauble(par1ItemStack);
+//                    slot.putStack(par1ItemStack.copy());
+//                    slot.onSlotChanged();
+//                    par1ItemStack.stackSize = 0;
+//                    flag1 = true;
+//                    break;
+//                }
+//
+//                if (par4)
+//                {
+//                    --k;
+//                }
+//                else
+//                {
+//                    ++k;
+//                }
+//            }
+//        }
+//        return flag1;
+//    }
 
     @Override
     public boolean canMergeSlot(ItemStack par1ItemStack, Slot par2Slot)

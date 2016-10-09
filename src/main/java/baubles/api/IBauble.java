@@ -42,4 +42,5 @@ public interface IBauble {
 	 * Can this bauble be removed from a bauble slot
 	 */
 	public boolean canUnequip(ItemStack itemstack, EntityLivingBase player);
+	
 }
