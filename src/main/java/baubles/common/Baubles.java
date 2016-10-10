@@ -25,6 +25,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 		modid = Baubles.MODID, 
 		name = Baubles.MODNAME, 
 		version = Baubles.VERSION, 
+		guiFactory = "baubles.client.gui.BaublesGuiFactory",
 		dependencies="required-after:Forge@[12.18.1,);")
 public class Baubles {
 	
@@ -58,8 +59,7 @@ public class Baubles {
 				
 		CapabilityManager.INSTANCE.register(IBaublesItemHandler.class, 
 				new CapabilityBaubles<IBaublesItemHandler>(), BaublesContainer.class);
-				
-		
+						
 		PacketHandler.init();
 		
 		entityEventHandler = new EventHandlerEntity();
@@ -74,12 +74,13 @@ public class Baubles {
 	@EventHandler
 	public void init(FMLInitializationEvent evt) {
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
-  		proxy.registerKeyBindings();  		
+  		proxy.registerKeyBindings();  	
+  		proxy.init();
 	}
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent evt) {
-		Config.initRecipe();
+		
 	}
 		
 }

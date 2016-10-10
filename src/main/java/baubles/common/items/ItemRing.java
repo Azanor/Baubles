@@ -106,4 +106,5 @@ public class ItemRing  extends Item implements IBauble
 		return true;
 	}
 
+
 }

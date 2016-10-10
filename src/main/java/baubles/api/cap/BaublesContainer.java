@@ -9,9 +9,18 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class BaublesContainer extends ItemStackHandler implements IBaublesItemHandler {
 
+	private final static int BAUBLE_SLOTS = 7;
+	
 	public BaublesContainer()
     {
-        super(7);
+        super(BAUBLE_SLOTS);
+    }
+	
+	@Override
+	public void setSize(int size)
+    {
+		if (size<BAUBLE_SLOTS) size = BAUBLE_SLOTS;
+		super.setSize(size);
     }
 
 	/**

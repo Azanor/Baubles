@@ -1,14 +1,18 @@
 
 package baubles.client;
 
+import java.util.Map;
+
 import baubles.client.gui.GuiEvents;
 import baubles.client.gui.GuiPlayerExpanded;
 import baubles.common.Baubles;
 import baubles.common.CommonProxy;
 import baubles.common.Config;
 import baubles.common.event.KeyHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -43,6 +47,17 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void registerItemModels() {
 		ModelLoader.setCustomModelResourceLocation(Config.itemRing, 0, new ModelResourceLocation("baubles:Ring", "inventory"));
+	}
+	
+	@Override
+	public void init() {
+		Map<String, RenderPlayer> skinMap = Minecraft.getMinecraft().getRenderManager().getSkinMap();
+		RenderPlayer render;
+		render = skinMap.get("default");
+		render.addLayer(new BaublesRenderLayer());
+
+		render = skinMap.get("slim");
+		render.addLayer(new BaublesRenderLayer());
 	}
 	
 }

@@ -1,5 +1,6 @@
 1.3.BETA8
 - by popular demand I added 3 more bauble slots: head, body and charm
+- added IRenderBauble. This is an item interface that allows baubles to be rendered on the players body or head. Heavily based of the renderer used by Botania (Thanks Vazkii!)
 
 1.3.BETA7
 - added a new type of bauble to the API - "TRINKET". It can go into any bauble slot
