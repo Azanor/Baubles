@@ -92,19 +92,6 @@ public class ItemRing  extends Item implements IBauble
 		}
 	}
 
-	@Override
-	public void onUnequipped(ItemStack itemstack, EntityLivingBase player) {
-	}
-	
-	@Override
-	public boolean canEquip(ItemStack itemstack, EntityLivingBase player) {
-		return true;
-	}
-	
-	@Override
-	public boolean canUnequip(ItemStack itemstack, EntityLivingBase player) {
-		return true;
-	}
 
 
 }
