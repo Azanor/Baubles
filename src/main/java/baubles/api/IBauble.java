@@ -21,26 +21,33 @@ public interface IBauble {
 	/**
 	 * This method is called once per tick if the bauble is being worn by a player
 	 */
-	public void onWornTick(ItemStack itemstack, EntityLivingBase player);
+	public default void onWornTick(ItemStack itemstack, EntityLivingBase player) {		
+	}
 	
 	/**
 	 * This method is called when the bauble is equipped by a player
 	 */
-	public void onEquipped(ItemStack itemstack, EntityLivingBase player);
+	public default void onEquipped(ItemStack itemstack, EntityLivingBase player) {		
+	}
 	
 	/**
 	 * This method is called when the bauble is unequipped by a player
 	 */
-	public void onUnequipped(ItemStack itemstack, EntityLivingBase player);
+	public default void onUnequipped(ItemStack itemstack, EntityLivingBase player) {		
+	}
 
 	/**
 	 * can this bauble be placed in a bauble slot
 	 */
-	public boolean canEquip(ItemStack itemstack, EntityLivingBase player);
+	public default boolean canEquip(ItemStack itemstack, EntityLivingBase player) {		
+		return true;
+	}
 	
 	/**
 	 * Can this bauble be removed from a bauble slot
 	 */
-	public boolean canUnequip(ItemStack itemstack, EntityLivingBase player);
+	public default boolean canUnequip(ItemStack itemstack, EntityLivingBase player) {
+		return true;
+	}
 	
 }
