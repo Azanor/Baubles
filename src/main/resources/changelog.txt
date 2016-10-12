@@ -1,4 +1,7 @@
-1.3.BETA9
+1.3.BETA10
+- fix trinket slots 
+
+1.3.BETA10
 - added some defaults to the api to reduce implementing class clutter
 - added command line (/baubles) for ops to view and clear a players baubles inventory
 
