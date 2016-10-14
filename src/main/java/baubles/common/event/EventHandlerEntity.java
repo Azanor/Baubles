@@ -7,6 +7,7 @@ import java.util.List;
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.IBauble;
+import baubles.api.cap.BaublesCapabilities;
 import baubles.api.cap.BaublesContainer;
 import baubles.api.cap.BaublesContainerProvider;
 import baubles.api.cap.IBaublesItemHandler;
@@ -34,7 +35,20 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class EventHandlerEntity {
 	
 	@SubscribeEvent
-	public void playerTick(AttachCapabilitiesEvent.Entity event) {
+	public void cloneCapabilitiesEvent(PlayerEvent.Clone event)
+	{		
+		try {
+			BaublesContainer bco = (BaublesContainer) BaublesApi.getBaublesHandler(event.getOriginal());
+			NBTTagCompound nbt = bco.serializeNBT();
+			BaublesContainer bcn = (BaublesContainer) BaublesApi.getBaublesHandler(event.getEntityPlayer());
+			bcn.deserializeNBT(nbt);
+		} catch (Exception e) {
+			Baubles.log.error("Could not clone player ["+event.getOriginal().getName()+"] baubles when changing dimensions");
+		}
+	}
+	
+	@SubscribeEvent
+	public void attachCapabilitiesPlayer(AttachCapabilitiesEvent.Entity event) {
 		if (event.getEntity() instanceof EntityPlayer) {
 			event.addCapability(new ResourceLocation(Baubles.MODID,"container"), 
 					new BaublesContainerProvider(new BaublesContainer()));	

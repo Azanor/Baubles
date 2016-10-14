@@ -1,6 +1,5 @@
 package baubles.common.container;
 
-import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import baubles.api.cap.BaublesCapabilities;
 import baubles.api.cap.IBaublesItemHandler;

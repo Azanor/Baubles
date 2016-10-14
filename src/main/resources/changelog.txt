@@ -1,5 +1,6 @@
 1.3.BETA10
 - fix trinket slots 
+- baubles now save when changing dimensions
 
 1.3.BETA10
 - added some defaults to the api to reduce implementing class clutter

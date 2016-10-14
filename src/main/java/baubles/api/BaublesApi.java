@@ -10,8 +10,7 @@ import net.minecraft.inventory.IInventory;
  * @author Azanor
  */
 public class BaublesApi 
-{
-	
+{	
 	/**
 	 * Retrieves the baubles inventory capability handler for the supplied player
 	 */

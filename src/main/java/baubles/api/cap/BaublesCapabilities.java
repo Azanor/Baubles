@@ -7,11 +7,12 @@ import net.minecraftforge.common.capabilities.Capability.IStorage;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 
 public class BaublesCapabilities {
+	
 	/**
      * Access to the baubles capability. 
      */
     @CapabilityInject(IBaublesItemHandler.class)
-    public static Capability<IBaublesItemHandler> CAPABILITY_BAUBLES = null;
+    public static final Capability<IBaublesItemHandler> CAPABILITY_BAUBLES = null;
     
     public static class CapabilityBaubles<T extends IBaublesItemHandler> implements IStorage<IBaublesItemHandler> {
         
