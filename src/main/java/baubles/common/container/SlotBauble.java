@@ -33,23 +33,28 @@ public class SlotBauble extends SlotItemHandler
 
 	@Override
 	public boolean canTakeStack(EntityPlayer player) {
-		return this.getStack()!=null &&
-			   ((IBauble)this.getStack().getItem()).canUnequip(this.getStack(), player);
-	}
-
+		return getStack()!=null &&
+			   ((IBauble)getStack().getItem()).canUnequip(getStack(), player);
+	}	
+	
 	@Override
 	public void onPickupFromSlot(EntityPlayer playerIn, ItemStack stack) {
-		if (!this.getHasStack() && !((IBaublesItemHandler)this.getItemHandler()).isEventBlocked()) {
-			((IBauble)stack.getItem()).onUnequipped(this.getStack(), playerIn);
+		if (!getHasStack() && !((IBaublesItemHandler)getItemHandler()).isEventBlocked()) {
+			((IBauble)stack.getItem()).onUnequipped(stack, playerIn);
 		}
 		super.onPickupFromSlot(playerIn, stack);		
 	}
 
 	@Override
-	public void putStack(ItemStack stack) {
-		super.putStack(stack);		
-		if (this.getHasStack() && !((IBaublesItemHandler)this.getItemHandler()).isEventBlocked()) {
-			((IBauble)this.getStack().getItem()).onEquipped(this.getStack(), player);
+	public void putStack(ItemStack stack) {		
+		if (getHasStack() && !((IBaublesItemHandler)getItemHandler()).isEventBlocked()) {
+			((IBauble)getStack().getItem()).onUnequipped(getStack(), player);
+		}
+		
+		super.putStack(stack);	
+		
+		if (this.getHasStack() && !((IBaublesItemHandler)getItemHandler()).isEventBlocked()) {
+			((IBauble)getStack().getItem()).onEquipped(getStack(), player);
 		}
 	}
 

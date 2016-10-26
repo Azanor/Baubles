@@ -87,9 +87,12 @@ public class ItemRing  extends Item implements IBauble
 
 	@Override
 	public void onEquipped(ItemStack itemstack, EntityLivingBase player) {
-		if (!player.worldObj.isRemote) {
-			player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 0.1F, 1.3f);
-		}
+		player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, .75F, 1.9f);
+	}
+
+	@Override
+	public void onUnequipped(ItemStack itemstack, EntityLivingBase player) {
+		player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, .75F, 2f);
 	}
 
 
