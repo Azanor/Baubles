@@ -50,4 +50,13 @@ public interface IBauble {
 		return true;
 	}
 	
+	/**
+	 * Will bauble automatically sync to client if a change is detected in its NBT or damage values?
+	 * Default is off, so override and set to true if you want to auto sync.
+	 * This sync is not instant, but occurs every 10 ticks (.5 seconds).
+	 */
+	public default boolean willAutoSync(ItemStack itemstack, EntityLivingBase player) {
+		return false;
+	}
+	
 }

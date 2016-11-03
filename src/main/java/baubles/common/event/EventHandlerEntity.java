@@ -2,12 +2,12 @@ package baubles.common.event;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.HashMap;
 import java.util.List;
 
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.IBauble;
-import baubles.api.cap.BaublesCapabilities;
 import baubles.api.cap.BaublesContainer;
 import baubles.api.cap.BaublesContainerProvider;
 import baubles.api.cap.IBaublesItemHandler;
@@ -31,6 +31,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import scala.actors.threadpool.Arrays;
 
 public class EventHandlerEntity {
 	
@@ -59,38 +60,63 @@ public class EventHandlerEntity {
 	public void playerJoin(EntityJoinWorldEvent event) {
 		if (event.getEntity() instanceof EntityPlayer && !event.getWorld().isRemote) {		
 			IBaublesItemHandler baubles = BaublesApi.getBaublesHandler((EntityPlayer) event.getEntity());	
+			
 			for (int a=0;a<baubles.getSlots();a++) baubles.setChanged(a,true);
+			
 			for (EntityPlayer p:event.getEntity().getEntityWorld().playerEntities) {
 				if (p.getEntityId() != event.getEntity().getEntityId()) {
 					IBaublesItemHandler baubles2 = BaublesApi.getBaublesHandler(p);	
 					for (int a=0;a<baubles2.getSlots();a++) baubles2.setChanged(a,true);
 				}
 			}
+			
+			String[] ia = new String[baubles.getSlots()];
+			Arrays.fill(ia, "");
+			syncCheck.put(event.getEntity().getName(), ia);		
 		}
 	}
 	
+	private HashMap<String,String[]> syncCheck = new  HashMap<>();
 	
 	@SubscribeEvent
 	public void playerTick(PlayerEvent.LivingUpdateEvent event) {
 		// player events
 		if (event.getEntity() instanceof EntityPlayer) {			
 			EntityPlayer player = (EntityPlayer) event.getEntity();
-			IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);			
+			IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);	
+			String[] hashOld = syncCheck.get(player.getName());
+			
+			boolean syncTick = player.ticksExisted%10==0;
+			
 			for (int a = 0; a < baubles.getSlots(); a++) {
-				if (baubles.getStackInSlot(a) != null && baubles.getStackInSlot(a).getItem() instanceof IBauble) {
-					((IBauble) baubles.getStackInSlot(a).getItem()).onWornTick(baubles.getStackInSlot(a), player);
-				}
-			}
-			//sync
-			if (!player.getEntityWorld().isRemote) {
-				for (int a=0;a<baubles.getSlots();a++) {
-					if (baubles.isChanged(a)) {
-						PacketHandler.INSTANCE.sendToDimension(
-								new PacketSync(player,a), player.getEntityWorld().provider.getDimension());				
+				ItemStack bauble = baubles.getStackInSlot(a);
+				
+				if (bauble != null && bauble.getItem() instanceof IBauble) {
+					//Worn Tick
+					((IBauble) bauble.getItem()).onWornTick(bauble, player);
+					
+					//Sync
+					if (!player.getEntityWorld().isRemote) {
+						if (syncTick && !baubles.isChanged(a) &&
+								((IBauble) bauble.getItem()).willAutoSync(bauble, player)) {							
+							String s = bauble.toString();
+							if (bauble.hasTagCompound()) s += bauble.getTagCompound().toString();
+							if (!s.equals(hashOld[a])) {
+								baubles.setChanged(a,true);
+							}
+							hashOld[a] = s;							
+						}
+						if (baubles.isChanged(a)) {
+							PacketHandler.INSTANCE.sendToDimension(
+									new PacketSync(player,a), player.getEntityWorld().provider.getDimension());				
+						}
 					}
-				}
+				}			
+				
 			}
+				
 		}
+			
 	}
 
 	@SubscribeEvent
