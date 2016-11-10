@@ -105,14 +105,14 @@ public class EventHandlerEntity {
 								baubles.setChanged(a,true);
 							}
 							hashOld[a] = s;							
-						}
-						if (baubles.isChanged(a)) {
-							PacketHandler.INSTANCE.sendToDimension(
-									new PacketSync(player,a), player.getEntityWorld().provider.getDimension());				
-						}
+						}						
 					}
 				}			
 				
+				if (baubles.isChanged(a)) {
+					PacketHandler.INSTANCE.sendToDimension(
+							new PacketSync(player,a), player.getEntityWorld().provider.getDimension());				
+				}
 			}
 				
 		}
