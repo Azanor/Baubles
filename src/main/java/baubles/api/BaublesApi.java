@@ -25,6 +25,6 @@ public class BaublesApi
 	@Deprecated
 	public static IInventory getBaubles(EntityPlayer player)
 	{
-		return new BaublesInventoryWrapper(player.getCapability(BaublesCapabilities.CAPABILITY_BAUBLES, null));
+		return new BaublesInventoryWrapper(player.getCapability(BaublesCapabilities.CAPABILITY_BAUBLES, null), player);
 	}
 }

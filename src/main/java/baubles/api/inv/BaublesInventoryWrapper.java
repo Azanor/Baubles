@@ -10,10 +10,18 @@ import net.minecraft.util.text.TextComponentString;
 public class BaublesInventoryWrapper implements IInventory {
 	
 	final IBaublesItemHandler handler;	
-
+	final EntityPlayer player;
+	
 	public BaublesInventoryWrapper(IBaublesItemHandler handler) {
 		super();
 		this.handler = handler;
+		this.player = null;
+	}
+
+	public BaublesInventoryWrapper(IBaublesItemHandler handler, EntityPlayer player) {
+		super();
+		this.handler = handler;
+		this.player = player;
 	}
 
 	@Override
@@ -79,7 +87,7 @@ public class BaublesInventoryWrapper implements IInventory {
 
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack) {
-		return handler.isItemValidForSlot(index, stack, null);
+		return handler.isItemValidForSlot(index, stack, player);
 	}
 
 	@Override
