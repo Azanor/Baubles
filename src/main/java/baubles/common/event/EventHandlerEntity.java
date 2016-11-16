@@ -110,8 +110,10 @@ public class EventHandlerEntity {
 				}			
 				
 				if (baubles.isChanged(a)) {
-					PacketHandler.INSTANCE.sendToDimension(
-							new PacketSync(player,a), player.getEntityWorld().provider.getDimension());				
+					try {
+						PacketHandler.INSTANCE.sendToDimension(new PacketSync(player, a),
+								player.getEntityWorld().provider.getDimension());
+					} catch (Exception e) {	}				
 				}
 			}
 				
