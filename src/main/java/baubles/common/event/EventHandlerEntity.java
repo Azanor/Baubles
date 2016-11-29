@@ -109,7 +109,7 @@ public class EventHandlerEntity {
 					}
 				}			
 				
-				if (baubles.isChanged(a)) {
+				if (baubles.isChanged(a) && !player.getEntityWorld().isRemote) {
 					try {
 						PacketHandler.INSTANCE.sendToDimension(new PacketSync(player, a),
 								player.getEntityWorld().provider.getDimension());
