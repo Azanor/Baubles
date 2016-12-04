@@ -18,6 +18,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -34,10 +35,11 @@ public class ItemRing  extends Item implements IBauble
 		setCreativeTab(CreativeTabs.TOOLS);
 	}
 
+	//TODO fix texture
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs,List par3List) {
-		par3List.add(new ItemStack(this,1,0));
+	public void getSubItems(Item par1, CreativeTabs par2CreativeTab, NonNullList<ItemStack> par3NonNullList) {
+		par3NonNullList.add(new ItemStack(this,1,0));
 	}
 
 	@Override
@@ -46,20 +48,20 @@ public class ItemRing  extends Item implements IBauble
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		if(!world.isRemote) { 
 			IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
 			for(int i = 0; i < baubles.getSlots(); i++) 
-				if(baubles.getStackInSlot(i) == null && baubles.isItemValidForSlot(i, stack, player)) {
-					baubles.setStackInSlot(i, stack.copy());
+				if(baubles.getStackInSlot(i) == null && baubles.isItemValidForSlot(i, player.getHeldItem(hand), player)) {
+					baubles.setStackInSlot(i, player.getHeldItem(hand).copy());
 					if(!player.capabilities.isCreativeMode){
 						player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
 					}
-					onEquipped(stack, player);
+					onEquipped(player.getHeldItem(hand), player);
 					break;
 				}
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);	
+		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
 	}
 
 	@Override

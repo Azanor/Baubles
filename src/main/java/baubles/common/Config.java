@@ -21,8 +21,9 @@ public class Config {
 		config = new Configuration(file);
         config.load();
 
-        itemRing =(new ItemRing()).setUnlocalizedName("Ring");
-		GameRegistry.registerItem(itemRing, "Ring");
+        itemRing =(new ItemRing()).setUnlocalizedName("Ring").setRegistryName("Ring");
+		//GameRegistry.registerItem(itemRing, "Ring");
+		GameRegistry.register(itemRing);
 		
 		load();
 		

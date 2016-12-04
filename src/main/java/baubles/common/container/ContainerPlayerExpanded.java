@@ -150,7 +150,7 @@ public class ContainerPlayerExpanded extends Container
             }
         }
 
-        this.craftResult.setInventorySlotContents(0, (ItemStack)null);
+        this.craftResult.setInventorySlotContents(0, ItemStack.field_190927_a);
     }
 
     @Override
@@ -240,7 +240,7 @@ public class ContainerPlayerExpanded extends Container
 	                {
 	                    return null;
 	                } 
-	                if (itemstack1.stackSize == 0) break;
+	                if (itemstack1.func_190916_E() == 0) break;
             	}
             }            
             
@@ -263,7 +263,7 @@ public class ContainerPlayerExpanded extends Container
                 return null;
             }
 
-            if (itemstack1.stackSize == 0)
+            if (itemstack1.func_190916_E() == 0)
             {
                 slot.putStack((ItemStack)null);
             }
@@ -272,12 +272,12 @@ public class ContainerPlayerExpanded extends Container
                 slot.onSlotChanged();
             }
 
-            if (itemstack1.stackSize == itemstack.stackSize)
+            if (itemstack1.func_190916_E() == itemstack.func_190916_E())
             {
                 return null;
             }
 
-            slot.onPickupFromSlot(par1EntityPlayer, itemstack1);
+            slot.func_190901_a(par1EntityPlayer, itemstack1);
         }
 
         return itemstack;
