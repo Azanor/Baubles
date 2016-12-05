@@ -45,6 +45,11 @@ public class BaublesInventoryWrapper implements IInventory {
 	}
 
 	@Override
+	public boolean func_191420_l() {
+		return false;
+	}
+
+	@Override
 	public ItemStack getStackInSlot(int index) {
 		return handler.getStackInSlot(index);
 	}

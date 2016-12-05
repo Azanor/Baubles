@@ -8,7 +8,7 @@ import net.minecraftforge.items.SlotItemHandler;
 
 public class SlotBauble extends SlotItemHandler
 {
-	
+
 	int baubleSlot;
 	EntityPlayer player;
 
@@ -17,42 +17,43 @@ public class SlotBauble extends SlotItemHandler
         super(itemHandler, slot, par4, par5);
         this.baubleSlot = slot;
         this.player = player;
-    }    
+    }
 
     /**
-     * Check if the stack is a valid item for this slot. 
+     * Check if the stack is a valid item for this slot.
      */
     @Override
     public boolean isItemValid(ItemStack stack)
     {
     	return stack!=null && stack.getItem() !=null &&
-        	   stack.getItem() instanceof IBauble && 
+        	   stack.getItem() instanceof IBauble &&
         	   ((IBauble)stack.getItem()).getBaubleType(stack).hasSlot(baubleSlot) &&
         	   ((IBauble)stack.getItem()).canEquip(stack, player);
-    }    
+    }
 
 	@Override
 	public boolean canTakeStack(EntityPlayer player) {
 		return getStack()!=null &&
 			   ((IBauble)getStack().getItem()).canUnequip(getStack(), player);
-	}	
-	
-	@Override
-	public void onPickupFromSlot(EntityPlayer playerIn, ItemStack stack) {
-		if (!getHasStack() && !((IBaublesItemHandler)getItemHandler()).isEventBlocked()) {
-			((IBauble)stack.getItem()).onUnequipped(stack, playerIn);
-		}
-		super.onPickupFromSlot(playerIn, stack);		
 	}
 
 	@Override
-	public void putStack(ItemStack stack) {		
+	public ItemStack func_190901_a(EntityPlayer playerIn, ItemStack stack) {
+		if (!getHasStack() && !((IBaublesItemHandler)getItemHandler()).isEventBlocked()) {
+			((IBauble)stack.getItem()).onUnequipped(stack, playerIn);
+		}
+		super.func_190901_a(playerIn, stack);
+		return stack;
+	}
+
+	@Override
+	public void putStack(ItemStack stack) {
 		if (getHasStack() && !((IBaublesItemHandler)getItemHandler()).isEventBlocked()) {
 			((IBauble)getStack().getItem()).onUnequipped(getStack(), player);
 		}
-		
-		super.putStack(stack);	
-		
+
+		super.putStack(stack);
+
 		if (this.getHasStack() && !((IBaublesItemHandler)getItemHandler()).isEventBlocked()) {
 			((IBauble)getStack().getItem()).onEquipped(getStack(), player);
 		}
@@ -63,5 +64,5 @@ public class SlotBauble extends SlotItemHandler
     {
         return 1;
     }
-    
+
 }
