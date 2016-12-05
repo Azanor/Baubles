@@ -25,7 +25,7 @@ public class SlotBauble extends SlotItemHandler
     @Override
     public boolean isItemValid(ItemStack stack)
     {
-    	return stack!=null && stack.getItem() !=null &&
+    	return stack!=null && !stack.isEmpty() && stack.getItem() !=null &&
         	   stack.getItem() instanceof IBauble &&
         	   ((IBauble)stack.getItem()).getBaubleType(stack).hasSlot(baubleSlot) &&
         	   ((IBauble)stack.getItem()).canEquip(stack, player);
@@ -33,16 +33,17 @@ public class SlotBauble extends SlotItemHandler
 
 	@Override
 	public boolean canTakeStack(EntityPlayer player) {
-		return getStack()!=null &&
+		return getStack()!=null && !getStack().isEmpty() &&
 			   ((IBauble)getStack().getItem()).canUnequip(getStack(), player);
 	}
 
 	@Override
-	public ItemStack func_190901_a(EntityPlayer playerIn, ItemStack stack) {
-		if (!getHasStack() && !((IBaublesItemHandler)getItemHandler()).isEventBlocked()) {
+	public ItemStack onTake(EntityPlayer playerIn, ItemStack stack) {
+		if (!getHasStack() && !((IBaublesItemHandler)getItemHandler()).isEventBlocked() &&
+			stack.getItem() instanceof IBauble) {
 			((IBauble)stack.getItem()).onUnequipped(stack, playerIn);
 		}
-		super.func_190901_a(playerIn, stack);
+		super.onTake(playerIn, stack);
 		return stack;
 	}
 

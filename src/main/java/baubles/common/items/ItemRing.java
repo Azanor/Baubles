@@ -1,7 +1,5 @@
 package baubles.common.items;
 
-import java.util.List;
-
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.IBauble;
@@ -52,10 +50,10 @@ public class ItemRing  extends Item implements IBauble
 		if(!world.isRemote) { 
 			IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
 			for(int i = 0; i < baubles.getSlots(); i++) 
-				if(baubles.getStackInSlot(i) == null && baubles.isItemValidForSlot(i, player.getHeldItem(hand), player)) {
+				if((baubles.getStackInSlot(i) == null || baubles.getStackInSlot(i).isEmpty()) && baubles.isItemValidForSlot(i, player.getHeldItem(hand), player)) {
 					baubles.setStackInSlot(i, player.getHeldItem(hand).copy());
 					if(!player.capabilities.isCreativeMode){
-						player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+						player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
 					}
 					onEquipped(player.getHeldItem(hand), player);
 					break;

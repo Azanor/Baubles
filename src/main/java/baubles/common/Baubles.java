@@ -5,9 +5,9 @@ import java.io.File;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import baubles.api.cap.BaublesCapabilities.CapabilityBaubles;
 import baubles.api.cap.BaublesContainer;
 import baubles.api.cap.IBaublesItemHandler;
-import baubles.api.cap.BaublesCapabilities.CapabilityBaubles;
 import baubles.common.event.CommandBaubles;
 import baubles.common.event.EventHandlerEntity;
 import baubles.common.network.PacketHandler;
@@ -31,7 +31,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 		//dependencies="required-after:Forge@[13.19.0.2180,);")
 public class Baubles {
 	
-	public static final String MODID = "Baubles";
+	public static final String MODID = "baubles";
 	public static final String MODNAME = "Baubles";
 	public static final String VERSION = "1.4.0";
 

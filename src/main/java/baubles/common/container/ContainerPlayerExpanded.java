@@ -3,6 +3,7 @@ package baubles.common.container;
 import baubles.api.IBauble;
 import baubles.api.cap.BaublesCapabilities;
 import baubles.api.cap.IBaublesItemHandler;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -64,14 +65,13 @@ public class ContainerPlayerExpanded extends Container
                 @Override
                 public boolean isItemValid(ItemStack stack)
                 {
-                    if (stack == null)
-                    {
-                        return false;
-                    }
-                    else
-                    {
-                        return stack.getItem().isValidArmor(stack, slot, thePlayer);
-                    }
+                    return stack.getItem().isValidArmor(stack, slot, player);
+                }
+                @Override
+                public boolean canTakeStack(EntityPlayer playerIn)
+                {
+                    ItemStack itemstack = this.getStack();
+                    return !itemstack.isEmpty() && !playerIn.isCreative() && EnchantmentHelper.hasBindingCurse(itemstack) ? false : super.canTakeStack(playerIn);
                 }
                 @Override
                 @SideOnly(Side.CLIENT)
@@ -130,7 +130,7 @@ public class ContainerPlayerExpanded extends Container
     @Override
     public void onCraftMatrixChanged(IInventory par1IInventory)
     {
-        this.craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(this.craftMatrix, this.thePlayer.worldObj));
+        this.craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(this.craftMatrix, this.thePlayer.world));
     }
 
     /**
@@ -144,13 +144,13 @@ public class ContainerPlayerExpanded extends Container
         {
             ItemStack itemstack = this.craftMatrix.removeStackFromSlot(i);
 
-            if (itemstack != null)
+            if (!itemstack.isEmpty())
             {
                 player.dropItem(itemstack, false);
             }
         }
 
-        this.craftResult.setInventorySlotContents(0, ItemStack.field_190927_a);
+        this.craftResult.setInventorySlotContents(0, ItemStack.EMPTY);
     }
 
     @Override
@@ -163,10 +163,10 @@ public class ContainerPlayerExpanded extends Container
      * Called when a player shift-clicks on a slot. You must override this or you will crash when someone does that.
      */
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2)
+    public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
     {
-        ItemStack itemstack = null;
-        Slot slot = (Slot)this.inventorySlots.get(par2);
+        ItemStack itemstack = ItemStack.EMPTY;
+        Slot slot = (Slot)this.inventorySlots.get(index);
 
         if (slot != null && slot.getHasStack())
         {
@@ -177,36 +177,36 @@ public class ContainerPlayerExpanded extends Container
             
             int slotShift = baubles.getSlots();
 
-            if (par2 == 0)
+            if (index == 0)
             {
                 if (!this.mergeItemStack(itemstack1, 9+ slotShift, 45+ slotShift, true))
                 {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
 
                 slot.onSlotChange(itemstack1, itemstack);
             }
-            else if (par2 >= 1 && par2 < 5)
+            else if (index >= 1 && index < 5)
             {
                 if (!this.mergeItemStack(itemstack1, 9+ slotShift, 45+ slotShift, false))
                 {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             }
-            else if (par2 >= 5 && par2 < 9)
+            else if (index >= 5 && index < 9)
             {
                 if (!this.mergeItemStack(itemstack1, 9+ slotShift, 45+ slotShift, false))
                 {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             }
             
             // baubles -> inv
-            else if (par2 >= 9 && par2 < 9+slotShift)
+            else if (index >= 9 && index < 9+slotShift)
             {
                 if (!this.mergeItemStack(itemstack1, 9+ slotShift, 45+ slotShift, false))
                 {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             }
             
@@ -217,7 +217,7 @@ public class ContainerPlayerExpanded extends Container
 
                 if (!this.mergeItemStack(itemstack1, i, i + 1, false))
                 {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             }
             
@@ -226,7 +226,7 @@ public class ContainerPlayerExpanded extends Container
             {
                 if (!this.mergeItemStack(itemstack1, 45+ slotShift, 46+ slotShift, false))
                 {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             }
             
@@ -238,46 +238,53 @@ public class ContainerPlayerExpanded extends Container
 	                if ( bauble.canEquip(itemstack1, thePlayer) && !((Slot)this.inventorySlots.get(baubleSlot+9)).getHasStack() &&	                		
 	                		!this.mergeItemStack(itemstack1, baubleSlot+9, baubleSlot + 10, false))
 	                {
-	                    return null;
+	                    return ItemStack.EMPTY;
 	                } 
-	                if (itemstack1.func_190916_E() == 0) break;
+	                if (itemstack1.getCount() == 0) break;
             	}
             }            
             
-            else if (par2 >= 9+ slotShift && par2 < 36+ slotShift)
+            else if (index >= 9+ slotShift && index < 36+ slotShift)
             {
                 if (!this.mergeItemStack(itemstack1, 36+ slotShift, 45+ slotShift, false))
                 {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             }
-            else if (par2 >= 36+ slotShift && par2 < 45+ slotShift)
+            else if (index >= 36+ slotShift && index < 45+ slotShift)
             {
                 if (!this.mergeItemStack(itemstack1, 9+ slotShift, 36+ slotShift, false))
                 {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             }
             else if (!this.mergeItemStack(itemstack1, 9+ slotShift, 45+ slotShift, false))
             {
-                return null;
+                return ItemStack.EMPTY;
             }
 
-            if (itemstack1.func_190916_E() == 0)
+            if (itemstack1.isEmpty())
             {
-                slot.putStack((ItemStack)null);
+                slot.putStack(ItemStack.EMPTY);
             }
             else
             {
                 slot.onSlotChanged();
             }
 
-            if (itemstack1.func_190916_E() == itemstack.func_190916_E())
+            if (itemstack1.getCount() == itemstack.getCount())
             {
-                return null;
+                return ItemStack.EMPTY;
             }
 
-            slot.func_190901_a(par1EntityPlayer, itemstack1);
+            slot.onTake(playerIn, itemstack1);
+            
+            ItemStack itemstack2 = slot.onTake(playerIn, itemstack1);
+
+            if (index == 0)
+            {
+            	playerIn.dropItem(itemstack2, false);
+            }
         }
 
         return itemstack;

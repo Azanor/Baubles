@@ -43,9 +43,9 @@ public class BaublesInventoryWrapper implements IInventory {
 	public int getSizeInventory() {
 		return handler.getSlots();
 	}
-
+	
 	@Override
-	public boolean func_191420_l() {
+	public boolean isEmpty() {
 		return false;
 	}
 
@@ -62,7 +62,7 @@ public class BaublesInventoryWrapper implements IInventory {
 	@Override
 	public ItemStack removeStackFromSlot(int index) {
 		ItemStack out = this.getStackInSlot(index);
-		handler.setStackInSlot(index, null);
+		handler.setStackInSlot(index, ItemStack.EMPTY);
 		return out;
 	}
 
@@ -80,10 +80,10 @@ public class BaublesInventoryWrapper implements IInventory {
 	public void markDirty() {	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(EntityPlayer player) {
 		return true;
 	}
-
+	
 	@Override
 	public void openInventory(EntityPlayer player) {	}
 
@@ -112,8 +112,10 @@ public class BaublesInventoryWrapper implements IInventory {
 	public void clear() {	
 		for (int i = 0; i < this.getSizeInventory(); ++i)
         {
-			this.setInventorySlotContents(i, null);
+			this.setInventorySlotContents(i, ItemStack.EMPTY);
         }
 	}
+
+	
 
 }

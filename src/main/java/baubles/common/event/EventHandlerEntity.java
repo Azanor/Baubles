@@ -91,7 +91,7 @@ public class EventHandlerEntity {
 			for (int a = 0; a < baubles.getSlots(); a++) {
 				ItemStack bauble = baubles.getStackInSlot(a);
 				
-				if (bauble != null && bauble.getItem() instanceof IBauble) {
+				if (bauble != null && !bauble.isEmpty() && bauble.getItem() instanceof IBauble) {
 					//Worn Tick
 					((IBauble) bauble.getItem()).onWornTick(bauble, player);
 					
@@ -124,8 +124,8 @@ public class EventHandlerEntity {
 	@SubscribeEvent
 	public void playerDeath(PlayerDropsEvent event) {
 		if (event.getEntity() instanceof EntityPlayer
-				&& !event.getEntity().worldObj.isRemote
-				&& !event.getEntity().worldObj.getGameRules().getBoolean("keepInventory")) {			
+				&& !event.getEntity().world.isRemote
+				&& !event.getEntity().world.getGameRules().getBoolean("keepInventory")) {			
 			dropItemsAt(event.getEntityPlayer(),event.getDrops(),event.getEntityPlayer());						
 		}
 	}
@@ -133,18 +133,18 @@ public class EventHandlerEntity {
 	public void dropItemsAt(EntityPlayer player, List<EntityItem> drops, Entity e) {
 		IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
 		for (int i = 0; i < baubles.getSlots(); ++i) {
-			if (baubles.getStackInSlot(i) != null) {
-				EntityItem ei = new EntityItem(e.worldObj,
+			if (baubles.getStackInSlot(i) != null && !baubles.getStackInSlot(i).isEmpty()) {
+				EntityItem ei = new EntityItem(e.world,
 						e.posX, e.posY + e.getEyeHeight(), e.posZ,
 						baubles.getStackInSlot(i).copy());
 				ei.setPickupDelay(40);
-				float f1 = e.worldObj.rand.nextFloat() * 0.5F;
-				float f2 = e.worldObj.rand.nextFloat() * (float) Math.PI * 2.0F;
+				float f1 = e.world.rand.nextFloat() * 0.5F;
+				float f2 = e.world.rand.nextFloat() * (float) Math.PI * 2.0F;
 				ei.motionX = (double) (-MathHelper.sin(f2) * f1);
 				ei.motionZ = (double) (MathHelper.cos(f2) * f1);
 				ei.motionY = 0.20000000298023224D;
 				drops.add(ei);
-				baubles.setStackInSlot(i, null);
+				baubles.setStackInSlot(i, ItemStack.EMPTY);
 			}
 		}
 	}
@@ -152,63 +152,10 @@ public class EventHandlerEntity {
 	
 	@SubscribeEvent
 	public void tooltipEvent(ItemTooltipEvent event) {
-		if (event.getItemStack()!=null && event.getItemStack().getItem() instanceof IBauble) {
+		if (event.getItemStack()!=null && !event.getItemStack().isEmpty() && event.getItemStack().getItem() instanceof IBauble) {
 			BaubleType bt = ((IBauble)event.getItemStack().getItem()).getBaubleType(event.getItemStack());
 			event.getToolTip().add(TextFormatting.GOLD+I18n.translateToLocal("name."+bt));
 		}
 	}
-	
-	
-	
-	@SubscribeEvent
-	public void playerLoad(PlayerEvent.LoadFromFile event) {		
-		File file1 = getPlayerFile("baub", event.getPlayerDirectory(), event.getEntityPlayer().getDisplayNameString());
-		if (file1.exists()) {
-			Baubles.log.info("Loading legacy baubles inventory for ["+event.getEntityPlayer().getDisplayNameString()+"]. Occupied slots will be skipped");
-			loadPlayerBaubles(event.getEntityPlayer(), file1, getPlayerFile("baubback", event.getPlayerDirectory(), event.getEntityPlayer().getDisplayNameString()));
-			file1.delete();
-		}				
-	}
-	
-	public void loadPlayerBaubles(EntityPlayer player, File file1, File file2) {
-		if (player != null && !player.worldObj.isRemote) {
-			try {
-				NBTTagCompound data = null;
-				boolean save = false;
-				if (file1 != null && file1.exists()) {
-					try {
-						FileInputStream fileinputstream = new FileInputStream(file1);
-						data = CompressedStreamTools.readCompressed(fileinputstream);
-						fileinputstream.close();
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-	
-				if (data != null) {
-					IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);				
-					NBTTagList tagList = data.getTagList("Baubles.Inventory", 10);
-					for (int i = 0; i < tagList.tagCount(); ++i) {
-						NBTTagCompound nbttagcompound = (NBTTagCompound) tagList.getCompoundTagAt(i);
-						int j = nbttagcompound.getByte("Slot") & 255;
-						ItemStack itemstack = new ItemStack(nbttagcompound);
-						if (itemstack != null && baubles.getStackInSlot(j)==null) {
-							baubles.setStackInSlot(j, itemstack);
-						}
-					}				
-				}
-			} catch (Exception exception1) {
-				Baubles.log.fatal("Error loading legacy baubles inventory");
-				exception1.printStackTrace();
-			}
-		}
-	}
-	
-	public File getPlayerFile(String suffix, File playerDirectory, String playername)
-    {
-        if ("dat".equals(suffix)) throw new IllegalArgumentException("The suffix 'dat' is reserved");
-        return new File(playerDirectory, "_"+playername+"."+suffix);
-    }
-
 
 }

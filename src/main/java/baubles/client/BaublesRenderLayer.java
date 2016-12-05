@@ -53,7 +53,7 @@ public final class BaublesRenderLayer implements LayerRenderer<EntityPlayer> {
 	private void dispatchRenders(IBaublesItemHandler inv, EntityPlayer player, RenderType type, float partialTicks) {
 		for(int i = 0; i < inv.getSlots(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);
-			if(stack != null) {
+			if(stack != null && !stack.isEmpty()) {
 				Item item = stack.getItem();
 				if(item instanceof IRenderBauble) {
 					GlStateManager.pushMatrix();

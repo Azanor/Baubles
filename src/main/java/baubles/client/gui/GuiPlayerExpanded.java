@@ -35,7 +35,7 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
 
     public GuiPlayerExpanded(EntityPlayer player)
     {
-        super(new ContainerPlayerExpanded(player.inventory, !player.worldObj.isRemote, player));
+        super(new ContainerPlayerExpanded(player.inventory, !player.getEntityWorld().isRemote, player));
         this.allowUserInput = true;
     }
 
@@ -96,11 +96,11 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
             Slot slot = (Slot)this.inventorySlots.inventorySlots.get(i1);
             if (slot.getHasStack() && slot.getSlotStackLimit()==1)
             {
-            	this.drawTexturedModalRect(k+slot.xDisplayPosition, l+slot.yDisplayPosition, 200, 0, 16, 16);
+            	this.drawTexturedModalRect(k+slot.xPos, l+slot.yPos, 200, 0, 16, 16);
             }
         }
         
-        drawPlayerModel(k + 51, l + 75, 30, (float)(k + 51) - this.xSizeFloat, (float)(l + 75 - 50) - this.ySizeFloat, this.mc.thePlayer);
+        drawPlayerModel(k + 51, l + 75, 30, (float)(k + 51) - this.xSizeFloat, (float)(l + 75 - 50) - this.ySizeFloat, this.mc.player);
     }
 
     public static void drawPlayerModel(int x, int y, int scale, float yaw, float pitch, EntityLivingBase playerdrawn)
@@ -149,12 +149,12 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
     {
         if (button.id == 0)
         {
-            this.mc.displayGuiScreen(new GuiAchievements(this, this.mc.thePlayer.getStatFileWriter()));
+            this.mc.displayGuiScreen(new GuiAchievements(this, this.mc.player.getStatFileWriter()));
         }
 
         if (button.id == 1)
         {
-            this.mc.displayGuiScreen(new GuiStats(this, this.mc.thePlayer.getStatFileWriter()));
+            this.mc.displayGuiScreen(new GuiStats(this, this.mc.player.getStatFileWriter()));
         }
     }
 
@@ -162,7 +162,7 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
 	protected void keyTyped(char par1, int par2) throws IOException {
 		if (par2 == Baubles.proxy.keyHandler.key.getKeyCode())
         {
-            this.mc.thePlayer.closeScreen();
+            this.mc.player.closeScreen();
         } else
 		super.keyTyped(par1, par2);
 	}
