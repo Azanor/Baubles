@@ -114,7 +114,7 @@ public class EventHandlerEntity {
 						try {
 							PacketHandler.INSTANCE.sendToDimension(new PacketSync(player, a), player.getEntityWorld().provider.getDimension());
 						} catch (Exception e) {	}
-						items[a] = bauble!=null ? ItemStack.copyItemStack(baubleStack) : null; 
+						items[a] = ItemStack.copyItemStack(baubleStack); 
 					}
 				}	
 			}				
