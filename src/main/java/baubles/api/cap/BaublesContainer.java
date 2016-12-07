@@ -25,7 +25,7 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
 		super.setSize(size);
 		boolean[] old = changed;
 		changed = new boolean[size];
-		for(int i = 0;i<old.length && changed.length;i++)
+		for(int i = 0;i<old.length && i<changed.length;i++)
 		{
 			changed[i] = old[i];
 		}
