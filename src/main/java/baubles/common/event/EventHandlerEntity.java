@@ -99,7 +99,7 @@ public class EventHandlerEntity {
 				baublesSync.put(player.getUniqueID(), items);
 			}
 			
-			for (int a = 0; a < ; a++) {
+			for (int a = 0; a < count; a++) {
 				ItemStack baubleStack = baubles.getStackInSlot(a);
 				
 				if (baubleStack != null && baubleStack.getItem() instanceof IBauble) {
