@@ -1,7 +1,5 @@
 package baubles.api.cap;
 
-import java.util.Arrays;
-
 import baubles.api.IBauble;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -53,14 +51,12 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
 	protected void onContentsChanged(int slot)
     {
 		setChanged(slot,true);
-    }
-	
+    }	
 	
 	@Override
 	public boolean isChanged(int slot) {
 		if (changed==null) {
 			changed = new boolean[this.getSlots()];
-			Arrays.fill(changed, false);
 		}
 		return changed[slot];
 	}
@@ -69,11 +65,9 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
 	public void setChanged(int slot, boolean change) {
 		if (changed==null) {
 			changed = new boolean[this.getSlots()];
-			Arrays.fill(changed, false);
 		}
 		this.changed[slot] = change;
 	}
-
 
 	private boolean[] changed;
 	
