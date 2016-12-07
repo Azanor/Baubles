@@ -62,7 +62,7 @@ public class GuiBaublesButton extends GuiButton {
 	private int getPotionShift(Minecraft mc) {
 		if (mc.currentScreen instanceof GuiContainer) {
 			GuiContainer guiContainer = (GuiContainer) mc.currentScreen;
-			return this.guiLeft - guiContainer.guiLeft;
+			return guiContainer.guiLeft - this.guiLeft;
 		}
 		return 0;
 	}

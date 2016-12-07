@@ -1,3 +1,7 @@
+1.4.1
+- baubles set to autosunc will now sync instantly
+- fix for baubles button not being in the right place when potion take effect or wear off while you are in the GUI. 
+
 1.4.0
 - update for MC 1.11
 - removed support for legacy baubles files (.baub)

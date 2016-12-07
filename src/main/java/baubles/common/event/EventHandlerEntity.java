@@ -1,10 +1,8 @@
 package baubles.common.event;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
@@ -19,9 +17,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
@@ -32,8 +28,11 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 
 public class EventHandlerEntity {
+	
+	private HashMap<UUID,ItemStack[]> baublesSync = new HashMap<UUID,ItemStack[]>();
 	
 	@SubscribeEvent
 	public void cloneCapabilitiesEvent(PlayerEvent.Clone event)
@@ -70,13 +69,16 @@ public class EventHandlerEntity {
 				}
 			}
 			
-			String[] ia = new String[baubles.getSlots()];
-			Arrays.fill(ia, "");
-			syncCheck.put(event.getEntity().getName(), ia);		
+			baublesSync.put(event.getEntity().getUniqueID(), new ItemStack[baubles.getSlots()]);
 		}
+	}	
+	
+	@SubscribeEvent
+	public void onPlayerLoggedOut(PlayerLoggedOutEvent event)
+	{
+		baublesSync.remove(event.player.getUniqueID());
 	}
 	
-	private HashMap<String,String[]> syncCheck = new  HashMap<>();
 	
 	@SubscribeEvent
 	public void playerTick(PlayerEvent.LivingUpdateEvent event) {
@@ -84,41 +86,36 @@ public class EventHandlerEntity {
 		if (event.getEntity() instanceof EntityPlayer) {			
 			EntityPlayer player = (EntityPlayer) event.getEntity();
 			IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);	
-			String[] hashOld = syncCheck.get(player.getName());
-			
-			boolean syncTick = player.ticksExisted%10==0;
-			
-			for (int a = 0; a < baubles.getSlots(); a++) {
-				ItemStack bauble = baubles.getStackInSlot(a);
-				
-				if (bauble != null && !bauble.isEmpty() && bauble.getItem() instanceof IBauble) {
-					//Worn Tick
-					((IBauble) bauble.getItem()).onWornTick(bauble, player);
-					
-					//Sync
-					if (!player.getEntityWorld().isRemote) {
-						if (syncTick && !baubles.isChanged(a) &&
-								((IBauble) bauble.getItem()).willAutoSync(bauble, player)) {							
-							String s = bauble.toString();
-							if (bauble.hasTagCompound()) s += bauble.getTagCompound().toString();
-							if (!s.equals(hashOld[a])) {
-								baubles.setChanged(a,true);
-							}
-							hashOld[a] = s;							
-						}						
-					}
-				}			
-				
-				if (baubles.isChanged(a) && !player.getEntityWorld().isRemote) {
-					try {
-						PacketHandler.INSTANCE.sendToDimension(new PacketSync(player, a),
-								player.getEntityWorld().provider.getDimension());
-					} catch (Exception e) {	}				
+			ItemStack[] items = baublesSync.get(player.getUniqueID());
+			int count = baubles.getSlots();
+			if(items.length != count) {
+				ItemStack[] old = items;
+				items = new ItemStack[count];
+				for(int i = 0;i<old.length && i<items.length;i++) {
+					items[i] = old[i];
 				}
+				baublesSync.put(player.getUniqueID(), items);
 			}
-				
-		}
 			
+			for (int a = 0; a < count; a++) {
+				ItemStack baubleStack = baubles.getStackInSlot(a);
+				IBauble bauble = null;
+				if (baubleStack != null && !baubleStack.isEmpty() && baubleStack.getItem() instanceof IBauble) {
+					bauble = (IBauble) baubleStack.getItem();
+					//Worn Tick
+					bauble.onWornTick(baubleStack, player);
+				}				
+				//Sync
+				if (!player.getEntityWorld().isRemote) { 
+					if(baubles.isChanged(a) || (bauble!=null && bauble.willAutoSync(baubleStack, player) && !ItemStack.areItemStacksEqual(baubleStack, items[a]))) {
+						try {
+							PacketHandler.INSTANCE.sendToDimension(new PacketSync(player, a), player.getEntityWorld().provider.getDimension());
+						} catch (Exception e) {	}
+						items[a] = baubleStack != null ? baubleStack.copy() : ItemStack.EMPTY; 
+					}
+				}	
+			}				
+		}						
 	}
 
 	@SubscribeEvent
