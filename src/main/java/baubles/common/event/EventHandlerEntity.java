@@ -2,9 +2,9 @@ package baubles.common.event;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
@@ -32,6 +32,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 
 public class EventHandlerEntity {
 	
@@ -101,25 +102,23 @@ public class EventHandlerEntity {
 			
 			for (int a = 0; a < count; a++) {
 				ItemStack baubleStack = baubles.getStackInSlot(a);
-				
+				IBauble bauble = null;
 				if (baubleStack != null && baubleStack.getItem() instanceof IBauble) {
-					IBauble bauble = (IBauble) baubleStack.getItem();
+					bauble = (IBauble) baubleStack.getItem();
 					//Worn Tick
 					bauble.onWornTick(baubleStack, player);
-					//Sync
-					if (!player.getEntityWorld().isRemote) {
-						if(bauble.isChanged(a) || (bauble.willAutoSync(baubleStack, player) && !ItemStack.areItemStacksEqual(baubleStack, items[a]))) {
-							try {
-								PacketHandler.INSTANCE.sendToDimension(new PacketSync(player, a), player.getEntityWorld().provider.getDimension());
-							} catch (Exception e) {	}
-							items[a] = ItemStack.copyItemStack(baubleStack); 
-						}
+				}				
+				//Sync
+				if (!player.getEntityWorld().isRemote) { 
+					if(baubles.isChanged(a) || (bauble!=null && bauble.willAutoSync(baubleStack, player) && !ItemStack.areItemStacksEqual(baubleStack, items[a]))) {
+						try {
+							PacketHandler.INSTANCE.sendToDimension(new PacketSync(player, a), player.getEntityWorld().provider.getDimension());
+						} catch (Exception e) {	}
+						items[a] = bauble!=null ? ItemStack.copyItemStack(baubleStack) : null; 
 					}
-				}			
-			}
-				
-		}
-			
+				}	
+			}				
+		}			
 	}
 
 	@SubscribeEvent
