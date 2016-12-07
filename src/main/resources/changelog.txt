@@ -1,3 +1,7 @@
+1.3.7
+- baubles set to autosunc will now sync instantly
+- fix for baubles button not being in the right place when potion take effect or wear off while you are in the GUI.
+
 1.3.6
 - catch edge-case crash if a player is somehow 'ticked' before the world has finished loading. Just do it better this time
 
