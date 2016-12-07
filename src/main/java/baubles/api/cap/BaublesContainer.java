@@ -10,6 +10,8 @@ import net.minecraftforge.items.ItemStackHandler;
 public class BaublesContainer extends ItemStackHandler implements IBaublesItemHandler {
 
 	private final static int BAUBLE_SLOTS = 7;
+	private boolean[] changed = new boolean[BAUBLE_SLOTS];
+	private boolean blockEvents = false;
 	
 	public BaublesContainer()
     {
@@ -21,6 +23,12 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
     {
 		if (size<BAUBLE_SLOTS) size = BAUBLE_SLOTS;
 		super.setSize(size);
+		boolean[] old = changed;
+		changed = new boolean[size];
+		for(int i = 0;i<old.length && i<changed.length;i++)
+		{
+			changed[i] = old[i];
+		}
     }
 
 	/**
@@ -37,7 +45,7 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
 	}
 	
 		
-	private boolean blockEvents=false;
+	
 	
 	@Override
 	public boolean isEventBlocked() {
@@ -58,23 +66,15 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
 	
 	@Override
 	public boolean isChanged(int slot) {
-		if (changed==null) {
-			changed = new boolean[this.getSlots()];
-			Arrays.fill(changed, false);
-		}
 		return changed[slot];
 	}
 
 	@Override
 	public void setChanged(int slot, boolean change) {
-		if (changed==null) {
-			changed = new boolean[this.getSlots()];
-			Arrays.fill(changed, false);
-		}
 		this.changed[slot] = change;
 	}
 
 
-	private boolean[] changed;
+	
 	
 }
