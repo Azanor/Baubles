@@ -1,5 +1,6 @@
 package baubles.common.event;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -68,8 +69,9 @@ public class EventHandlerEntity {
 					for (int a=0;a<baubles2.getSlots();a++) baubles2.setChanged(a,true);
 				}
 			}
-			
-			baublesSync.put(event.getEntity().getUniqueID(), new ItemStack[baubles.getSlots()]);
+			ItemStack[] sl = new ItemStack[baubles.getSlots()];
+			Arrays.fill(sl, ItemStack.EMPTY);
+			baublesSync.put(event.getEntity().getUniqueID(), sl);
 		}
 	}	
 	
@@ -87,6 +89,12 @@ public class EventHandlerEntity {
 			EntityPlayer player = (EntityPlayer) event.getEntity();
 			IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);	
 			ItemStack[] items = baublesSync.get(player.getUniqueID());
+			if (items==null) {
+				ItemStack[] sl = new ItemStack[baubles.getSlots()];
+				Arrays.fill(sl, ItemStack.EMPTY);
+				baublesSync.put(player.getUniqueID(), sl);
+				items = baublesSync.get(player.getUniqueID());
+			}
 			int count = baubles.getSlots();
 			if(items.length != count) {
 				ItemStack[] old = items;
