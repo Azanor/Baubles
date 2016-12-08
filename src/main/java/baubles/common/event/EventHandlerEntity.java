@@ -89,7 +89,11 @@ public class EventHandlerEntity {
 		if (event.getEntity() instanceof EntityPlayer) {			
 			EntityPlayer player = (EntityPlayer) event.getEntity();
 			IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);	
-			ItemStack[] items = baublesSync.get(player.getUniqueID());
+			ItemStack[] items = baublesSync.get(player.getUniqueID());			
+			if (items==null) {
+				baublesSync.put(player.getUniqueID(), new ItemStack[baubles.getSlots()]);
+				items = baublesSync.get(player.getUniqueID());
+			}
 			int count = baubles.getSlots();
 			if(items.length != count) {
 				ItemStack[] old = items;
