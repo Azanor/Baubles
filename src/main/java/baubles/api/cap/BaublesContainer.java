@@ -1,7 +1,5 @@
 package baubles.api.cap;
 
-import java.util.Arrays;
-
 import baubles.api.IBauble;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -12,6 +10,7 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
 	private final static int BAUBLE_SLOTS = 7;
 	private boolean[] changed = new boolean[BAUBLE_SLOTS];
 	private boolean blockEvents = false;
+	private EntityLivingBase player;
 	
 	public BaublesContainer()
     {
@@ -36,17 +35,26 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
 	 * stack size) into the given slot.
 	 */
 	@Override
-	public boolean isItemValidForSlot(int slot, ItemStack stack, EntityLivingBase player) {
-		if (stack == null || !(stack.getItem() instanceof IBauble) ||
+	public boolean isItemValidForSlot(int slot, ItemStack stack, EntityLivingBase player) {		
+		if (stack == null || stack.getItem()==null || !(stack.getItem() instanceof IBauble) ||
 				!((IBauble) stack.getItem()).canEquip(stack, player))
-			return false;
-		
+			return false;		
 		return ((IBauble) stack.getItem()).getBaubleType(stack).hasSlot(slot);
+	}	
+	
+	@Override
+	public void setStackInSlot(int slot, ItemStack stack) {
+		if (stack==null || this.isItemValidForSlot(slot, stack, player)) {
+			super.setStackInSlot(slot, stack);
+		}
 	}
-	
-		
-	
-	
+
+	@Override
+	public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+		if (!this.isItemValidForSlot(slot, stack, player)) return stack;
+		return super.insertItem(slot, stack, simulate);
+	}
+
 	@Override
 	public boolean isEventBlocked() {
 		return blockEvents;
@@ -72,6 +80,11 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
 	@Override
 	public void setChanged(int slot, boolean change) {
 		this.changed[slot] = change;
+	}
+
+	@Override
+	public void setPlayer(EntityLivingBase player) {
+		this.player = player;		
 	}
 
 

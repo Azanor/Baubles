@@ -21,4 +21,6 @@ public interface IBaublesItemHandler extends IItemHandlerModifiable {
 	 */
 	boolean isChanged(int slot);
 	void setChanged(int slot, boolean changed);
+	
+	void setPlayer(EntityLivingBase player);
 }

@@ -25,10 +25,7 @@ public class SlotBauble extends SlotItemHandler
     @Override
     public boolean isItemValid(ItemStack stack)
     {
-    	return stack!=null && stack.getItem() !=null &&
-        	   stack.getItem() instanceof IBauble && 
-        	   ((IBauble)stack.getItem()).getBaubleType(stack).hasSlot(baubleSlot) &&
-        	   ((IBauble)stack.getItem()).canEquip(stack, player);
+    	return ((IBaublesItemHandler)getItemHandler()).isItemValidForSlot(baubleSlot, stack, player);
     }    
 
 	@Override
