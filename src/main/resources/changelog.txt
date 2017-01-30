@@ -1,3 +1,6 @@
+1.4.3
+- added player references to capabilities container and added checks for item validity.
+
 1.4.2
 - fix for ticking entity crash
 

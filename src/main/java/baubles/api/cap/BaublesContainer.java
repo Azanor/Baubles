@@ -9,7 +9,8 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
 
 	private final static int BAUBLE_SLOTS = 7;
 	private boolean[] changed = new boolean[BAUBLE_SLOTS];
-	private boolean blockEvents=false;
+	private boolean blockEvents=false;	
+	private EntityLivingBase player;
 	
 	public BaublesContainer()
     {
@@ -37,9 +38,21 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
 	public boolean isItemValidForSlot(int slot, ItemStack stack, EntityLivingBase player) {
 		if (stack==null || stack.isEmpty() || !(stack.getItem() instanceof IBauble) ||
 				!((IBauble) stack.getItem()).canEquip(stack, player))
-			return false;
-		
+			return false;		
 		return ((IBauble) stack.getItem()).getBaubleType(stack).hasSlot(slot);
+	}
+	
+	@Override
+	public void setStackInSlot(int slot, ItemStack stack) {
+		if (stack==null || stack.isEmpty() || this.isItemValidForSlot(slot, stack, player)) {
+			super.setStackInSlot(slot, stack);
+		}
+	}
+
+	@Override
+	public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+		if (!this.isItemValidForSlot(slot, stack, player)) return stack;
+		return super.insertItem(slot, stack, simulate);
 	}
 	
 	@Override
@@ -72,6 +85,11 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
 			changed = new boolean[this.getSlots()];
 		}
 		this.changed[slot] = change;
+	}
+
+	@Override
+	public void setPlayer(EntityLivingBase player) {
+		this.player=player;
 	}
 	
 }
