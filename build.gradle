@@ -41,25 +41,12 @@ processResources
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
-    
-    // Move access transformers to META-INF
-    rename '(.+_at.cfg)', 'META-INF/$1'
 }
-
-def commonManifest = {
-    attributes 'FMLAT': 'baubles_at.cfg'
-}
-
-jar {
-    manifest commonManifest
-}
-
 
 // Create deobf dev jars
 task deobfJar(type: Jar) {
     from sourceSets.main.output
     classifier = 'deobf'
-    manifest commonManifest    
 }
 
 // Create API library zip
