@@ -75,7 +75,7 @@ public class BaublesInventoryWrapper implements IInventory {
 	public void markDirty() {	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(EntityPlayer player) {
 		return true;
 	}
 
