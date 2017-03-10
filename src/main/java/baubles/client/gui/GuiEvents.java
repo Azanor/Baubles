@@ -31,14 +31,14 @@ public class GuiEvents {
 
 		if (event.getGui() instanceof GuiInventory) {
 			if (event.getButton().id == 55) {
-				PacketHandler.INSTANCE.sendToServer(new PacketOpenBaublesInventory(event.getGui().mc.thePlayer));
+				PacketHandler.INSTANCE.sendToServer(new PacketOpenBaublesInventory(event.getGui().mc.player));
 			}
 		}
 		
 		if (event.getGui() instanceof GuiPlayerExpanded) {
 			if (event.getButton().id == 55) {
-				event.getGui().mc.displayGuiScreen(new GuiInventory(event.getGui().mc.thePlayer));
-				PacketHandler.INSTANCE.sendToServer(new PacketOpenNormalInventory(event.getGui().mc.thePlayer));
+				event.getGui().mc.displayGuiScreen(new GuiInventory(event.getGui().mc.player));
+				PacketHandler.INSTANCE.sendToServer(new PacketOpenNormalInventory(event.getGui().mc.player));
 			}
 		}
 	}

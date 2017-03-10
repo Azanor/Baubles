@@ -23,22 +23,23 @@ public class CommandBaubles extends CommandBase {
 		this.aliases.add("baub");
 		this.aliases.add("bau");
 	}	
-		
+
 	@Override
-	public String getCommandName() {
+	public String getName() {
+		
 		return "baubles";
 	}
 	
 	@Override
-	public List<String> getCommandAliases() {
+	public List<String> getAliases() {
 		return aliases;
     }
 
 	@Override
-	public String getCommandUsage(ICommandSender icommandsender) {
+	public String getUsage(ICommandSender sender) {
 		return "/baubles <action> [<player> [<params>]]";
 	}
-
+	
 	@Override
 	public int getRequiredPermissionLevel() {
 		return 2;
@@ -52,30 +53,30 @@ public class CommandBaubles extends CommandBase {
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (args.length < 2 || args[0].equalsIgnoreCase("help")) {
-			sender.addChatMessage(new TextComponentTranslation("\u00a73You can also use /baub or /bau instead of /baubles."));
-			sender.addChatMessage(new TextComponentTranslation("\u00a73Use this to view the baubles inventory of a player."));
-			sender.addChatMessage(new TextComponentTranslation("  /baubles view <player>"));
-			sender.addChatMessage(new TextComponentTranslation("\u00a73Use this to clear a players baubles inventory. Default is everything or you can give a slot number"));
-			sender.addChatMessage(new TextComponentTranslation("  /baubles clear <player> [<slot>]"));
+			sender.sendMessage(new TextComponentTranslation("\u00a73You can also use /baub or /bau instead of /baubles."));
+			sender.sendMessage(new TextComponentTranslation("\u00a73Use this to view the baubles inventory of a player."));
+			sender.sendMessage(new TextComponentTranslation("  /baubles view <player>"));
+			sender.sendMessage(new TextComponentTranslation("\u00a73Use this to clear a players baubles inventory. Default is everything or you can give a slot number"));
+			sender.sendMessage(new TextComponentTranslation("  /baubles clear <player> [<slot>]"));
 		} else 
 		if (args.length >= 2) {
 			EntityPlayerMP entityplayermp = getPlayer(server,sender,args[1]);
 			
 			if (entityplayermp==null) {
-				sender.addChatMessage(new TextComponentTranslation("\u00a7c"+args[1]+" not found"));
+				sender.sendMessage(new TextComponentTranslation("\u00a7c"+args[1]+" not found"));
 				return;
 			}
 			
 			IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(entityplayermp);
 			
 			if (args[0].equalsIgnoreCase("view")) {				
-				sender.addChatMessage(new TextComponentTranslation("\u00a73Showing baubles for "+entityplayermp.getName()));
+				sender.sendMessage(new TextComponentTranslation("\u00a73Showing baubles for "+entityplayermp.getName()));
 				for (int a = 0; a<baubles.getSlots();a++) {
 					ItemStack st = baubles.getStackInSlot(a);
 					if (st!=null && st.getItem() instanceof IBauble) {
 						IBauble bauble=(IBauble)st.getItem();
 						BaubleType bt = bauble.getBaubleType(st);
-						sender.addChatMessage(new TextComponentTranslation("\u00a73 [Slot "+a+"] "+bt+" "+st.getDisplayName()));
+						sender.sendMessage(new TextComponentTranslation("\u00a73 [Slot "+a+"] "+bt+" "+st.getDisplayName()));
 					}
 				}
 			} else 
@@ -84,28 +85,28 @@ public class CommandBaubles extends CommandBase {
 					int slot = -1;
 					try { slot = Integer.parseInt(args[2]); } catch (Exception e) {}
 					if (slot<0 || slot >= baubles.getSlots()) {
-						sender.addChatMessage(new TextComponentTranslation("\u00a7cInvalid arguments"));
-						sender.addChatMessage(new TextComponentTranslation("\u00a7cUse /baubles help to get help"));
+						sender.sendMessage(new TextComponentTranslation("\u00a7cInvalid arguments"));
+						sender.sendMessage(new TextComponentTranslation("\u00a7cUse /baubles help to get help"));
 					} else {
 						baubles.setStackInSlot(slot, null);
-						sender.addChatMessage(new TextComponentTranslation("\u00a73Cleared baubles slot "+slot+" for "+entityplayermp.getName()));
-						entityplayermp.addChatMessage(new TextComponentTranslation("\u00a74Your baubles slot "+slot+" has been cleared by admin "+sender.getName()));
+						sender.sendMessage(new TextComponentTranslation("\u00a73Cleared baubles slot "+slot+" for "+entityplayermp.getName()));
+						entityplayermp.sendMessage(new TextComponentTranslation("\u00a74Your baubles slot "+slot+" has been cleared by admin "+sender.getName()));
 					}
 				} else {
 					for (int a = 0; a<baubles.getSlots();a++) {
 						baubles.setStackInSlot(a, null);						
 					}
-					sender.addChatMessage(new TextComponentTranslation("\u00a73Cleared all baubles slots for "+entityplayermp.getName()));
-					entityplayermp.addChatMessage(new TextComponentTranslation("\u00a74All your baubles slots have been cleared by admin "+sender.getName()));					
+					sender.sendMessage(new TextComponentTranslation("\u00a73Cleared all baubles slots for "+entityplayermp.getName()));
+					entityplayermp.sendMessage(new TextComponentTranslation("\u00a74All your baubles slots have been cleared by admin "+sender.getName()));					
 				}				
 			} else {
-				sender.addChatMessage(new TextComponentTranslation("\u00a7cInvalid arguments"));
-				sender.addChatMessage(new TextComponentTranslation("\u00a7cUse /baubles help to get help"));
+				sender.sendMessage(new TextComponentTranslation("\u00a7cInvalid arguments"));
+				sender.sendMessage(new TextComponentTranslation("\u00a7cUse /baubles help to get help"));
 			}
 
 		} else {
-			sender.addChatMessage(new TextComponentTranslation("\u00a7cInvalid arguments"));
-			sender.addChatMessage(new TextComponentTranslation("\u00a7cUse /baubles help to get help"));
+			sender.sendMessage(new TextComponentTranslation("\u00a7cInvalid arguments"));
+			sender.sendMessage(new TextComponentTranslation("\u00a7cUse /baubles help to get help"));
 		}
 
 	}

@@ -15,6 +15,7 @@ import baubles.api.cap.IBaublesItemHandler;
 import baubles.common.Baubles;
 import baubles.common.network.PacketHandler;
 import baubles.common.network.PacketSync;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,7 +26,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -128,8 +128,8 @@ public class EventHandlerEntity {
 	@SubscribeEvent
 	public void playerDeath(PlayerDropsEvent event) {
 		if (event.getEntity() instanceof EntityPlayer
-				&& !event.getEntity().worldObj.isRemote
-				&& !event.getEntity().worldObj.getGameRules().getBoolean("keepInventory")) {			
+				&& !event.getEntity().world.isRemote
+				&& !event.getEntity().world.getGameRules().getBoolean("keepInventory")) {			
 			dropItemsAt(event.getEntityPlayer(),event.getDrops(),event.getEntityPlayer());						
 		}
 	}
@@ -138,12 +138,12 @@ public class EventHandlerEntity {
 		IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
 		for (int i = 0; i < baubles.getSlots(); ++i) {
 			if (baubles.getStackInSlot(i) != null) {
-				EntityItem ei = new EntityItem(e.worldObj,
+				EntityItem ei = new EntityItem(e.world,
 						e.posX, e.posY + e.getEyeHeight(), e.posZ,
 						baubles.getStackInSlot(i).copy());
 				ei.setPickupDelay(40);
-				float f1 = e.worldObj.rand.nextFloat() * 0.5F;
-				float f2 = e.worldObj.rand.nextFloat() * (float) Math.PI * 2.0F;
+				float f1 = e.world.rand.nextFloat() * 0.5F;
+				float f2 = e.world.rand.nextFloat() * (float) Math.PI * 2.0F;
 				ei.motionX = (double) (-MathHelper.sin(f2) * f1);
 				ei.motionZ = (double) (MathHelper.cos(f2) * f1);
 				ei.motionY = 0.20000000298023224D;
@@ -158,7 +158,7 @@ public class EventHandlerEntity {
 	public void tooltipEvent(ItemTooltipEvent event) {
 		if (event.getItemStack()!=null && event.getItemStack().getItem() instanceof IBauble) {
 			BaubleType bt = ((IBauble)event.getItemStack().getItem()).getBaubleType(event.getItemStack());
-			event.getToolTip().add(TextFormatting.GOLD+I18n.translateToLocal("name."+bt));
+			event.getToolTip().add(TextFormatting.GOLD+I18n.format("name."+bt));
 		}
 	}
 	
@@ -175,7 +175,7 @@ public class EventHandlerEntity {
 	}
 	
 	public void loadPlayerBaubles(EntityPlayer player, File file1, File file2) {
-		if (player != null && !player.worldObj.isRemote) {
+		if (player != null && !player.world.isRemote) {
 			try {
 				NBTTagCompound data = null;
 				boolean save = false;
