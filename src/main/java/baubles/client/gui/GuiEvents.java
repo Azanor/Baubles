@@ -19,7 +19,7 @@ public class GuiEvents {
 
 		if (event.getGui() instanceof GuiInventory || event.getGui() instanceof GuiPlayerExpanded) {
 			GuiContainer gui = (GuiContainer) event.getGui();
-			event.getButtonList().add(new GuiBaublesButton(55, gui.guiLeft, gui.guiTop, 64, 9, 10, 10,
+			event.getButtonList().add(new GuiBaublesButton(55, gui.getGuiLeft(), gui.getGuiTop(), 64, 9, 10, 10,
 					I18n.format((event.getGui() instanceof GuiInventory)?"button.baubles":"button.normal", new Object[0])));
 		}
 		
