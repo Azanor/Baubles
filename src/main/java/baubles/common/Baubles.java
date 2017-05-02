@@ -28,12 +28,11 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 		name = Baubles.MODNAME, 
 		version = Baubles.VERSION, 
 		guiFactory = "baubles.client.gui.BaublesGuiFactory")
-		//dependencies="required-after:Forge@[13.19.0.2180,);")
 public class Baubles {
 	
 	public static final String MODID = "baubles";
 	public static final String MODNAME = "Baubles";
-	public static final String VERSION = "1.4.3";
+	public static final String VERSION = "1.4.4";
 
 	@SidedProxy(clientSide = "baubles.client.ClientProxy", serverSide = "baubles.common.CommonProxy")
 	public static CommonProxy proxy;

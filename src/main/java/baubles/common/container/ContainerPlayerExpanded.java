@@ -300,5 +300,7 @@ public class ContainerPlayerExpanded extends Container
     {
         return slot.inventory != this.craftResult && super.canMergeSlot(stack, slot);
     }
+    
+    
 
 }

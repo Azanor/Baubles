@@ -1,3 +1,7 @@
+1.4.4
+- item on cursor will no longer be lost if you click on the baubles ring button
+- fixed baubles button display text
+
 1.4.3
 - added player references to capabilities container and added checks for item validity.
 
