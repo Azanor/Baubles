@@ -35,7 +35,7 @@ public class GuiBaublesButton extends GuiButton {
         {
         	int potionShift = getPotionShift(mc);
         	
-            FontRenderer fontrenderer = mc.fontRendererObj;
+            FontRenderer fontrenderer = mc.fontRenderer;
             mc.getTextureManager().bindTexture(GuiPlayerExpanded.background);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             this.hovered = xx >= this.xPosition + potionShift && yy >= this.yPosition && 
