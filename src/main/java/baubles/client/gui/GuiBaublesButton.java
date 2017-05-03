@@ -7,6 +7,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 
 public class GuiBaublesButton extends GuiButton {
 
@@ -49,7 +50,7 @@ public class GuiBaublesButton extends GuiButton {
             	this.drawTexturedModalRect(this.xPosition + potionShift, this.yPosition, 200, 48, 10, 10);	
             } else {
             	this.drawTexturedModalRect(this.xPosition + potionShift, this.yPosition, 210, 48, 10, 10);
-            	this.drawCenteredString(fontrenderer, this.displayString, 
+            	this.drawCenteredString(fontrenderer, I18n.format(this.displayString, new Object[0]),
             			this.xPosition + 5 + potionShift, this.yPosition + this.height, 0xffffff);
             }
             
