@@ -11,25 +11,25 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class Config {
-	
+
 	public static Configuration config;
 	public static Item itemRing;
 	public static boolean renderBaubles=true;
-		
-	public static void initialize(File file)
-    {
-		config = new Configuration(file);
-        config.load();
 
-        itemRing =(new ItemRing()).setUnlocalizedName("Ring").setRegistryName("Ring");
+	public static void initialize(File file)
+	{
+		config = new Configuration(file);
+		config.load();
+
+		itemRing =(new ItemRing()).setUnlocalizedName("Ring").setRegistryName("Ring");
 		//GameRegistry.registerItem(itemRing, "Ring");
 		GameRegistry.register(itemRing);
-		
+
 		load();
-		
+
 		MinecraftForge.EVENT_BUS.register(ConfigChangeListener.class);
-    }
-	
+	}
+
 	public static void load() {
 		String desc = "Set this to false to disable rendering of baubles in the player.";
 		renderBaubles = config.getBoolean("baubleRender.enabled", 
@@ -38,12 +38,11 @@ public class Config {
 		if(config.hasChanged())	config.save();
 	}
 
-	
 	public static void save()
-    {
-        config.save();
-    }	
-	
+	{
+		config.save();
+	}
+
 	public static class ConfigChangeListener {
 		@SubscribeEvent
 		public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
@@ -51,5 +50,4 @@ public class Config {
 				load();
 		}
 	}
-	
 }

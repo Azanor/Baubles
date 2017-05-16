@@ -11,15 +11,15 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
 	private boolean[] changed = new boolean[BAUBLE_SLOTS];
 	private boolean blockEvents=false;	
 	private EntityLivingBase player;
-	
+
 	public BaublesContainer()
-    {
-        super(BAUBLE_SLOTS);
-    }
-	
+	{
+		super(BAUBLE_SLOTS);
+	}
+
 	@Override
 	public void setSize(int size)
-    {
+	{
 		if (size<BAUBLE_SLOTS) size = BAUBLE_SLOTS;
 		super.setSize(size);
 		boolean[] old = changed;
@@ -28,7 +28,7 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
 		{
 			changed[i] = old[i];
 		}
-    }
+	}
 
 	/**
 	 * Returns true if automation is allowed to insert the given stack (ignoring
@@ -38,10 +38,10 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
 	public boolean isItemValidForSlot(int slot, ItemStack stack, EntityLivingBase player) {
 		if (stack==null || stack.isEmpty() || !(stack.getItem() instanceof IBauble) ||
 				!((IBauble) stack.getItem()).canEquip(stack, player))
-			return false;		
+			return false;
 		return ((IBauble) stack.getItem()).getBaubleType(stack).hasSlot(slot);
 	}
-	
+
 	@Override
 	public void setStackInSlot(int slot, ItemStack stack) {
 		if (stack==null || stack.isEmpty() || this.isItemValidForSlot(slot, stack, player)) {
@@ -54,7 +54,7 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
 		if (!this.isItemValidForSlot(slot, stack, player)) return stack;
 		return super.insertItem(slot, stack, simulate);
 	}
-	
+
 	@Override
 	public boolean isEventBlocked() {
 		return blockEvents;
@@ -64,13 +64,13 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
 	public void setEventBlock(boolean blockEvents) {
 		this.blockEvents = blockEvents;
 	}
-	
+
 	@Override
 	protected void onContentsChanged(int slot)
-    {
+	{
 		setChanged(slot,true);
-    }	
-	
+	}
+
 	@Override
 	public boolean isChanged(int slot) {
 		if (changed==null) {
@@ -91,5 +91,4 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
 	public void setPlayer(EntityLivingBase player) {
 		this.player=player;
 	}
-	
 }

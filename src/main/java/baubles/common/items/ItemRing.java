@@ -1,9 +1,5 @@
 package baubles.common.items;
 
-import baubles.api.BaubleType;
-import baubles.api.BaublesApi;
-import baubles.api.IBauble;
-import baubles.api.cap.IBaublesItemHandler;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,10 +16,13 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import baubles.api.BaubleType;
+import baubles.api.BaublesApi;
+import baubles.api.IBauble;
+import baubles.api.cap.IBaublesItemHandler;
 
 public class ItemRing  extends Item implements IBauble
 {
-
 	public ItemRing()
 	{
 		super();
@@ -36,15 +35,15 @@ public class ItemRing  extends Item implements IBauble
 	//TODO fix texture
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubItems(Item par1, CreativeTabs par2CreativeTab, NonNullList<ItemStack> par3NonNullList) {
-		par3NonNullList.add(new ItemStack(this,1,0));
+	public void getSubItems(Item par1, CreativeTabs par2CreativeTab, NonNullList<ItemStack> list) {
+		list.add(new ItemStack(this,1,0));
 	}
 
 	@Override
 	public BaubleType getBaubleType(ItemStack itemstack) {
 		return BaubleType.RING;
 	}
-	
+
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		if(!world.isRemote) { 
@@ -94,7 +93,4 @@ public class ItemRing  extends Item implements IBauble
 	public void onUnequipped(ItemStack itemstack, EntityLivingBase player) {
 		player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, .75F, 2f);
 	}
-
-
-
 }

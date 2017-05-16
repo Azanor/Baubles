@@ -25,10 +25,8 @@ public class BaublesGuiConfig extends GuiConfig {
 				.getChildElements());
 		list.addAll(new ConfigElement(Config.config
 				.getCategory(Configuration.CATEGORY_CLIENT))
-				.getChildElements());		
-		
-		return list;
-		
-	}
+				.getChildElements());
 
+		return list;
+	}
 }

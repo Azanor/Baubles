@@ -17,15 +17,15 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketSync implements IMessage, IMessageHandler<PacketSync, IMessage> {
-	
+
 	int playerId;
 	byte slot=0;
 	ItemStack bauble;
-	
+
 	public PacketSync() {}
-	
-	public PacketSync(EntityPlayer p, int slot) {		
-		IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(p);			
+
+	public PacketSync(EntityPlayer p, int slot) {
+		IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(p);
 		this.slot = (byte) slot;
 		this.bauble = baubles.getStackInSlot(slot);
 		this.playerId = p.getEntityId();
@@ -35,7 +35,7 @@ public class PacketSync implements IMessage, IMessageHandler<PacketSync, IMessag
 	@Override
 	public void toBytes(ByteBuf buffer) {
 		buffer.writeInt(playerId);
-		buffer.writeByte(slot);		
+		buffer.writeByte(slot);
 		ByteBufUtils.writeItemStack(buffer, bauble);
 	}
 
@@ -43,22 +43,21 @@ public class PacketSync implements IMessage, IMessageHandler<PacketSync, IMessag
 	public void fromBytes(ByteBuf buffer) {
 		playerId = buffer.readInt();
 		slot = buffer.readByte();
-		bauble = ByteBufUtils.readItemStack(buffer);	
-	}	
-	
+		bauble = ByteBufUtils.readItemStack(buffer);
+	}
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IMessage onMessage(PacketSync message, MessageContext ctx) {
-		Minecraft.getMinecraft().addScheduledTask(new Runnable(){ public void run() {			
+		Minecraft.getMinecraft().addScheduledTask(new Runnable(){ public void run() {
 			World world = Baubles.proxy.getClientWorld();
 			if (world==null) return;
 			Entity p = world.getEntityByID(message.playerId);
 			if (p !=null && p instanceof EntityPlayer) {
-				IBaublesItemHandler baubles = BaublesApi.getBaublesHandler((EntityPlayer) p);	
+				IBaublesItemHandler baubles = BaublesApi.getBaublesHandler((EntityPlayer) p);
 				baubles.setStackInSlot(message.slot, message.bauble);
-			}			
+			}
 		}});
 		return null;
 	}
-
 }

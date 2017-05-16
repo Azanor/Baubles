@@ -8,13 +8,13 @@ public enum BaubleType {
 	HEAD(4),
 	BODY(5),
 	CHARM(6);
-	
+
 	int[] validSlots;
 
 	private BaubleType(int ... validSlots) {
 		this.validSlots = validSlots;
 	}
-	
+
 	public boolean hasSlot(int slot) {
 		for (int s:validSlots) {
 			if (s == slot) return true;
@@ -25,6 +25,4 @@ public enum BaubleType {
 	public int[] getValidSlots() {
 		return validSlots;
 	}
-	
-	
 }

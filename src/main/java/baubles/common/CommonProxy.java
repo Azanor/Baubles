@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 
 public class CommonProxy implements IGuiHandler {
-	
+
 	public KeyHandler keyHandler;
 
 	@Override
@@ -27,19 +27,11 @@ public class CommonProxy implements IGuiHandler {
 	public World getClientWorld() {
 		return null;
 	}
-		
-	
-	public void registerKeyBindings() {}
+
+	public void registerKeyBindings() { }
 
 
-	public void registerItemModels() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void registerItemModels() { }
 
-	public void init() {
-		// TODO Auto-generated method stub
-		
-	}
-
+	public void init() { }
 }

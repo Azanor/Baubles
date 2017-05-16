@@ -16,23 +16,23 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentTranslation;
 
 public class CommandBaubles extends CommandBase {
-	private List aliases;
+	private List<String> aliases;
 
 	public CommandBaubles() {
-		this.aliases = new ArrayList();
+		this.aliases = new ArrayList<String>();
 		this.aliases.add("baub");
 		this.aliases.add("bau");
-	}	
-		
+	}
+
 	@Override
 	public String getName() {
 		return "baubles";
 	}
-	
+
 	@Override
 	public List<String> getAliases() {
 		return aliases;
-    }
+	}
 
 	@Override
 	public String getUsage(ICommandSender icommandsender) {
@@ -57,18 +57,18 @@ public class CommandBaubles extends CommandBase {
 			sender.sendMessage(new TextComponentTranslation("  /baubles view <player>"));
 			sender.sendMessage(new TextComponentTranslation("\u00a73Use this to clear a players baubles inventory. Default is everything or you can give a slot number"));
 			sender.sendMessage(new TextComponentTranslation("  /baubles clear <player> [<slot>]"));
-		} else 
-		if (args.length >= 2) {
+		}
+		else if (args.length >= 2) {
 			EntityPlayerMP entityplayermp = getPlayer(server,sender,args[1]);
 			
 			if (entityplayermp==null) {
 				sender.sendMessage(new TextComponentTranslation("\u00a7c"+args[1]+" not found"));
 				return;
 			}
-			
+
 			IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(entityplayermp);
-			
-			if (args[0].equalsIgnoreCase("view")) {				
+
+			if (args[0].equalsIgnoreCase("view")) {
 				sender.sendMessage(new TextComponentTranslation("\u00a73Showing baubles for "+entityplayermp.getName()));
 				for (int a = 0; a<baubles.getSlots();a++) {
 					ItemStack st = baubles.getStackInSlot(a);
@@ -78,8 +78,8 @@ public class CommandBaubles extends CommandBase {
 						sender.sendMessage(new TextComponentTranslation("\u00a73 [Slot "+a+"] "+bt+" "+st.getDisplayName()));
 					}
 				}
-			} else 
-			if (args[0].equalsIgnoreCase("clear")) {				
+			}
+			else if (args[0].equalsIgnoreCase("clear")) {
 				if (args.length>=3) {
 					int slot = -1;
 					try { slot = Integer.parseInt(args[2]); } catch (Exception e) {}
@@ -93,11 +93,11 @@ public class CommandBaubles extends CommandBase {
 					}
 				} else {
 					for (int a = 0; a<baubles.getSlots();a++) {
-						baubles.setStackInSlot(a, ItemStack.EMPTY);						
+						baubles.setStackInSlot(a, ItemStack.EMPTY);
 					}
 					sender.sendMessage(new TextComponentTranslation("\u00a73Cleared all baubles slots for "+entityplayermp.getName()));
-					entityplayermp.sendMessage(new TextComponentTranslation("\u00a74All your baubles slots have been cleared by admin "+sender.getName()));					
-				}				
+					entityplayermp.sendMessage(new TextComponentTranslation("\u00a74All your baubles slots have been cleared by admin "+sender.getName()));
+				}
 			} else {
 				sender.sendMessage(new TextComponentTranslation("\u00a7cInvalid arguments"));
 				sender.sendMessage(new TextComponentTranslation("\u00a7cUse /baubles help to get help"));
@@ -107,9 +107,5 @@ public class CommandBaubles extends CommandBase {
 			sender.sendMessage(new TextComponentTranslation("\u00a7cInvalid arguments"));
 			sender.sendMessage(new TextComponentTranslation("\u00a7cUse /baubles help to get help"));
 		}
-
 	}
-
-	
-
 }

@@ -20,15 +20,15 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
-public class ClientProxy extends CommonProxy {	
-	
+public class ClientProxy extends CommonProxy {
+
 	@Override
 	public void registerKeyBindings() {
 		keyHandler = new KeyHandler();
 		FMLCommonHandler.instance().bus().register(keyHandler);
 		MinecraftForge.EVENT_BUS.register(new GuiEvents());
 	}
-	
+
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		if (world instanceof WorldClient) {
@@ -38,17 +38,17 @@ public class ClientProxy extends CommonProxy {
 		}
 		return null;
 	}
-				
+
 	@Override
 	public World getClientWorld() {
 		return FMLClientHandler.instance().getClient().world;
 	}
-	
+
 	@Override
 	public void registerItemModels() {
 		ModelLoader.setCustomModelResourceLocation(Config.itemRing, 0, new ModelResourceLocation("baubles:Ring", "inventory"));
 	}
-	
+
 	@Override
 	public void init() {
 		Map<String, RenderPlayer> skinMap = Minecraft.getMinecraft().getRenderManager().getSkinMap();
@@ -59,5 +59,4 @@ public class ClientProxy extends CommonProxy {
 		render = skinMap.get("slim");
 		render.addLayer(new BaublesRenderLayer());
 	}
-	
 }
