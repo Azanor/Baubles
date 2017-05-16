@@ -30,6 +30,7 @@ import baubles.common.Baubles;
 import baubles.common.network.PacketHandler;
 import baubles.common.network.PacketSync;
 
+@SuppressWarnings("deprecation")
 public class EventHandlerEntity {
 
 	private HashMap<UUID,ItemStack[]> baublesSync = new HashMap<UUID,ItemStack[]>();
@@ -48,8 +49,8 @@ public class EventHandlerEntity {
 	}
 
 	@SubscribeEvent
-	public void attachCapabilitiesPlayer(AttachCapabilitiesEvent.Entity event) {
-		if (event.getEntity() instanceof EntityPlayer) {
+	public void attachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
+		if (event.getObject() instanceof EntityPlayer) {
 			event.addCapability(new ResourceLocation(Baubles.MODID,"container"),
 					new BaublesContainerProvider(new BaublesContainer()));
 		}
@@ -152,7 +153,6 @@ public class EventHandlerEntity {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	@SubscribeEvent
 	public void tooltipEvent(ItemTooltipEvent event) {
 		if (event.getItemStack()!=null && !event.getItemStack().isEmpty() && event.getItemStack().getItem() instanceof IBauble) {
