@@ -1,3 +1,6 @@
+1.3.11
+- fixed localization issues
+
 1.3.10
 - item on cursor will no longer be lost if you click on the baubles ring button
 - fixed baubles button display text
