@@ -1,0 +1,19 @@
+#
+# ITEMS
+item.Ring.0.name=Пръстенът на миньора
+#
+# GUI
+button.baubles=Дрънкулки
+button.normal=Нормално
+#
+# Keybinding
+keybind.baublesinventory=Инвентара на Дранкулките
+#
+# Description
+name.AMULET=Дрънкулка (Амулет)
+name.RING=Дрънкулка (Пръстен)
+name.BELT=Дрънкулка (Колан)
+name.TRINKET=Дрънкулка (Всяко)
+name.HEAD=Дрънкулка (Глава)
+name.BODY=Дрънкулка (Тяло)
+name.CHARM=Дрънкулка (Чар)

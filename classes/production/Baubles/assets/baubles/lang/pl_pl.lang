@@ -1,0 +1,10 @@
+#
+# ITEMS
+item.Ring.0.name=Pierścień Górnika
+#
+# GUI
+button.baubles=Baubles
+button.normal=Normalne
+#
+# Keybinding
+keybind.baublesinventory=Inwentarz Baubles
