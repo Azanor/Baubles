@@ -1,0 +1,10 @@
+#
+# ITEMS
+item.Ring.0.name=Кольцо шахтёра
+#
+# GUI
+button.baubles=Baubles
+button.normal=Обычн.
+#
+# Keybinding
+keybind.baublesinventory=Инвентарь Baubles

@@ -1,0 +1,19 @@
+#
+# ITEMS
+item.Ring.0.name=礦工戒指
+#
+# GUI
+button.baubles=配件裝備欄
+button.normal=一般裝備欄
+#
+# Keybinding
+keybind.baublesinventory=配件裝備欄
+#
+# Description
+name.AMULET=配件（護身符）
+name.RING=配件（戒指）
+name.BELT=配件（腰帶）
+name.TRINKET=配件（任意）
+name.HEAD=配件（頭部）
+name.BODY=配件（身體）
+name.CHARM=配件（墜飾）

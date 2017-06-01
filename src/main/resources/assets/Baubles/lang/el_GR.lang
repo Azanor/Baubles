@@ -1,0 +1,19 @@
+#
+# ITEMS
+item.Ring.0.name=Δαχτυλίδι Μεταλλωρύχου
+#
+# GUI
+button.baubles=Μπιχλιμπίδια
+button.normal=Κανονικό
+#
+# Keybinding
+keybind.baublesinventory=Inventory Μπιχλιμπίδιων
+#
+# Description
+name.AMULET=Μπιχλιμπίδι (Φυλακτό)
+name.RING=Μπιχλιμπίδι (Δαχτυλίδι)
+name.BELT=Μπιχλιμπίδι (Ζώνη)
+name.TRINKET=Μπιχλιμπίδι (Κάθε)
+name.HEAD=Μπιχλιμπίδι (Κεφάλι)
+name.BODY=Μπιχλιμπίδι (Σώμα)
+name.CHARM=Μπιχλιμπίδι (Γοητεία)

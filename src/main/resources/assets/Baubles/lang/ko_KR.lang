@@ -1,0 +1,9 @@
+#
+# ITEMS
+item.Ring.0.name=광부의 반지
+#
+# GUI
+button.baubles=버블즈
+button.normal=노멀
+# Keybinding
+keybind.baublesinventory=버블즈 인벤토리
