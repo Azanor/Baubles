@@ -1,6 +1,6 @@
 [
 {
-  "modid": "Baubles",
+  "modid": "baubles",
   "name": "Baubles",
   "description": "Adding a touch of bling to Minecraft",
   "version": "${version}",
