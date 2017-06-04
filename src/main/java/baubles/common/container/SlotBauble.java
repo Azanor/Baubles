@@ -1,6 +1,7 @@
 package baubles.common.container;
 
 import baubles.api.IBauble;
+import baubles.api.cap.BaublesCapabilities;
 import baubles.api.cap.IBaublesItemHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -30,15 +31,21 @@ public class SlotBauble extends SlotItemHandler
 
 	@Override
 	public boolean canTakeStack(EntityPlayer player) {
-		return getStack()!=null && !getStack().isEmpty() &&
-			   ((IBauble)getStack().getItem()).canUnequip(getStack(), player);
+    	ItemStack stack = getStack();
+    	if(stack==null || stack.isEmpty())
+    		return false;
+
+    	IBauble bauble = stack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null);
+    	// xalcon: the player should be able to unequip non-bauble items. Non-baubles shouldnt show up here, but we never know
+		return bauble == null || bauble.canUnequip(stack, player);
 	}
 
 	@Override
 	public ItemStack onTake(EntityPlayer playerIn, ItemStack stack) {
+
 		if (!getHasStack() && !((IBaublesItemHandler)getItemHandler()).isEventBlocked() &&
-			stack.getItem() instanceof IBauble) {
-			((IBauble)stack.getItem()).onUnequipped(stack, playerIn);
+				stack.hasCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
+			stack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null).onUnequipped(stack, playerIn);
 		}
 		super.onTake(playerIn, stack);
 		return stack;
@@ -46,14 +53,16 @@ public class SlotBauble extends SlotItemHandler
 
 	@Override
 	public void putStack(ItemStack stack) {
-		if (getHasStack() && !((IBaublesItemHandler)getItemHandler()).isEventBlocked()) {
-			((IBauble)getStack().getItem()).onUnequipped(getStack(), player);
+		if (getHasStack() && !((IBaublesItemHandler)getItemHandler()).isEventBlocked() &&
+				getStack().hasCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
+			getStack().getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null).onUnequipped(getStack(), player);
 		}
 
 		super.putStack(stack);
 
-		if (this.getHasStack() && !((IBaublesItemHandler)getItemHandler()).isEventBlocked()) {
-			((IBauble)getStack().getItem()).onEquipped(getStack(), player);
+		if (this.getHasStack() && !((IBaublesItemHandler)getItemHandler()).isEventBlocked() &&
+				getStack().hasCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
+			getStack().getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null).onEquipped(getStack(), player);
 		}
 	}
 

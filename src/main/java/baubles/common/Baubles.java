@@ -2,6 +2,13 @@ package baubles.common;
 
 import java.io.File;
 
+import baubles.api.BaubleType;
+import baubles.api.IBauble;
+import baubles.api.cap.BaubleItem;
+import baubles.api.cap.BaublesCapabilities;
+import baubles.common.event.EventHandlerItem;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.client.MinecraftForgeClient;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -41,6 +48,7 @@ public class Baubles {
 	public static Baubles instance;
 	
 	public EventHandlerEntity entityEventHandler;
+	public EventHandlerItem itemEventHandler;
 	public File modDir;
 	
 	public static final Logger log = LogManager.getLogger(MODID.toUpperCase());
@@ -60,12 +68,18 @@ public class Baubles {
 				
 		CapabilityManager.INSTANCE.register(IBaublesItemHandler.class, 
 				new CapabilityBaubles<IBaublesItemHandler>(), BaublesContainer.class);
+
+		CapabilityManager.INSTANCE.register(IBauble.class,
+				new BaublesCapabilities.CapabilityItemBaubleStorage(), () -> new BaubleItem(BaubleType.TRINKET));
 						
 		PacketHandler.init();
 		
 		entityEventHandler = new EventHandlerEntity();
-		
+		itemEventHandler = new EventHandlerItem();
+
 		MinecraftForge.EVENT_BUS.register(entityEventHandler);
+		MinecraftForge.EVENT_BUS.register(itemEventHandler);
+
 
 		/////////////////////
 		proxy.registerItemModels();
