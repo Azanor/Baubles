@@ -31,12 +31,12 @@ public class SlotBauble extends SlotItemHandler
 
 	@Override
 	public boolean canTakeStack(EntityPlayer player) {
-    	ItemStack stack = getStack();
-    	if(stack==null || stack.isEmpty())
-    		return false;
+		ItemStack stack = getStack();
+		if(stack==null || stack.isEmpty())
+		    return false;
 
-    	IBauble bauble = stack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null);
-    	// xalcon: the player should be able to unequip non-bauble items. Non-baubles shouldnt show up here, but we never know
+		IBauble bauble = stack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null);
+		// xalcon: the player should be able to unequip non-bauble items. Non-baubles shouldnt show up here, but we never know
 		return bauble == null || bauble.canUnequip(stack, player);
 	}
 
