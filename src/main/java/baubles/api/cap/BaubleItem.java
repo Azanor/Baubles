@@ -2,7 +2,6 @@ package baubles.api.cap;
 
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 
 public class BaubleItem implements IBauble
@@ -16,17 +15,5 @@ public class BaubleItem implements IBauble
 	@Override
 	public BaubleType getBaubleType(ItemStack itemstack) {
 		return baubleType;
-	}
-
-	@Override
-	public void onWornTick(ItemStack itemstack, EntityLivingBase player) {
-	}
-
-	@Override
-	public void onEquipped(ItemStack itemstack, EntityLivingBase player) {
-	}
-
-	@Override
-	public void onUnequipped(ItemStack itemstack, EntityLivingBase player) {
 	}
 }

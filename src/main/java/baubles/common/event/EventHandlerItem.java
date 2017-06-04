@@ -47,7 +47,9 @@ public class EventHandlerItem
 			@Override
 			public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing)
 			{
-				return capability == BaublesCapabilities.CAPABILITY_ITEM_BAUBLE ? (T)stack.getItem() : null;
+				return capability == BaublesCapabilities.CAPABILITY_ITEM_BAUBLE
+						? BaublesCapabilities.CAPABILITY_ITEM_BAUBLE.cast((IBauble)stack.getItem())
+						: null;
 			}
 		});
 	}
