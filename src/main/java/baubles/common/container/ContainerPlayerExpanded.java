@@ -24,8 +24,8 @@ public class ContainerPlayerExpanded extends Container
 	/**
 	 * The crafting matrix inventory.
 	 */
-	public InventoryCrafting craftMatrix = new InventoryCrafting(this, 2, 2);
-	public IInventory craftResult = new InventoryCraftResult();
+	public final InventoryCrafting craftMatrix = new InventoryCrafting(this, 2, 2);
+	public final InventoryCraftResult craftResult = new InventoryCraftResult();
 	public IBaublesItemHandler baubles;
 	/**
 	 * Determines if inventory manipulation should be handled.
@@ -125,8 +125,7 @@ public class ContainerPlayerExpanded extends Container
 	@Override
 	public void onCraftMatrixChanged(IInventory par1IInventory)
 	{
-	    // FIXME 1.12
-		//this.craftResult.setInventorySlotContents(0, CraftingManager.findMatchingRecipe(this.craftMatrix, this.thePlayer.world));
+		this.func_192389_a(this.thePlayer.getEntityWorld(), this.thePlayer, this.craftMatrix, this.craftResult);
 	}
 
 	/**
