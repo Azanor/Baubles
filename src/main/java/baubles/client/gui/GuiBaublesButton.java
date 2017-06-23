@@ -29,7 +29,7 @@ public class GuiBaublesButton extends GuiButton {
 
 
 	@Override
-	public void drawButton(Minecraft mc, int xx, int yy)
+	public void drawButton(Minecraft mc, int xx, int yy,float partialTicks)
     {
         if (this.visible)
         {
@@ -38,8 +38,8 @@ public class GuiBaublesButton extends GuiButton {
             FontRenderer fontrenderer = mc.fontRenderer;
             mc.getTextureManager().bindTexture(GuiPlayerExpanded.background);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-            this.hovered = xx >= this.xPosition + potionShift && yy >= this.yPosition && 
-            		xx < this.xPosition + this.width + potionShift && yy < this.yPosition + this.height;
+            this.hovered = xx >= this.x + potionShift && yy >= this.y && 
+            		xx < this.x + this.width + potionShift && yy < this.y + this.height;
             int k = this.getHoverState(this.hovered);
             GlStateManager.enableBlend();
             GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
@@ -47,11 +47,11 @@ public class GuiBaublesButton extends GuiButton {
             
             
             if (k==1) {
-            	this.drawTexturedModalRect(this.xPosition + potionShift, this.yPosition, 200, 48, 10, 10);	
+            	this.drawTexturedModalRect(this.x + potionShift, this.y, 200, 48, 10, 10);	
             } else {
-            	this.drawTexturedModalRect(this.xPosition + potionShift, this.yPosition, 210, 48, 10, 10);
+            	this.drawTexturedModalRect(this.x + potionShift, this.y, 210, 48, 10, 10);
             	this.drawCenteredString(fontrenderer, I18n.format(this.displayString, new Object[0]), 
-            			this.xPosition + 5 + potionShift, this.yPosition + this.height, 0xffffff);
+            			this.x + 5 + potionShift, this.y + this.height, 0xffffff);
             }
             
             this.mouseDragged(mc, xx, yy);

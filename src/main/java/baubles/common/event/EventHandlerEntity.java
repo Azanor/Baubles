@@ -49,8 +49,8 @@ public class EventHandlerEntity {
 	}
 	
 	@SubscribeEvent
-	public void attachCapabilitiesPlayer(AttachCapabilitiesEvent.Entity event) {
-		if (event.getEntity() instanceof EntityPlayer) {
+	public void attachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
+		if (event.getObject() instanceof EntityPlayer) {
 			event.addCapability(new ResourceLocation(Baubles.MODID,"container"), 
 					new BaublesContainerProvider(new BaublesContainer()));	
 		}
