@@ -6,7 +6,6 @@ import baubles.common.Baubles;
 import baubles.common.container.ContainerPlayerExpanded;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.achievement.GuiAchievements;
 import net.minecraft.client.gui.achievement.GuiStats;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
@@ -149,7 +148,8 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
     {
         if (button.id == 0)
         {
-            this.mc.displayGuiScreen(new GuiAchievements(this, this.mc.player.getStatFileWriter()));
+          //does not exist
+            //this.mc.displayGuiScreen(new GuiAchievements(this, this.mc.player.getStatFileWriter()));
         }
 
         if (button.id == 1)
