@@ -1,12 +1,8 @@
 package baubles.client.gui;
 
 import java.io.IOException;
-
-import baubles.common.Baubles;
-import baubles.common.container.ContainerPlayerExpanded;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.achievement.GuiAchievements;
 import net.minecraft.client.gui.achievement.GuiStats;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
@@ -18,6 +14,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
+import baubles.common.Baubles;
+import baubles.common.container.ContainerPlayerExpanded;
 
 public class GuiPlayerExpanded extends InventoryEffectRenderer {
 
@@ -146,7 +144,7 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
 	{
 		if (button.id == 0)
 		{
-			this.mc.displayGuiScreen(new GuiAchievements(this, this.mc.player.getStatFileWriter()));
+			//this.mc.displayGuiScreen(new GuiAchievements(this, this.mc.player.getStatFileWriter()));
 		}
 
 		if (button.id == 1)

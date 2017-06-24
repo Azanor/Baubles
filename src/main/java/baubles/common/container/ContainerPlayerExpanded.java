@@ -1,8 +1,5 @@
 package baubles.common.container;
 
-import baubles.api.IBauble;
-import baubles.api.cap.BaublesCapabilities;
-import baubles.api.cap.IBaublesItemHandler;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,9 +13,11 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import baubles.api.IBauble;
+import baubles.api.cap.BaublesCapabilities;
+import baubles.api.cap.IBaublesItemHandler;
 
 public class ContainerPlayerExpanded extends Container
 {
@@ -126,7 +125,8 @@ public class ContainerPlayerExpanded extends Container
 	@Override
 	public void onCraftMatrixChanged(IInventory par1IInventory)
 	{
-		this.craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(this.craftMatrix, this.thePlayer.world));
+	    // FIXME 1.12
+		//this.craftResult.setInventorySlotContents(0, CraftingManager.findMatchingRecipe(this.craftMatrix, this.thePlayer.world));
 	}
 
 	/**

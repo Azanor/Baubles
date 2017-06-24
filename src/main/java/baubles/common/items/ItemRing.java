@@ -35,7 +35,7 @@ public class ItemRing  extends Item implements IBauble
 	//TODO fix texture
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubItems(Item par1, CreativeTabs par2CreativeTab, NonNullList<ItemStack> list) {
+	public void getSubItems(CreativeTabs par2CreativeTab, NonNullList<ItemStack> list) {
 		list.add(new ItemStack(this,1,0));
 	}
 
