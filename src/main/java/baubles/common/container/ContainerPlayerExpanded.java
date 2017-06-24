@@ -13,8 +13,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import baubles.api.IBauble;
 import baubles.api.cap.BaublesCapabilities;
 import baubles.api.cap.IBaublesItemHandler;
@@ -72,7 +70,6 @@ public class ContainerPlayerExpanded extends Container
 					return !itemstack.isEmpty() && !playerIn.isCreative() && EnchantmentHelper.hasBindingCurse(itemstack) ? false : super.canTakeStack(playerIn);
 				}
 				@Override
-				@SideOnly(Side.CLIENT)
 				public String getSlotTexture()
 				{
 					return ItemArmor.EMPTY_SLOT_NAMES[slot.getIndex()];
@@ -109,7 +106,6 @@ public class ContainerPlayerExpanded extends Container
 				return super.isItemValid(stack);
 			}
 			@Override
-			@SideOnly(Side.CLIENT)
 			public String getSlotTexture()
 			{
 				return "minecraft:items/empty_armor_slot_shield";

@@ -1,19 +1,16 @@
 package baubles.client.gui;
 
-import baubles.common.network.PacketHandler;
-import baubles.common.network.PacketOpenBaublesInventory;
-import baubles.common.network.PacketOpenNormalInventory;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import baubles.common.network.PacketHandler;
+import baubles.common.network.PacketOpenBaublesInventory;
+import baubles.common.network.PacketOpenNormalInventory;
 
 public class GuiEvents {
 
-	@SideOnly(value = Side.CLIENT)
 	@SubscribeEvent
 	public void guiPostInit(GuiScreenEvent.InitGuiEvent.Post event) {
 
@@ -24,7 +21,6 @@ public class GuiEvents {
 		}
 	}
 
-	@SideOnly(value = Side.CLIENT)
 	@SubscribeEvent
 	public void guiPostAction(GuiScreenEvent.ActionPerformedEvent.Post event) {
 

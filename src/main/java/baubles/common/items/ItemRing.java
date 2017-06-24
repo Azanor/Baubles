@@ -17,8 +17,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.IBauble;
@@ -43,7 +41,6 @@ public class ItemRing extends Item implements IBauble
 		event.getRegistry().register(RING);
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
 		if (this.isInCreativeTab(tab)) {
@@ -80,7 +77,6 @@ public class ItemRing extends Item implements IBauble
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
 	public boolean hasEffect(ItemStack par1ItemStack) {
 		return true;

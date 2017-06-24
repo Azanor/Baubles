@@ -1,9 +1,5 @@
 package baubles.common.network;
 
-import baubles.api.BaublesApi;
-import baubles.api.cap.IBaublesItemHandler;
-import baubles.common.Baubles;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,8 +9,10 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import baubles.api.BaublesApi;
+import baubles.api.cap.IBaublesItemHandler;
+import baubles.common.Baubles;
+import io.netty.buffer.ByteBuf;
 
 public class PacketSync implements IMessage, IMessageHandler<PacketSync, IMessage> {
 
@@ -47,7 +45,6 @@ public class PacketSync implements IMessage, IMessageHandler<PacketSync, IMessag
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
 	public IMessage onMessage(PacketSync message, MessageContext ctx) {
 		Minecraft.getMinecraft().addScheduledTask(new Runnable(){ public void run() {
 			World world = Baubles.proxy.getClientWorld();

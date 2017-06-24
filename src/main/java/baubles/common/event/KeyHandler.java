@@ -8,7 +8,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import baubles.common.network.PacketHandler;
 import baubles.common.network.PacketOpenBaublesInventory;
 
@@ -20,7 +19,6 @@ public class KeyHandler {
 		 ClientRegistry.registerKeyBinding(key);
 	}
 
-	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void playerTick(PlayerTickEvent event) {
 		if (event.side == Side.SERVER) return;
