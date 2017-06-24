@@ -72,6 +72,7 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
 	@Override
 	public void drawScreen(int par1, int par2, float par3)
 	{
+		this.drawDefaultBackground();
 		super.drawScreen(par1, par2, par3);
 		this.xSizeFloat = (float)par1;
 		this.ySizeFloat = (float)par2;
