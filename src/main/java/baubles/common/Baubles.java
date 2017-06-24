@@ -1,16 +1,8 @@
 package baubles.common; 
 
 import java.io.File;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import baubles.api.cap.BaublesCapabilities.CapabilityBaubles;
-import baubles.api.cap.BaublesContainer;
-import baubles.api.cap.IBaublesItemHandler;
-import baubles.common.event.CommandBaubles;
-import baubles.common.event.EventHandlerEntity;
-import baubles.common.network.PacketHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.Mod;
@@ -22,12 +14,19 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import baubles.api.cap.BaublesCapabilities.CapabilityBaubles;
+import baubles.api.cap.BaublesContainer;
+import baubles.api.cap.IBaublesItemHandler;
+import baubles.common.event.CommandBaubles;
+import baubles.common.event.EventHandlerEntity;
+import baubles.common.network.PacketHandler;
 
 @Mod(
 		modid = Baubles.MODID, 
 		name = Baubles.MODNAME, 
 		version = Baubles.VERSION, 
-		guiFactory = "baubles.client.gui.BaublesGuiFactory")
+		guiFactory = "baubles.client.gui.BaublesGuiFactory",
+		dependencies = "required-after:forge@[14.21.0.2348,);")
 public class Baubles {
 
 	public static final String MODID = "baubles";
@@ -68,7 +67,6 @@ public class Baubles {
 		MinecraftForge.EVENT_BUS.register(entityEventHandler);
 
 		/////////////////////
-		proxy.registerItemModels();
 		Config.save();
 	}
 

@@ -8,16 +8,21 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
 import baubles.client.gui.GuiEvents;
 import baubles.client.gui.GuiPlayerExpanded;
 import baubles.common.Baubles;
 import baubles.common.CommonProxy;
-import baubles.common.Config;
 import baubles.common.event.KeyHandler;
+import baubles.common.items.ItemRing;
 
+@Mod.EventBusSubscriber(Side.CLIENT)
 public class ClientProxy extends CommonProxy {
 
 	@Override
@@ -42,9 +47,9 @@ public class ClientProxy extends CommonProxy {
 		return FMLClientHandler.instance().getClient().world;
 	}
 
-	@Override
-	public void registerItemModels() {
-		ModelLoader.setCustomModelResourceLocation(Config.itemRing, 0, new ModelResourceLocation("baubles:Ring", "inventory"));
+	@SubscribeEvent
+	public static void registerItemModels(ModelRegistryEvent event) {
+		ModelLoader.setCustomModelResourceLocation(ItemRing.RING, 0, new ModelResourceLocation("baubles:ring", "inventory"));
 	}
 
 	@Override

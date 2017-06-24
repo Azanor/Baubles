@@ -125,7 +125,7 @@ public class ContainerPlayerExpanded extends Container
 	@Override
 	public void onCraftMatrixChanged(IInventory par1IInventory)
 	{
-		this.func_192389_a(this.thePlayer.getEntityWorld(), this.thePlayer, this.craftMatrix, this.craftResult);
+		this.slotChangedCraftingGrid(this.thePlayer.getEntityWorld(), this.thePlayer, this.craftMatrix, this.craftResult);
 	}
 
 	/**

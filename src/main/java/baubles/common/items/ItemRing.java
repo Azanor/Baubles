@@ -14,6 +14,9 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import baubles.api.BaubleType;
@@ -21,22 +24,31 @@ import baubles.api.BaublesApi;
 import baubles.api.IBauble;
 import baubles.api.cap.IBaublesItemHandler;
 
-public class ItemRing  extends Item implements IBauble
+@Mod.EventBusSubscriber
+public class ItemRing extends Item implements IBauble
 {
+	public static final Item RING = (new ItemRing()).setUnlocalizedName("Ring").setRegistryName("ring");
+
 	public ItemRing()
 	{
 		super();
 		this.setMaxStackSize(1);
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
-		setCreativeTab(CreativeTabs.TOOLS);
+		this.setCreativeTab(CreativeTabs.TOOLS);
 	}
 
-	//TODO fix texture
+	@SubscribeEvent
+	public static void registerItems(RegistryEvent.Register<Item> event) {
+		event.getRegistry().register(RING);
+	}
+
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubItems(CreativeTabs par2CreativeTab, NonNullList<ItemStack> list) {
-		list.add(new ItemStack(this,1,0));
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
+		if (this.isInCreativeTab(tab)) {
+			list.add(new ItemStack(this, 1, 0));
+		}
 	}
 
 	@Override
@@ -68,6 +80,7 @@ public class ItemRing  extends Item implements IBauble
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public boolean hasEffect(ItemStack par1ItemStack) {
 		return true;
