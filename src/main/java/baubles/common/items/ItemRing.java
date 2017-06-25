@@ -17,15 +17,18 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.IBauble;
 import baubles.api.cap.IBaublesItemHandler;
+import baubles.common.Baubles;
 
 @Mod.EventBusSubscriber
 public class ItemRing extends Item implements IBauble
 {
-	public static final Item RING = (new ItemRing()).setUnlocalizedName("Ring").setRegistryName("ring");
+	@GameRegistry.ObjectHolder(Baubles.MODID + ":ring")
+	public static final Item RING = null;
 
 	public ItemRing()
 	{
@@ -38,7 +41,7 @@ public class ItemRing extends Item implements IBauble
 
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event) {
-		event.getRegistry().register(RING);
+		event.getRegistry().register((new ItemRing()).setUnlocalizedName("Ring").setRegistryName("ring"));
 	}
 
 	@Override
