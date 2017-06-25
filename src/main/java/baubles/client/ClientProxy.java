@@ -2,34 +2,33 @@
 package baubles.client;
 
 import java.util.Map;
+import org.lwjgl.input.Keyboard;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.RenderPlayer;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import baubles.client.gui.GuiEvents;
 import baubles.client.gui.GuiPlayerExpanded;
 import baubles.common.Baubles;
 import baubles.common.CommonProxy;
-import baubles.common.event.KeyHandler;
-import baubles.common.items.ItemRing;
 
-@Mod.EventBusSubscriber(Side.CLIENT)
 public class ClientProxy extends CommonProxy {
 
+	public static final KeyBinding KEY_BAUBLES = new KeyBinding("keybind.baublesinventory", Keyboard.KEY_B, "key.categories.inventory");
+
 	@Override
-	public void registerKeyBindings() {
-		keyHandler = new KeyHandler();
+	public void registerEventHandlers() {
+		super.registerEventHandlers();
+
+		ClientRegistry.registerKeyBinding(KEY_BAUBLES);
+
+		MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
 		MinecraftForge.EVENT_BUS.register(new GuiEvents());
-		MinecraftForge.EVENT_BUS.register(keyHandler);
 	}
 
 	@Override
@@ -45,11 +44,6 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public World getClientWorld() {
 		return FMLClientHandler.instance().getClient().world;
-	}
-
-	@SubscribeEvent
-	public static void registerItemModels(ModelRegistryEvent event) {
-		ModelLoader.setCustomModelResourceLocation(ItemRing.RING, 0, new ModelResourceLocation("baubles:ring", "inventory"));
 	}
 
 	@Override

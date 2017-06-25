@@ -3,14 +3,12 @@ package baubles.common;
 import java.io.File;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -18,7 +16,6 @@ import baubles.api.cap.BaublesCapabilities.CapabilityBaubles;
 import baubles.api.cap.BaublesContainer;
 import baubles.api.cap.IBaublesItemHandler;
 import baubles.common.event.CommandBaubles;
-import baubles.common.event.EventHandlerEntity;
 import baubles.common.network.PacketHandler;
 
 @Mod(
@@ -39,7 +36,6 @@ public class Baubles {
 	@Instance(value=Baubles.MODID)
 	public static Baubles instance;
 
-	public EventHandlerEntity entityEventHandler;
 	public File modDir;
 
 	public static final Logger log = LogManager.getLogger(MODID.toUpperCase());
@@ -60,11 +56,8 @@ public class Baubles {
 		CapabilityManager.INSTANCE.register(IBaublesItemHandler.class,
 				new CapabilityBaubles<IBaublesItemHandler>(), BaublesContainer.class);
 
+		proxy.registerEventHandlers();
 		PacketHandler.init();
-		
-		entityEventHandler = new EventHandlerEntity();
-		
-		MinecraftForge.EVENT_BUS.register(entityEventHandler);
 
 		/////////////////////
 		Config.save();
@@ -73,12 +66,7 @@ public class Baubles {
 	@EventHandler
 	public void init(FMLInitializationEvent evt) {
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
-		proxy.registerKeyBindings();
 		proxy.init();
-	}
-
-	@EventHandler
-	public void postInit(FMLPostInitializationEvent evt) {
 	}
 
 	@EventHandler

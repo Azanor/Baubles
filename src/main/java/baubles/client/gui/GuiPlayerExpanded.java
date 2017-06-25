@@ -14,7 +14,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
-import baubles.common.Baubles;
+import baubles.client.ClientProxy;
 import baubles.common.container.ContainerPlayerExpanded;
 
 public class GuiPlayerExpanded extends InventoryEffectRenderer {
@@ -156,7 +156,7 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
 
 	@Override
 	protected void keyTyped(char par1, int par2) throws IOException {
-		if (par2 == Baubles.proxy.keyHandler.key.getKeyCode())
+		if (par2 == ClientProxy.KEY_BAUBLES.getKeyCode())
 		{
 			this.mc.player.closeScreen();
 		} else
