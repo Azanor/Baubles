@@ -14,7 +14,7 @@ import baubles.api.cap.IBaublesItemHandler;
 import baubles.common.Baubles;
 import io.netty.buffer.ByteBuf;
 
-public class PacketSync implements IMessage, IMessageHandler<PacketSync, IMessage> {
+public class PacketSync implements IMessage {
 
 	int playerId;
 	byte slot=0;
@@ -44,17 +44,20 @@ public class PacketSync implements IMessage, IMessageHandler<PacketSync, IMessag
 		bauble = ByteBufUtils.readItemStack(buffer);
 	}
 
-	@Override
-	public IMessage onMessage(PacketSync message, MessageContext ctx) {
-		Minecraft.getMinecraft().addScheduledTask(new Runnable(){ public void run() {
-			World world = Baubles.proxy.getClientWorld();
-			if (world==null) return;
-			Entity p = world.getEntityByID(message.playerId);
-			if (p !=null && p instanceof EntityPlayer) {
-				IBaublesItemHandler baubles = BaublesApi.getBaublesHandler((EntityPlayer) p);
-				baubles.setStackInSlot(message.slot, message.bauble);
-			}
-		}});
-		return null;
+	public static class Handler implements IMessageHandler<PacketSync, IMessage>
+	{
+		@Override
+		public IMessage onMessage(PacketSync message, MessageContext ctx) {
+			Minecraft.getMinecraft().addScheduledTask(new Runnable(){ public void run() {
+				World world = Baubles.proxy.getClientWorld();
+				if (world==null) return;
+				Entity p = world.getEntityByID(message.playerId);
+				if (p !=null && p instanceof EntityPlayer) {
+					IBaublesItemHandler baubles = BaublesApi.getBaublesHandler((EntityPlayer) p);
+					baubles.setStackInSlot(message.slot, message.bauble);
+				}
+			}});
+			return null;
+		}
 	}
 }
