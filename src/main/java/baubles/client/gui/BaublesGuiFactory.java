@@ -1,27 +1,41 @@
 package baubles.client.gui;
 
-import java.util.Set;
-import net.minecraft.client.Minecraft;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraftforge.fml.client.IModGuiFactory;
+import net.minecraftforge.common.config.ConfigElement;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.client.DefaultGuiFactory;
+import net.minecraftforge.fml.client.config.GuiConfig;
+import net.minecraftforge.fml.client.config.IConfigElement;
+import baubles.common.Baubles;
+import baubles.common.Config;
 
-public class BaublesGuiFactory implements IModGuiFactory {
+public class BaublesGuiFactory extends DefaultGuiFactory {
 
-	@Override
-	public void initialize(Minecraft minecraftInstance) { }
-
-	@Override
-	public boolean hasConfigGui() {
-		return true;
+	public BaublesGuiFactory() {
+		super(Baubles.MODID, getTitle());
 	}
 
 	@Override
-	public GuiScreen createConfigGui(GuiScreen parentScreen) {
-		return new BaublesGuiConfig(parentScreen);
+	public GuiScreen createConfigGui(GuiScreen parent) {
+		return new GuiConfig(parent, getConfigElements(), Baubles.MODID, false, false, getTitle());
 	}
 
-	@Override
-	public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
-		return null;
+	private static List<IConfigElement> getConfigElements() {
+		List<IConfigElement> list = new ArrayList<IConfigElement>();
+
+		list.addAll(new ConfigElement(Config.config
+				.getCategory(Configuration.CATEGORY_GENERAL))
+				.getChildElements());
+		list.addAll(new ConfigElement(Config.config
+				.getCategory(Configuration.CATEGORY_CLIENT))
+				.getChildElements());
+
+		return list;
+	}
+
+	private static String getTitle() {
+		return GuiConfig.getAbridgedConfigPath(Config.config.toString());
 	}
 }
