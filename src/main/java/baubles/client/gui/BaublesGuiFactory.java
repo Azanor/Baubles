@@ -11,11 +11,6 @@ public class BaublesGuiFactory implements IModGuiFactory {
 	public void initialize(Minecraft minecraftInstance) { }
 
 	@Override
-	public Class<? extends GuiScreen> mainConfigGuiClass() {
-		return BaublesGuiConfig.class;
-	}
-
-	@Override
 	public boolean hasConfigGui() {
 		return true;
 	}
@@ -27,12 +22,6 @@ public class BaublesGuiFactory implements IModGuiFactory {
 
 	@Override
 	public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
-		return null;
-	}
-
-	@Deprecated
-	@Override
-	public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element) {
 		return null;
 	}
 }
