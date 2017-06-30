@@ -14,12 +14,12 @@ import baubles.common.Config;
 public class BaublesGuiFactory extends DefaultGuiFactory {
 
 	public BaublesGuiFactory() {
-		super(Baubles.MODID, getTitle());
+		super(Baubles.MODID, GuiConfig.getAbridgedConfigPath(Config.config.toString()));
 	}
 
 	@Override
 	public GuiScreen createConfigGui(GuiScreen parent) {
-		return new GuiConfig(parent, getConfigElements(), Baubles.MODID, false, false, getTitle());
+		return new GuiConfig(parent, getConfigElements(), this.modid, false, false, this.title);
 	}
 
 	private static List<IConfigElement> getConfigElements() {
@@ -33,9 +33,5 @@ public class BaublesGuiFactory extends DefaultGuiFactory {
 				.getChildElements());
 
 		return list;
-	}
-
-	private static String getTitle() {
-		return GuiConfig.getAbridgedConfigPath(Config.config.toString());
 	}
 }
