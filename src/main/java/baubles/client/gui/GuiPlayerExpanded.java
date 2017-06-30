@@ -70,12 +70,13 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
 	 * Draws the screen and all the components in it.
 	 */
 	@Override
-	public void drawScreen(int par1, int par2, float par3)
+	public void drawScreen(int mouseX, int mouseY, float partialTicks)
 	{
 		this.drawDefaultBackground();
-		super.drawScreen(par1, par2, par3);
-		this.xSizeFloat = (float)par1;
-		this.ySizeFloat = (float)par2;
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		this.xSizeFloat = (float) mouseX;
+		this.ySizeFloat = (float) mouseY;
+		this.renderHoveredToolTip(mouseX, mouseY);
 	}
 
 	@Override
