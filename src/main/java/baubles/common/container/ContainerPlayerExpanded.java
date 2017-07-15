@@ -131,17 +131,12 @@ public class ContainerPlayerExpanded extends Container
 	public void onContainerClosed(EntityPlayer player)
 	{
 		super.onContainerClosed(player);
-		for (int i = 0; i < 4; ++i)
+		this.craftResult.clear();
+
+		if (!player.world.isRemote)
 		{
-			ItemStack itemstack = this.craftMatrix.removeStackFromSlot(i);
-
-			if (!itemstack.isEmpty())
-			{
-				player.dropItem(itemstack, false);
-			}
+			this.clearContainer(player, player.world, this.craftMatrix);
 		}
-
-		this.craftResult.setInventorySlotContents(0, ItemStack.EMPTY);
 	}
 
 	@Override
@@ -266,8 +261,6 @@ public class ContainerPlayerExpanded extends Container
 				return ItemStack.EMPTY;
 			}
 
-			slot.onTake(playerIn, itemstack1);
-			
 			ItemStack itemstack2 = slot.onTake(playerIn, itemstack1);
 
 			if (index == 0)
