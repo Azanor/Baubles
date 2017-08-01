@@ -1,3 +1,6 @@
+1.4.6
+- added IBauble as a capability (see https://github.com/Azanor/Baubles/pull/208)
+
 1.4.5
 - fixes for localization bug
 

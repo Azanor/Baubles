@@ -42,7 +42,6 @@ public class SlotBauble extends SlotItemHandler
 
 	@Override
 	public ItemStack onTake(EntityPlayer playerIn, ItemStack stack) {
-
 		if (!getHasStack() && !((IBaublesItemHandler)getItemHandler()).isEventBlocked() &&
 				stack.hasCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
 			stack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null).onUnequipped(stack, playerIn);
@@ -53,14 +52,18 @@ public class SlotBauble extends SlotItemHandler
 
 	@Override
 	public void putStack(ItemStack stack) {
-		if (getHasStack() && !((IBaublesItemHandler)getItemHandler()).isEventBlocked() &&
+		if (getHasStack() && !ItemStack.areItemStacksEqual(stack,getStack()) && 
+				!((IBaublesItemHandler)getItemHandler()).isEventBlocked() &&
 				getStack().hasCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
 			getStack().getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null).onUnequipped(getStack(), player);
 		}
+		
+		ItemStack oldstack = getStack().copy();
 
 		super.putStack(stack);
 
-		if (this.getHasStack() && !((IBaublesItemHandler)getItemHandler()).isEventBlocked() &&
+		if (this.getHasStack() && !ItemStack.areItemStacksEqual(oldstack,getStack()) && 
+				!((IBaublesItemHandler)getItemHandler()).isEventBlocked() &&
 				getStack().hasCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
 			getStack().getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null).onEquipped(getStack(), player);
 		}

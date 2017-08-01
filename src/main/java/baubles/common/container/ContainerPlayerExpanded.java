@@ -121,7 +121,6 @@ public class ContainerPlayerExpanded extends Container
         });
 
         this.onCraftMatrixChanged(this.craftMatrix);
-        
     }
 
     /**
@@ -276,11 +275,14 @@ public class ContainerPlayerExpanded extends Container
             {
                 return ItemStack.EMPTY;
             }
-
-            slot.onTake(playerIn, itemstack1);
+            
+            if (itemstack1.isEmpty() && !baubles.isEventBlocked() && slot instanceof SlotBauble &&
+            		itemstack.hasCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
+            	itemstack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null).onUnequipped(itemstack, playerIn);
+    		}
             
             ItemStack itemstack2 = slot.onTake(playerIn, itemstack1);
-
+            
             if (index == 0)
             {
             	playerIn.dropItem(itemstack2, false);
