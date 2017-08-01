@@ -231,17 +231,17 @@ public class ContainerPlayerExpanded extends Container
             }
             
             // inv -> bauble
-            else if (itemstack.getItem() instanceof IBauble)
+            else if (itemstack.hasCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null))
             {
-            	IBauble bauble = (IBauble) itemstack1.getItem();            	
-            	for (int baubleSlot : bauble.getBaubleType(itemstack).getValidSlots()) {				
-	                if ( bauble.canEquip(itemstack1, thePlayer) && !((Slot)this.inventorySlots.get(baubleSlot+9)).getHasStack() &&	                		
-	                		!this.mergeItemStack(itemstack1, baubleSlot+9, baubleSlot + 10, false))
-	                {
-	                    return ItemStack.EMPTY;
-	                } 
-	                if (itemstack1.getCount() == 0) break;
-            	}
+            	IBauble bauble = itemstack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null);
+                for (int baubleSlot : bauble.getBaubleType(itemstack).getValidSlots()) {
+                    if ( bauble.canEquip(itemstack1, thePlayer) && !((Slot)this.inventorySlots.get(baubleSlot+9)).getHasStack() &&
+                            !this.mergeItemStack(itemstack1, baubleSlot+9, baubleSlot + 10, false))
+                    {
+                        return ItemStack.EMPTY;
+                    }
+                    if (itemstack1.getCount() == 0) break;
+                }
             }            
             
             else if (index >= 9+ slotShift && index < 36+ slotShift)
@@ -293,7 +293,6 @@ public class ContainerPlayerExpanded extends Container
     private void unequipBauble(ItemStack stack) {
     	
     }
-    
 
     @Override
     public boolean canMergeSlot(ItemStack stack, Slot slot)

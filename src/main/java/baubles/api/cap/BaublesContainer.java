@@ -36,10 +36,10 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
 	 */
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack, EntityLivingBase player) {
-		if (stack==null || stack.isEmpty() || !(stack.getItem() instanceof IBauble) ||
-				!((IBauble) stack.getItem()).canEquip(stack, player))
-			return false;		
-		return ((IBauble) stack.getItem()).getBaubleType(stack).hasSlot(slot);
+		if (stack==null || stack.isEmpty() || !stack.hasCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null))
+			return false;
+		IBauble bauble = stack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null);
+		return bauble.canEquip(stack, player) && bauble.getBaubleType(stack).hasSlot(slot);
 	}
 	
 	@Override

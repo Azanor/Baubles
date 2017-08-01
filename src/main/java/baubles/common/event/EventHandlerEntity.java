@@ -8,6 +8,7 @@ import java.util.UUID;
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.IBauble;
+import baubles.api.cap.BaublesCapabilities;
 import baubles.api.cap.BaublesContainer;
 import baubles.api.cap.BaublesContainerProvider;
 import baubles.api.cap.IBaublesItemHandler;
@@ -108,8 +109,9 @@ public class EventHandlerEntity {
 			for (int a = 0; a < count; a++) {
 				ItemStack baubleStack = baubles.getStackInSlot(a);
 				IBauble bauble = null;
-				if (baubleStack != null && !baubleStack.isEmpty() && baubleStack.getItem() instanceof IBauble) {
-					bauble = (IBauble) baubleStack.getItem();
+				if (baubleStack != null && !baubleStack.isEmpty() && baubleStack.hasCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
+
+					bauble = baubleStack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null);
 					//Worn Tick
 					bauble.onWornTick(baubleStack, player);
 				}				
@@ -157,8 +159,9 @@ public class EventHandlerEntity {
 	
 	@SubscribeEvent
 	public void tooltipEvent(ItemTooltipEvent event) {
-		if (event.getItemStack()!=null && !event.getItemStack().isEmpty() && event.getItemStack().getItem() instanceof IBauble) {
-			BaubleType bt = ((IBauble)event.getItemStack().getItem()).getBaubleType(event.getItemStack());
+		if (event.getItemStack()!=null && !event.getItemStack().isEmpty() && event.getItemStack().hasCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
+			IBauble bauble = event.getItemStack().getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null);
+			BaubleType bt = bauble.getBaubleType(event.getItemStack());
 			event.getToolTip().add(TextFormatting.GOLD+I18n.translateToLocal("name."+bt));
 		}
 	}
