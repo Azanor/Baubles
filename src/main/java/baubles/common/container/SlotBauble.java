@@ -8,25 +8,24 @@ import net.minecraftforge.items.SlotItemHandler;
 
 public class SlotBauble extends SlotItemHandler
 {
-
 	int baubleSlot;
 	EntityPlayer player;
 
-    public SlotBauble(EntityPlayer player, IBaublesItemHandler itemHandler, int slot, int par4, int par5)
-    {
-        super(itemHandler, slot, par4, par5);
-        this.baubleSlot = slot;
-        this.player = player;
-    }
+	public SlotBauble(EntityPlayer player, IBaublesItemHandler itemHandler, int slot, int par4, int par5)
+	{
+		super(itemHandler, slot, par4, par5);
+		this.baubleSlot = slot;
+		this.player = player;
+	}
 
-    /**
-     * Check if the stack is a valid item for this slot.
-     */
-    @Override
-    public boolean isItemValid(ItemStack stack)
-    {
-    	return ((IBaublesItemHandler)getItemHandler()).isItemValidForSlot(baubleSlot, stack, player);
-    }
+	/**
+	 * Check if the stack is a valid item for this slot.
+	 */
+	@Override
+	public boolean isItemValid(ItemStack stack)
+	{
+		return ((IBaublesItemHandler)getItemHandler()).isItemValidForSlot(baubleSlot, stack, player);
+	}
 
 	@Override
 	public boolean canTakeStack(EntityPlayer player) {
@@ -58,9 +57,8 @@ public class SlotBauble extends SlotItemHandler
 	}
 
 	@Override
-    public int getSlotStackLimit()
-    {
-        return 1;
-    }
-
+	public int getSlotStackLimit()
+	{
+		return 1;
+	}
 }

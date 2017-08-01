@@ -92,7 +92,6 @@ public interface IRenderBauble {
 			GlStateManager.rotate(180F, 1F, 0F, 0F);
 			GlStateManager.translate(0F, -3.2F, -0.85F);
 		}
-
 	}
 
 	public enum RenderType {
@@ -110,5 +109,4 @@ public interface IRenderBauble {
 		 */
 		HEAD;
 	}
-
 }

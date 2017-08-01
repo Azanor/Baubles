@@ -7,23 +7,23 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 
-version = "1.11-1.4.5" 
-group= "com.azanor.baubles" 
+version = "1.12-1.4.5"
+group= "com.azanor.baubles"
 archivesBaseName = "Baubles"
 
 srcCompat = JavaVersion.VERSION_1_8
 targetCompat = JavaVersion.VERSION_1_8
 
 minecraft {
-      version = "1.11-13.19.0.2180"
+    version = "1.12-14.21.1.2404"
     runDir = "run"
-    mappings = "snapshot_20170502"
+    mappings = "snapshot_20170708"
     makeObfSourceJar = false
 }
 
@@ -49,11 +49,15 @@ task deobfJar(type: Jar) {
     classifier = 'deobf'
 }
 
-// Create API library zip
-task apiZip(type: Zip) {
+// Create API library jar
+task apiZip(type: Jar) {
     from(sourceSets.main.java) {
         include "baubles/api/**"
     }
+    from(sourceSets.main.output) {
+        include "baubles/api/**"
+    }
+
     classifier = 'api'
 }
 

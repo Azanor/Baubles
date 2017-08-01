@@ -8,10 +8,9 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 
 public class BaublesInventoryWrapper implements IInventory {
-	
-	final IBaublesItemHandler handler;	
+	final IBaublesItemHandler handler;
 	final EntityPlayer player;
-	
+
 	public BaublesInventoryWrapper(IBaublesItemHandler handler) {
 		super();
 		this.handler = handler;
@@ -43,7 +42,7 @@ public class BaublesInventoryWrapper implements IInventory {
 	public int getSizeInventory() {
 		return handler.getSlots();
 	}
-	
+
 	@Override
 	public boolean isEmpty() {
 		return false;
@@ -77,18 +76,18 @@ public class BaublesInventoryWrapper implements IInventory {
 	}
 
 	@Override
-	public void markDirty() {	}
+	public void markDirty() { }
 
 	@Override
 	public boolean isUsableByPlayer(EntityPlayer player) {
 		return true;
 	}
-	
-	@Override
-	public void openInventory(EntityPlayer player) {	}
 
 	@Override
-	public void closeInventory(EntityPlayer player) {	}
+	public void openInventory(EntityPlayer player) { }
+
+	@Override
+	public void closeInventory(EntityPlayer player) { }
 
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack) {
@@ -109,13 +108,10 @@ public class BaublesInventoryWrapper implements IInventory {
 	}
 
 	@Override
-	public void clear() {	
+	public void clear() {
 		for (int i = 0; i < this.getSizeInventory(); ++i)
-        {
+		{
 			this.setInventorySlotContents(i, ItemStack.EMPTY);
-        }
+		}
 	}
-
-	
-
 }
