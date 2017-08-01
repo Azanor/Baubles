@@ -1,6 +1,11 @@
 package baubles.common; 
 
 import java.io.File;
+
+import baubles.api.BaubleType;
+import baubles.api.IBauble;
+import baubles.api.cap.BaubleItem;
+import baubles.api.cap.BaublesCapabilities;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -55,6 +60,9 @@ public class Baubles {
 
 		CapabilityManager.INSTANCE.register(IBaublesItemHandler.class,
 				new CapabilityBaubles<IBaublesItemHandler>(), BaublesContainer.class);
+
+		CapabilityManager.INSTANCE
+				.register(IBauble.class, new BaublesCapabilities.CapabilityItemBaubleStorage(), () -> new BaubleItem(BaubleType.TRINKET));
 
 		proxy.registerEventHandlers();
 		PacketHandler.init();

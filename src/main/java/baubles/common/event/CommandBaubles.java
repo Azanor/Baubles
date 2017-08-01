@@ -6,6 +6,7 @@ import java.util.List;
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.IBauble;
+import baubles.api.cap.BaublesCapabilities;
 import baubles.api.cap.IBaublesItemHandler;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -72,8 +73,8 @@ public class CommandBaubles extends CommandBase {
 				sender.sendMessage(new TextComponentTranslation("\u00a73Showing baubles for "+entityplayermp.getName()));
 				for (int a = 0; a<baubles.getSlots();a++) {
 					ItemStack st = baubles.getStackInSlot(a);
-					if (st!=null && !st.isEmpty() && st.getItem() instanceof IBauble) {
-						IBauble bauble=(IBauble)st.getItem();
+					if (!st.isEmpty() && st.hasCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
+						IBauble bauble = st.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null);
 						BaubleType bt = bauble.getBaubleType(st);
 						sender.sendMessage(new TextComponentTranslation("\u00a73 [Slot "+a+"] "+bt+" "+st.getDisplayName()));
 					}

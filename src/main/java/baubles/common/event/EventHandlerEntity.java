@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+
+import baubles.api.cap.BaublesCapabilities;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -102,8 +104,8 @@ public class EventHandlerEntity {
 			for (int a = 0; a < count; a++) {
 				ItemStack baubleStack = baubles.getStackInSlot(a);
 				IBauble bauble = null;
-				if (baubleStack != null && !baubleStack.isEmpty() && baubleStack.getItem() instanceof IBauble) {
-					bauble = (IBauble) baubleStack.getItem();
+				if (!baubleStack.isEmpty() && baubleStack.hasCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
+					bauble = baubleStack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null);
 					//Worn Tick
 					bauble.onWornTick(baubleStack, player);
 				}

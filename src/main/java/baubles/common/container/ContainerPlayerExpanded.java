@@ -216,9 +216,9 @@ public class ContainerPlayerExpanded extends Container
 				}
 			}
 			// inv -> bauble
-			else if (itemstack.getItem() instanceof IBauble)
+			else if (itemstack.hasCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null))
 			{
-				IBauble bauble = (IBauble) itemstack1.getItem();
+				IBauble bauble = itemstack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null);
 				for (int baubleSlot : bauble.getBaubleType(itemstack).getValidSlots()) {
 					if ( bauble.canEquip(itemstack1, thePlayer) && !((Slot)this.inventorySlots.get(baubleSlot+9)).getHasStack() &&
 							!this.mergeItemStack(itemstack1, baubleSlot+9, baubleSlot + 10, false))

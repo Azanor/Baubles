@@ -1,6 +1,8 @@
 package baubles.client;
 
+import baubles.api.cap.BaublesCapabilities;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
@@ -34,9 +36,10 @@ public class ClientEventHandler
 
 	@SubscribeEvent
 	public void tooltipEvent(ItemTooltipEvent event) {
-		if (!event.getItemStack().isEmpty() && event.getItemStack().getItem() instanceof IBauble) {
-			BaubleType bt = ((IBauble)event.getItemStack().getItem()).getBaubleType(event.getItemStack());
-			event.getToolTip().add(TextFormatting.GOLD + net.minecraft.client.resources.I18n.format("name." + bt));
+		if (!event.getItemStack().isEmpty() && event.getItemStack().hasCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
+			IBauble bauble = event.getItemStack().getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null);
+			BaubleType bt = bauble.getBaubleType(event.getItemStack());
+			event.getToolTip().add(TextFormatting.GOLD + I18n.format("name."+bt));
 		}
 	}
 }
