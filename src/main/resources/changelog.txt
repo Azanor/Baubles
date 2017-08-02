@@ -1,2 +1,5 @@
+1.5.1
+- added IBauble as a capability (see https://github.com/Azanor/Baubles/pull/208)
+
 1.5.0
 - updated for MC 1.12
