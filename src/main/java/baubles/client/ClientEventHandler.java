@@ -29,7 +29,7 @@ public class ClientEventHandler
 	public void playerTick(PlayerTickEvent event) {
 		if (event.side == Side.CLIENT && event.phase == Phase.START ) {
 			if (ClientProxy.KEY_BAUBLES.isPressed() && FMLClientHandler.instance().getClient().inGameHasFocus) {
-					PacketHandler.INSTANCE.sendToServer(new PacketOpenBaublesInventory(event.player));
+					PacketHandler.INSTANCE.sendToServer(new PacketOpenBaublesInventory());
 			}
 		}
 	}

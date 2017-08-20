@@ -1,20 +1,16 @@
 package baubles.client.gui;
 
 import java.io.IOException;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.achievement.GuiStats;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import baubles.client.ClientProxy;
 import baubles.common.container.ContainerPlayerExpanded;
 
@@ -28,10 +24,12 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
 	/** The old y position of the mouse pointer */
 	private float oldMouseY;
 
-	public GuiPlayerExpanded(EntityPlayer player)
+	public GuiPlayerExpanded(EntityPlayer player, int mouseX, int mouseY)
 	{
 		super(new ContainerPlayerExpanded(player.inventory, !player.getEntityWorld().isRemote, player));
 		this.allowUserInput = true;
+		oldMouseX = mouseX;
+		oldMouseY = mouseY;
 	}
 
 	/**
@@ -118,5 +116,12 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
 			this.mc.player.closeScreen();
 		} else
 		super.keyTyped(par1, par2);
+	}
+
+	public void displayNormalInventory()
+	{
+		this.mc.displayGuiScreen(new GuiInventory(this.mc.player));
+		ReflectionHelper.setPrivateValue(GuiInventory.class, (GuiInventory) this.mc.currentScreen, this.oldMouseX, "oldMouseX", "field_147048_u");
+		ReflectionHelper.setPrivateValue(GuiInventory.class, (GuiInventory) this.mc.currentScreen, this.oldMouseY, "oldMouseY", "field_147047_v");
 	}
 }
