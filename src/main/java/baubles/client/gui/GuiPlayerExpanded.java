@@ -23,14 +23,10 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
 	public static final ResourceLocation background =
 			new ResourceLocation("baubles","textures/gui/expanded_inventory.png");
 
-	/**
-	 * x size of the inventory window in pixels. Defined as  float, passed as int
-	 */
-	private float xSizeFloat;
-	/**
-	 * y size of the inventory window in pixels. Defined as  float, passed as int.
-	 */
-	private float ySizeFloat;
+	/** The old x position of the mouse pointer */
+	private float oldMouseX;
+	/** The old y position of the mouse pointer */
+	private float oldMouseY;
 
 	public GuiPlayerExpanded(EntityPlayer player)
 	{
@@ -75,8 +71,8 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
 	{
 		this.drawDefaultBackground();
 		super.drawScreen(mouseX, mouseY, partialTicks);
-		this.xSizeFloat = (float) mouseX;
-		this.ySizeFloat = (float) mouseY;
+		this.oldMouseX = (float) mouseX;
+		this.oldMouseY = (float) mouseY;
 		this.renderHoveredToolTip(mouseX, mouseY);
 	}
 
@@ -98,7 +94,7 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
 			}
 		}
 
-		GuiInventory.drawEntityOnScreen(k + 51, l + 75, 30, (float)(k + 51) - this.xSizeFloat, (float)(l + 75 - 50) - this.ySizeFloat, this.mc.player);
+		GuiInventory.drawEntityOnScreen(k + 51, l + 75, 30, (float)(k + 51) - this.oldMouseX, (float)(l + 75 - 50) - this.oldMouseY, this.mc.player);
 	}
 
 	@Override
