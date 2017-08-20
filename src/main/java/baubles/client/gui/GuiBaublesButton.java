@@ -53,12 +53,15 @@ public class GuiBaublesButton extends GuiButton {
 			GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
 			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(0, 0, 200);
 			if (k==1) {
 				this.drawTexturedModalRect(x, this.y, 200, 48, 10, 10);
 			} else {
 				this.drawTexturedModalRect(x, this.y, 210, 48, 10, 10);
 				this.drawCenteredString(fontrenderer, I18n.format(this.displayString), x + 5, this.y + this.height, 0xffffff);
 			}
+			GlStateManager.popMatrix();
 
 			this.mouseDragged(mc, mouseX, mouseY);
 		}
