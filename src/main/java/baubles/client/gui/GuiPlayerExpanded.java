@@ -4,6 +4,7 @@ import java.io.IOException;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.achievement.GuiStats;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -97,48 +98,7 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
 			}
 		}
 
-		drawPlayerModel(k + 51, l + 75, 30, (float)(k + 51) - this.xSizeFloat, (float)(l + 75 - 50) - this.ySizeFloat, this.mc.player);
-	}
-
-	public static void drawPlayerModel(int x, int y, int scale, float yaw, float pitch, EntityLivingBase playerdrawn)
-	{
-		GlStateManager.enableColorMaterial();
-		GlStateManager.pushMatrix();
-		GlStateManager.translate((float)x, (float)y, 50.0F);
-		GlStateManager.scale((float)(-scale), (float)scale, (float)scale);
-		GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
-		float f2 = playerdrawn.renderYawOffset;
-		float f3 = playerdrawn.rotationYaw;
-		float f4 = playerdrawn.rotationPitch;
-		float f5 = playerdrawn.prevRotationYawHead;
-		float f6 = playerdrawn.rotationYawHead;
-		GlStateManager.rotate(135.0F, 0.0F, 1.0F, 0.0F);
-		RenderHelper.enableStandardItemLighting();
-		GlStateManager.rotate(-135.0F, 0.0F, 1.0F, 0.0F);
-		GlStateManager.rotate(-((float)Math.atan((double)(pitch / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
-		playerdrawn.renderYawOffset = (float)Math.atan((double)(yaw / 40.0F)) * 20.0F;
-		playerdrawn.rotationYaw = (float)Math.atan((double)(yaw / 40.0F)) * 40.0F;
-		playerdrawn.rotationPitch = -((float)Math.atan((double)(pitch / 40.0F))) * 20.0F;
-		playerdrawn.rotationYawHead = playerdrawn.rotationYaw;
-		playerdrawn.prevRotationYawHead = playerdrawn.rotationYaw;
-		GlStateManager.translate(0.0F, 0.0F, 0.0F);
-		RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
-		renderManager.setPlayerViewY(180.0F);
-		renderManager.setRenderShadow(false);
-		renderManager.doRenderEntity(playerdrawn, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
-
-		renderManager.setRenderShadow(true);
-		playerdrawn.renderYawOffset = f2;
-		playerdrawn.rotationYaw = f3;
-		playerdrawn.rotationPitch = f4;
-		playerdrawn.prevRotationYawHead = f5;
-		playerdrawn.rotationYawHead = f6;
-		GlStateManager.popMatrix();
-		RenderHelper.disableStandardItemLighting();
-		GlStateManager.disableRescaleNormal();
-		GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-		GlStateManager.disableTexture2D();
-		GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+		GuiInventory.drawEntityOnScreen(k + 51, l + 75, 30, (float)(k + 51) - this.xSizeFloat, (float)(l + 75 - 50) - this.ySizeFloat, this.mc.player);
 	}
 
 	@Override
