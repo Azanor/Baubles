@@ -14,6 +14,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 public class GuiPlayerExpanded extends InventoryEffectRenderer {
 	
@@ -25,11 +26,13 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
 	/** The old y position of the mouse pointer */
 	private float oldMouseY;
 
-    public GuiPlayerExpanded(EntityPlayer player)
-    {
-        super(new ContainerPlayerExpanded(player.inventory, !player.getEntityWorld().isRemote, player));
-        this.allowUserInput = true;
-    }
+	public GuiPlayerExpanded(EntityPlayer player, int mouseX, int mouseY)
+	{
+		super(new ContainerPlayerExpanded(player.inventory, !player.world.isRemote, player));
+		this.allowUserInput = true;
+		oldMouseX = mouseX;
+		oldMouseY = mouseY;
+	}
 
     /**
      * Called from the main game loop to update the screen.
@@ -116,5 +119,12 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
             this.mc.player.closeScreen();
         } else
 		super.keyTyped(par1, par2);
+	}
+
+	public void displayNormalInventory()
+	{
+		this.mc.displayGuiScreen(new GuiInventory(this.mc.player));
+		ReflectionHelper.setPrivateValue(GuiInventory.class, (GuiInventory) this.mc.currentScreen, this.oldMouseX, "oldMouseX", "field_147048_u");
+		ReflectionHelper.setPrivateValue(GuiInventory.class, (GuiInventory) this.mc.currentScreen, this.oldMouseY, "oldMouseY", "field_147047_v");
 	}
 }

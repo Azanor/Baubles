@@ -29,7 +29,7 @@ public class KeyHandler {
 		if (event.side == Side.SERVER) return;
 		if (event.phase == Phase.START ) {
 			if (key.isPressed() && FMLClientHandler.instance().getClient().inGameHasFocus) {
-					PacketHandler.INSTANCE.sendToServer(new PacketOpenBaublesInventory(event.player));
+					PacketHandler.INSTANCE.sendToServer(new PacketOpenBaublesInventory());
 			}
 		}
 	}

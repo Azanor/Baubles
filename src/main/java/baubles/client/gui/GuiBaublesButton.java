@@ -19,7 +19,7 @@ public class GuiBaublesButton extends GuiButton {
 	private final GuiContainer parentGui;
 
 	public GuiBaublesButton(int buttonId, GuiContainer parentGui, int x, int y, int width, int height, String buttonText) {
-		super(buttonId, x, parentGui.getGuiLeft() + y, width, height, buttonText);
+		super(buttonId, x, parentGui.getGuiTop() + y, width, height, buttonText);
 		this.parentGui = parentGui;
 	}
 
@@ -28,10 +28,10 @@ public class GuiBaublesButton extends GuiButton {
 		boolean pressed = super.mousePressed(mc, mouseX - this.parentGui.getGuiLeft(), mouseY);
 		if (pressed) {
 			if (parentGui instanceof GuiInventory) {
-				PacketHandler.INSTANCE.sendToServer(new PacketOpenBaublesInventory(mc.player));
+				PacketHandler.INSTANCE.sendToServer(new PacketOpenBaublesInventory(mouseX, mouseY));
 			} else {
-				mc.displayGuiScreen(new GuiInventory(mc.player));
-				PacketHandler.INSTANCE.sendToServer(new PacketOpenNormalInventory(mc.player));
+				((GuiPlayerExpanded) parentGui).displayNormalInventory();
+				PacketHandler.INSTANCE.sendToServer(new PacketOpenNormalInventory());
 			}
 		}
 		return pressed;
