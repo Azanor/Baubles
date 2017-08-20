@@ -32,6 +32,11 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
 		oldMouseY = mouseY;
 	}
 
+	private void resetGuiLeft()
+	{
+		this.guiLeft = (this.width - this.xSize) / 2;
+	}
+
 	/**
 	 * Called from the main game loop to update the screen.
 	 */
@@ -39,7 +44,8 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
 	public void updateScreen()
 	{
 		((ContainerPlayerExpanded)inventorySlots).baubles.setEventBlock(false);
-		this.updateActivePotionEffects();
+		updateActivePotionEffects();
+		resetGuiLeft();
 	}
 
 	/**
@@ -50,6 +56,7 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
 	{
 		this.buttonList.clear();
 		super.initGui();
+		resetGuiLeft();
 	}
 
 	/**
