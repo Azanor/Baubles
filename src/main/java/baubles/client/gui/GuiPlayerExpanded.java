@@ -24,12 +24,10 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
 	/** The old y position of the mouse pointer */
 	private float oldMouseY;
 
-	public GuiPlayerExpanded(EntityPlayer player, int mouseX, int mouseY)
+	public GuiPlayerExpanded(EntityPlayer player)
 	{
 		super(new ContainerPlayerExpanded(player.inventory, !player.getEntityWorld().isRemote, player));
 		this.allowUserInput = true;
-		oldMouseX = mouseX;
-		oldMouseY = mouseY;
 	}
 
 	private void resetGuiLeft()
@@ -75,9 +73,9 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
 	public void drawScreen(int mouseX, int mouseY, float partialTicks)
 	{
 		this.drawDefaultBackground();
-		super.drawScreen(mouseX, mouseY, partialTicks);
 		this.oldMouseX = (float) mouseX;
 		this.oldMouseY = (float) mouseY;
+		super.drawScreen(mouseX, mouseY, partialTicks);
 		this.renderHoveredToolTip(mouseX, mouseY);
 	}
 
@@ -127,8 +125,9 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
 
 	public void displayNormalInventory()
 	{
-		this.mc.displayGuiScreen(new GuiInventory(this.mc.player));
-		ReflectionHelper.setPrivateValue(GuiInventory.class, (GuiInventory) this.mc.currentScreen, this.oldMouseX, "oldMouseX", "field_147048_u");
-		ReflectionHelper.setPrivateValue(GuiInventory.class, (GuiInventory) this.mc.currentScreen, this.oldMouseY, "oldMouseY", "field_147047_v");
+		GuiInventory gui = new GuiInventory(this.mc.player);
+		ReflectionHelper.setPrivateValue(GuiInventory.class, gui, this.oldMouseX, "oldMouseX", "field_147048_u");
+		ReflectionHelper.setPrivateValue(GuiInventory.class, gui, this.oldMouseY, "oldMouseY", "field_147047_v");
+		this.mc.displayGuiScreen(gui);
 	}
 }
