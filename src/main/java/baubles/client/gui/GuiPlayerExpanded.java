@@ -1,19 +1,16 @@
 package baubles.client.gui;
 
 import java.io.IOException;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.achievement.GuiStats;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import baubles.client.ClientProxy;
 import baubles.common.container.ContainerPlayerExpanded;
 
@@ -22,19 +19,22 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
 	public static final ResourceLocation background =
 			new ResourceLocation("baubles","textures/gui/expanded_inventory.png");
 
-	/**
-	 * x size of the inventory window in pixels. Defined as  float, passed as int
-	 */
-	private float xSizeFloat;
-	/**
-	 * y size of the inventory window in pixels. Defined as  float, passed as int.
-	 */
-	private float ySizeFloat;
+	/** The old x position of the mouse pointer */
+	private float oldMouseX;
+	/** The old y position of the mouse pointer */
+	private float oldMouseY;
 
-	public GuiPlayerExpanded(EntityPlayer player)
+	public GuiPlayerExpanded(EntityPlayer player, int mouseX, int mouseY)
 	{
 		super(new ContainerPlayerExpanded(player.inventory, !player.getEntityWorld().isRemote, player));
 		this.allowUserInput = true;
+		oldMouseX = mouseX;
+		oldMouseY = mouseY;
+	}
+
+	private void resetGuiLeft()
+	{
+		this.guiLeft = (this.width - this.xSize) / 2;
 	}
 
 	/**
@@ -44,7 +44,8 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
 	public void updateScreen()
 	{
 		((ContainerPlayerExpanded)inventorySlots).baubles.setEventBlock(false);
-		this.updateActivePotionEffects();
+		updateActivePotionEffects();
+		resetGuiLeft();
 	}
 
 	/**
@@ -55,6 +56,7 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
 	{
 		this.buttonList.clear();
 		super.initGui();
+		resetGuiLeft();
 	}
 
 	/**
@@ -74,8 +76,8 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
 	{
 		this.drawDefaultBackground();
 		super.drawScreen(mouseX, mouseY, partialTicks);
-		this.xSizeFloat = (float) mouseX;
-		this.ySizeFloat = (float) mouseY;
+		this.oldMouseX = (float) mouseX;
+		this.oldMouseY = (float) mouseY;
 		this.renderHoveredToolTip(mouseX, mouseY);
 	}
 
@@ -97,48 +99,7 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
 			}
 		}
 
-		drawPlayerModel(k + 51, l + 75, 30, (float)(k + 51) - this.xSizeFloat, (float)(l + 75 - 50) - this.ySizeFloat, this.mc.player);
-	}
-
-	public static void drawPlayerModel(int x, int y, int scale, float yaw, float pitch, EntityLivingBase playerdrawn)
-	{
-		GlStateManager.enableColorMaterial();
-		GlStateManager.pushMatrix();
-		GlStateManager.translate((float)x, (float)y, 50.0F);
-		GlStateManager.scale((float)(-scale), (float)scale, (float)scale);
-		GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
-		float f2 = playerdrawn.renderYawOffset;
-		float f3 = playerdrawn.rotationYaw;
-		float f4 = playerdrawn.rotationPitch;
-		float f5 = playerdrawn.prevRotationYawHead;
-		float f6 = playerdrawn.rotationYawHead;
-		GlStateManager.rotate(135.0F, 0.0F, 1.0F, 0.0F);
-		RenderHelper.enableStandardItemLighting();
-		GlStateManager.rotate(-135.0F, 0.0F, 1.0F, 0.0F);
-		GlStateManager.rotate(-((float)Math.atan((double)(pitch / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
-		playerdrawn.renderYawOffset = (float)Math.atan((double)(yaw / 40.0F)) * 20.0F;
-		playerdrawn.rotationYaw = (float)Math.atan((double)(yaw / 40.0F)) * 40.0F;
-		playerdrawn.rotationPitch = -((float)Math.atan((double)(pitch / 40.0F))) * 20.0F;
-		playerdrawn.rotationYawHead = playerdrawn.rotationYaw;
-		playerdrawn.prevRotationYawHead = playerdrawn.rotationYaw;
-		GlStateManager.translate(0.0F, 0.0F, 0.0F);
-		RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
-		renderManager.setPlayerViewY(180.0F);
-		renderManager.setRenderShadow(false);
-		renderManager.doRenderEntity(playerdrawn, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
-
-		renderManager.setRenderShadow(true);
-		playerdrawn.renderYawOffset = f2;
-		playerdrawn.rotationYaw = f3;
-		playerdrawn.rotationPitch = f4;
-		playerdrawn.prevRotationYawHead = f5;
-		playerdrawn.rotationYawHead = f6;
-		GlStateManager.popMatrix();
-		RenderHelper.disableStandardItemLighting();
-		GlStateManager.disableRescaleNormal();
-		GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-		GlStateManager.disableTexture2D();
-		GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+		GuiInventory.drawEntityOnScreen(k + 51, l + 75, 30, (float)(k + 51) - this.oldMouseX, (float)(l + 75 - 50) - this.oldMouseY, this.mc.player);
 	}
 
 	@Override
@@ -162,5 +123,12 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
 			this.mc.player.closeScreen();
 		} else
 		super.keyTyped(par1, par2);
+	}
+
+	public void displayNormalInventory()
+	{
+		this.mc.displayGuiScreen(new GuiInventory(this.mc.player));
+		ReflectionHelper.setPrivateValue(GuiInventory.class, (GuiInventory) this.mc.currentScreen, this.oldMouseX, "oldMouseX", "field_147048_u");
+		ReflectionHelper.setPrivateValue(GuiInventory.class, (GuiInventory) this.mc.currentScreen, this.oldMouseY, "oldMouseY", "field_147047_v");
 	}
 }
