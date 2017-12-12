@@ -1,24 +1,31 @@
 package baubles.common.event;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import baubles.api.cap.BaublesCapabilities;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import baubles.api.BaublesApi;
 import baubles.api.IBauble;
 import baubles.api.cap.BaublesContainer;
@@ -55,20 +62,18 @@ public class EventHandlerEntity {
 
 	@SubscribeEvent
 	public void playerJoin(EntityJoinWorldEvent event) {
-		if (event.getEntity() instanceof EntityPlayer && !event.getWorld().isRemote) {
-			IBaublesItemHandler baubles = BaublesApi.getBaublesHandler((EntityPlayer) event.getEntity());
+		Entity entity = event.getEntity();
+		if (entity instanceof EntityPlayerMP) {
+			EntityPlayerMP player = (EntityPlayerMP) entity;
+			syncSlots(player, Collections.singletonList(player));
+		}
+	}
 
-			for (int a=0;a<baubles.getSlots();a++) baubles.setChanged(a,true);
-
-			for (EntityPlayer p:event.getEntity().getEntityWorld().playerEntities) {
-				if (p.getEntityId() != event.getEntity().getEntityId()) {
-					IBaublesItemHandler baubles2 = BaublesApi.getBaublesHandler(p);
-					for (int a=0;a<baubles2.getSlots();a++) baubles2.setChanged(a,true);
-				}
-			}
-			ItemStack[] sl = new ItemStack[baubles.getSlots()];
-			Arrays.fill(sl, ItemStack.EMPTY);
-			baublesSync.put(event.getEntity().getUniqueID(), sl);
+	@SubscribeEvent
+	public void onStartTracking(PlayerEvent.StartTracking event) {
+		Entity target = event.getTarget();
+		if (target instanceof EntityPlayerMP) {
+			syncSlots((EntityPlayer) target, Collections.singletonList(event.getEntityPlayer()));
 		}
 	}
 
@@ -79,46 +84,64 @@ public class EventHandlerEntity {
 	}
 
 	@SubscribeEvent
-	public void playerTick(PlayerEvent.LivingUpdateEvent event) {
+	public void playerTick(TickEvent.PlayerTickEvent event) {
 		// player events
-		if (event.getEntity() instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) event.getEntity();
+		if (event.phase == TickEvent.Phase.END) {
+			EntityPlayer player = event.player;
 			IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
-			ItemStack[] items = baublesSync.get(player.getUniqueID());
-			if (items==null) {
-				ItemStack[] sl = new ItemStack[baubles.getSlots()];
-				Arrays.fill(sl, ItemStack.EMPTY);
-				baublesSync.put(player.getUniqueID(), sl);
-				items = baublesSync.get(player.getUniqueID());
-			}
-			int count = baubles.getSlots();
-			if(items.length != count) {
-				ItemStack[] old = items;
-				items = new ItemStack[count];
-				for(int i = 0;i<old.length && i<items.length;i++) {
-					items[i] = old[i];
+			for (int i = 0; i < baubles.getSlots(); i++) {
+				ItemStack stack = baubles.getStackInSlot(i);
+				IBauble bauble = stack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null);
+				if (bauble != null) {
+					bauble.onWornTick(stack, player);
 				}
-				baublesSync.put(player.getUniqueID(), items);
 			}
+			if (!player.world.isRemote) {
+				syncBaubles(player, baubles);
+			}
+		}
+	}
 
-			for (int a = 0; a < count; a++) {
-				ItemStack baubleStack = baubles.getStackInSlot(a);
-				IBauble bauble = null;
-				if (!baubleStack.isEmpty() && baubleStack.hasCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
-					bauble = baubleStack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null);
-					//Worn Tick
-					bauble.onWornTick(baubleStack, player);
+	private void syncBaubles(EntityPlayer player, IBaublesItemHandler baubles) {
+		ItemStack[] items = baublesSync.get(player.getUniqueID());
+		if (items == null) {
+			items = new ItemStack[baubles.getSlots()];
+			Arrays.fill(items, ItemStack.EMPTY);
+			baublesSync.put(player.getUniqueID(), items);
+		}
+		if (items.length != baubles.getSlots()) {
+			ItemStack[] old = items;
+			items = new ItemStack[baubles.getSlots()];
+			System.arraycopy(old, 0, items, 0, Math.min(old.length, items.length));
+			baublesSync.put(player.getUniqueID(), items);
+		}
+		Set<EntityPlayer> receivers = null;
+		for (int i = 0; i < baubles.getSlots(); i++) {
+			ItemStack stack = baubles.getStackInSlot(i);
+			IBauble bauble = stack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null);
+			if (baubles.isChanged(i) || bauble != null && bauble.willAutoSync(stack, player) && !ItemStack.areItemStacksEqual(stack, items[i])) {
+				if (receivers == null) {
+					receivers = new HashSet<>(((WorldServer) player.world).getEntityTracker().getTrackingPlayers(player));
+					receivers.add(player);
 				}
-				//Sync
-				if (!player.getEntityWorld().isRemote) {
-					if(baubles.isChanged(a) || (bauble!=null && bauble.willAutoSync(baubleStack, player) && !ItemStack.areItemStacksEqual(baubleStack, items[a]))) {
-						try {
-							PacketHandler.INSTANCE.sendToDimension(new PacketSync(player, a), player.getEntityWorld().provider.getDimension());
-						} catch (Exception e) {	}
-						items[a] = baubleStack != null ? baubleStack.copy() : ItemStack.EMPTY;
-					}
-				}
+				syncSlot(player, i, stack, receivers);
+				baubles.setChanged(i,false);
+				items[i] = stack == null ? ItemStack.EMPTY : stack.copy();
 			}
+		}
+	}
+
+	private void syncSlots(EntityPlayer player, Collection<? extends EntityPlayer> receivers) {
+		IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
+		for (int i = 0; i < baubles.getSlots(); i++) {
+			syncSlot(player, i, baubles.getStackInSlot(i), receivers);
+		}
+	}
+
+	private void syncSlot(EntityPlayer player, int slot, ItemStack stack, Collection<? extends EntityPlayer> receivers) {
+		PacketSync pkt = new PacketSync(player, slot, stack);
+		for (EntityPlayer receiver : receivers) {
+			PacketHandler.INSTANCE.sendTo(pkt, (EntityPlayerMP) receiver);
 		}
 	}
 
