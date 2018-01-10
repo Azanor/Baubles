@@ -31,4 +31,12 @@ public class BaublesApi
 		handler.setPlayer(player);
 		return new BaublesInventoryWrapper(handler, player);
 	}
+	
+	public static boolean isBaubleEquipped(EntityPlayer player, IBauble bauble) {
+		IBaublesItemHandler handler = getBaublesHandler(player);
+		for (int a=0;a<handler.getSlots();a++) {
+			if (!handler.getStackInSlot(a).isEmpty() && handler.getStackInSlot(a).getItem()==bauble) return true;
+		}
+		return false;
+	}
 }
