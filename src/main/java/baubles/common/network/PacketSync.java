@@ -22,12 +22,10 @@ public class PacketSync implements IMessage {
 
 	public PacketSync() {}
 
-	public PacketSync(EntityPlayer p, int slot) {
-		IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(p);
+	public PacketSync(EntityPlayer p, int slot, ItemStack bauble) {
 		this.slot = (byte) slot;
-		this.bauble = baubles.getStackInSlot(slot);
+		this.bauble = bauble;
 		this.playerId = p.getEntityId();
-		baubles.setChanged(slot,false);
 	}
 
 	@Override
