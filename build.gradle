@@ -13,7 +13,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 
-version = "1.10.2-1.3.12"
+version = "1.10.2-1.3.13"
 group= "com.azanor.baubles" 
 archivesBaseName = "Baubles"
 
