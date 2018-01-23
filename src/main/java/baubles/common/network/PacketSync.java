@@ -22,6 +22,16 @@ public class PacketSync implements IMessage {
 
 	public PacketSync() {}
 
+	/**
+	 * Instanciate the PacketSync the old way.
+	 *
+	 * @deprecated use {@link #PacketSync(EntityPlayer, int, ItemStack)} instead.
+	 */
+	@Deprecated
+	public PacketSync(EntityPlayer p, int slot) {
+	    this(p, slot, BaublesApi.getBaublesHandler(p).getStackInSlot(slot));
+	}
+
 	public PacketSync(EntityPlayer p, int slot, ItemStack bauble) {
 		this.slot = (byte) slot;
 		this.bauble = bauble;
