@@ -1,0 +1,19 @@
+#
+# ITEMS
+item.Ring.0.name=Madenci'nin Yüzüğü
+#
+# GUI
+button.baubles=Baubles
+button.normal=Normal
+#
+# Keybinding
+keybind.baublesinventory=Baubles Envanteri
+#
+# Description
+name.AMULET=Bauble (Muska)
+name.RING=Bauble (Yüzük)
+name.BELT=Bauble (Kemer)
+name.TRINKET=Bauble (Herhangi)
+name.HEAD=Bauble (Kafa)
+name.BODY=Bauble (Vücut)
+name.CHARM=Bauble (Cazibe)
