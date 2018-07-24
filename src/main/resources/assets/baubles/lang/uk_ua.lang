@@ -1,10 +1,20 @@
 #
-# Речі
+# ITEMS
 item.Ring.0.name=Перстень шахтаря
 #
 # GUI
-button.baubles=Baubles
-button.normal=Звич.
+button.baubles=Приваби
+button.normal=Звичний
 #
 # Keybinding
-keybind.baublesinventory=Інвертар Baubles
+keybind.baublesinventory=Інвентар Baubles
+#
+# Description
+name.AMULET=Приваба (Амулет)
+name.RING=Приваба (Перстень)
+name.BELT=Приваба (Пасок)
+name.TRINKET=Приваба (Будь-яка)
+name.HEAD=Приваба (Голова)
+name.BODY=Приваба (Тіло)
+name.CHARM=Приваба (Дармовис)
+
