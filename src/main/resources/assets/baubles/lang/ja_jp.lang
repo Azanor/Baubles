@@ -1,0 +1,19 @@
+#
+# ITEMS
+item.Ring.0.name=鉱夫の指輪
+#
+# GUI
+button.baubles=装飾品スロット
+button.normal=通常スロット
+#
+# Keybinding
+keybind.baublesinventory=Baublesインベントリ
+#
+# Description
+name.AMULET=装飾品 (護符)
+name.RING=装飾品 (指輪)
+name.BELT=装飾品 (腰帯)
+name.TRINKET=装飾品 (任意)
+name.HEAD=装飾品 (頭部)
+name.BODY=装飾品 (胴体)
+name.CHARM=装飾品 (魔除け)
