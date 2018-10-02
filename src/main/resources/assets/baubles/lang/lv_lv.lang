@@ -1,0 +1,19 @@
+#
+# ITEMS
+item.Ring.0.name=Racēja Gredzens
+#
+# GUI
+button.baubles=Baubles
+button.normal=Normāls
+#
+# Keybinding
+keybind.baublesinventory=Baubles Inventārs
+#
+# Description
+name.AMULET=Bauble (Amulets)
+name.RING=Bauble (Gredzens)
+name.BELT=Bauble (Josta)
+name.TRINKET=Bauble (Jebkurš)
+name.HEAD=Bauble (Galva)
+name.BODY=Bauble (Ķermenis)
+name.CHARM=Bauble (Piekariņš)
