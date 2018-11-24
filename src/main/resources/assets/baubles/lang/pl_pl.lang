@@ -8,3 +8,12 @@ button.normal=Normalne
 #
 # Keybinding
 keybind.baublesinventory=Inwentarz Baubles
+#
+# Description
+name.AMULET=Bauble (Amulet)
+name.RING=Bauble (Pierścień)
+name.BELT=Bauble (Pas)
+name.TRINKET=Bauble (Dowolne)
+name.HEAD=Bauble (Głowa)
+name.BODY=Bauble (Ciało)
+name.CHARM=Bauble (Talizman)
