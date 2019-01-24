@@ -24,10 +24,6 @@ public class CommonProxy implements IGuiHandler {
 		return null;
 	}
 
-	public World getClientWorld() {
-		return null;
-	}
-
 	public void registerEventHandlers() {
 		MinecraftForge.EVENT_BUS.register(new EventHandlerEntity());
 		MinecraftForge.EVENT_BUS.register(new EventHandlerItem());

@@ -18,5 +18,6 @@ public class PacketOpenBaublesInventory {
 			// todo 1.13 ctx.get().getSender().openGui(Baubles.instance, Baubles.GUI, ctx.getServerHandler().player.world, 0, 0, 0);
 		});
 	}
-	private PacketOpenBaublesInventory() {}
+
+	public PacketOpenBaublesInventory() {}
 }

@@ -1,15 +1,19 @@
 package baubles.client.gui;
 
+import baubles.common.Baubles;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.resources.I18n;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.GuiScreenEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
+@Mod.EventBusSubscriber(modid = Baubles.MODID, value = Dist.CLIENT)
 public class GuiEvents {
 
 	@SubscribeEvent
-	public void guiPostInit(GuiScreenEvent.InitGuiEvent.Post event) {
+	public static void guiPostInit(GuiScreenEvent.InitGuiEvent.Post event) {
 
 		if (event.getGui() instanceof GuiInventory || event.getGui() instanceof GuiPlayerExpanded) {
 			GuiContainer gui = (GuiContainer) event.getGui();

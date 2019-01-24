@@ -12,7 +12,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import baubles.client.gui.GuiEvents;
 import baubles.client.gui.GuiPlayerExpanded;
 import baubles.common.Baubles;
 import baubles.common.CommonProxy;
@@ -26,9 +25,6 @@ public class ClientProxy extends CommonProxy {
 		super.registerEventHandlers();
 
 		ClientRegistry.registerKeyBinding(KEY_BAUBLES);
-
-		MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
-		MinecraftForge.EVENT_BUS.register(new GuiEvents());
 	}
 
 	@Override
@@ -39,11 +35,6 @@ public class ClientProxy extends CommonProxy {
 			}
 		}
 		return null;
-	}
-
-	@Override
-	public World getClientWorld() {
-		return FMLClientHandler.instance().getClient().world;
 	}
 
 	@Override

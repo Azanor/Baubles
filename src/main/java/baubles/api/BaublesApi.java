@@ -2,9 +2,7 @@ package baubles.api;
 
 import baubles.api.cap.BaublesCapabilities;
 import baubles.api.cap.IBaublesItemHandler;
-import baubles.api.inv.BaublesInventoryWrapper;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 
 /**
@@ -22,17 +20,6 @@ public class BaublesApi
 		return handler;
 	}
 
-	/**
-	 * Retrieves the baubles capability handler wrapped as a IInventory for the supplied player
-	 */
-	@Deprecated
-	public static IInventory getBaubles(EntityPlayer player)
-	{
-		IBaublesItemHandler handler = player.getCapability(BaublesCapabilities.CAPABILITY_BAUBLES, null);
-		handler.setPlayer(player);
-		return new BaublesInventoryWrapper(handler, player);
-	}
-	
 	/**
 	 * Returns if the passed in item is equipped in a bauble slot. Will return the first slot found
 	 * @return -1 if not found and slot number if it is found 
