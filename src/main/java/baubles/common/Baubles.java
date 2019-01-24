@@ -5,7 +5,9 @@ import java.nio.file.Paths;
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import baubles.api.cap.BaublesCapabilities;
+import baubles.client.ClientProxy;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLModLoadingContext;
@@ -23,7 +25,6 @@ import baubles.common.network.PacketHandler;
 public class Baubles {
 	public static final String MODID = "baubles";
 
-	@SidedProxy(clientSide = "baubles.client.ClientProxy", serverSide = "baubles.common.CommonProxy")
 	public static CommonProxy proxy;
 
 	public static final Logger log = LogManager.getLogger(MODID.toUpperCase());
@@ -32,6 +33,7 @@ public class Baubles {
 	public Baubles() {
 		FMLModLoadingContext.get().getModEventBus().addListener(this::preInit);
 		MinecraftForge.EVENT_BUS.addListener(this::serverLoad);
+		proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 	}
 
 	private void preInit(FMLCommonSetupEvent event) {
