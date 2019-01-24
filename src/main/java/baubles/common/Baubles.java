@@ -1,72 +1,55 @@
 package baubles.common; 
 
-import java.io.File;
+import java.nio.file.Paths;
 
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import baubles.api.cap.BaublesCapabilities;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.javafmlmod.FMLModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 import baubles.api.cap.BaublesCapabilities.CapabilityBaubles;
 import baubles.api.cap.BaublesContainer;
 import baubles.api.cap.IBaublesItemHandler;
 import baubles.common.event.CommandBaubles;
 import baubles.common.network.PacketHandler;
 
-@Mod(
-		modid = Baubles.MODID, 
-		name = Baubles.MODNAME, 
-		version = Baubles.VERSION, 
-		guiFactory = "baubles.client.gui.BaublesGuiFactory",
-		dependencies = "required-after:forge@[14.21.0.2348,);")
+@Mod(Baubles.MODID)
 public class Baubles {
-
 	public static final String MODID = "baubles";
-	public static final String MODNAME = "Baubles";
-	public static final String VERSION = "1.5.2";
 
 	@SidedProxy(clientSide = "baubles.client.ClientProxy", serverSide = "baubles.common.CommonProxy")
 	public static CommonProxy proxy;
 
-	@Instance(value=Baubles.MODID)
-	public static Baubles instance;
-
-	public File modDir;
-
 	public static final Logger log = LogManager.getLogger(MODID.toUpperCase());
 	public static final int GUI = 0;
 
-	@EventHandler
-	public void preInit(FMLPreInitializationEvent event) {
-		modDir = event.getModConfigurationDirectory();
+	public Baubles() {
+		FMLModLoadingContext.get().getModEventBus().addListener(this::preInit);
+		MinecraftForge.EVENT_BUS.addListener(this::serverLoad);
+	}
 
-		try {
-			Config.initialize(event.getSuggestedConfigurationFile());
-		} catch (Exception e) {
-			Baubles.log.error("BAUBLES has a problem loading it's configuration");
-		} finally {
-			if (Config.config!=null) Config.save();
-		}
+	private void preInit(FMLCommonSetupEvent event) {
+		Config.initialize(Paths.get("config", MODID + ".toml"));
 
 		CapabilityManager.INSTANCE.register(IBaublesItemHandler.class,
-				new CapabilityBaubles<IBaublesItemHandler>(), BaublesContainer.class);
+				new CapabilityBaubles<>(), BaublesContainer::new);
 
 		CapabilityManager.INSTANCE
-				.register(IBauble.class, new BaublesCapabilities.CapabilityItemBaubleStorage(), () -> new BaubleItem(BaubleType.TRINKET));
+				.register(IBauble.class, new BaublesCapabilities.CapabilityItemBaubleStorage(), () -> new IBauble() {
+					@Override
+					public BaubleType getBaubleType() {
+						return BaubleType.TRINKET;
+					}
+				});
 
 		proxy.registerEventHandlers();
 		PacketHandler.init();
-
-		Config.save();
 	}
 
 	@EventHandler
@@ -75,8 +58,7 @@ public class Baubles {
 		proxy.init();
 	}
 
-	@EventHandler
-	public void serverLoad(FMLServerStartingEvent event)
+	private void serverLoad(FMLServerStartingEvent event)
 	{
 		event.registerServerCommand(new CommandBaubles());
 	}
