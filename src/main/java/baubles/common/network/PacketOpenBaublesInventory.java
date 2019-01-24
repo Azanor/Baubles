@@ -1,30 +1,22 @@
 package baubles.common.network;
 
-import net.minecraft.util.IThreadListener;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import baubles.common.Baubles;
-import io.netty.buffer.ByteBuf;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class PacketOpenBaublesInventory implements IMessage, IMessageHandler<PacketOpenBaublesInventory, IMessage> {
+import java.util.function.Supplier;
 
-	public PacketOpenBaublesInventory() {}
+public class PacketOpenBaublesInventory {
+	public static void encode(PacketOpenBaublesInventory msg, PacketBuffer buf) {}
 
-	@Override
-	public void toBytes(ByteBuf buffer) {}
-
-	@Override
-	public void fromBytes(ByteBuf buffer) {}
-
-	@Override
-	public IMessage onMessage(PacketOpenBaublesInventory message, MessageContext ctx) {
-		IThreadListener mainThread = (WorldServer) ctx.getServerHandler().player.world;
-		mainThread.addScheduledTask(new Runnable(){ public void run() {
-			ctx.getServerHandler().player.openContainer.onContainerClosed(ctx.getServerHandler().player);
-			ctx.getServerHandler().player.openGui(Baubles.instance, Baubles.GUI, ctx.getServerHandler().player.world, 0, 0, 0);
-		}});
-		return null;
+	public static PacketOpenBaublesInventory decode(PacketBuffer buf) {
+		return new PacketOpenBaublesInventory();
 	}
+
+	public static void handle(PacketOpenBaublesInventory message, Supplier<NetworkEvent.Context> ctx) {
+		ctx.get().enqueueWork(() -> {
+			ctx.get().getSender().openContainer.onContainerClosed(ctx.get().getSender());
+			// todo 1.13 ctx.get().getSender().openGui(Baubles.instance, Baubles.GUI, ctx.getServerHandler().player.world, 0, 0, 0);
+		});
+	}
+	private PacketOpenBaublesInventory() {}
 }

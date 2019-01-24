@@ -4,58 +4,47 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraft.network.PacketBuffer;
 import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
-import baubles.common.Baubles;
-import io.netty.buffer.ByteBuf;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class PacketSync implements IMessage {
+import java.util.function.Supplier;
 
-	int playerId;
-	byte slot=0;
-	ItemStack bauble;
+public class PacketSync {
 
-	public PacketSync() {}
+	private final int playerId;
+	private final byte slot;
+	private final ItemStack bauble;
 
 	public PacketSync(EntityPlayer p, int slot, ItemStack bauble) {
+		this(p.getEntityId(), slot, bauble);
+	}
+
+	private PacketSync(int entity, int slot, ItemStack bauble) {
 		this.slot = (byte) slot;
 		this.bauble = bauble;
-		this.playerId = p.getEntityId();
+		this.playerId = entity;
 	}
 
-	@Override
-	public void toBytes(ByteBuf buffer) {
-		buffer.writeInt(playerId);
-		buffer.writeByte(slot);
-		ByteBufUtils.writeItemStack(buffer, bauble);
+	public static void encode(PacketSync msg, PacketBuffer buffer) {
+		buffer.writeInt(msg.playerId);
+		buffer.writeByte(msg.slot);
+		buffer.writeItemStack(msg.bauble);
 	}
 
-	@Override
-	public void fromBytes(ByteBuf buffer) {
-		playerId = buffer.readInt();
-		slot = buffer.readByte();
-		bauble = ByteBufUtils.readItemStack(buffer);
+	public static PacketSync decode(PacketBuffer buffer) {
+		return new PacketSync(buffer.readInt(), buffer.readByte(), buffer.readItemStack());
 	}
 
-	public static class Handler implements IMessageHandler<PacketSync, IMessage>
-	{
-		@Override
-		public IMessage onMessage(PacketSync message, MessageContext ctx) {
-			Minecraft.getMinecraft().addScheduledTask(new Runnable(){ public void run() {
-				World world = Baubles.proxy.getClientWorld();
-				if (world==null) return;
-				Entity p = world.getEntityByID(message.playerId);
-				if (p !=null && p instanceof EntityPlayer) {
-					IBaublesItemHandler baubles = BaublesApi.getBaublesHandler((EntityPlayer) p);
-					baubles.setStackInSlot(message.slot, message.bauble);
-				}
-			}});
-			return null;
-		}
+	public static void handle(PacketSync message, Supplier<NetworkEvent.Context> ctx) {
+		ctx.get().enqueueWork(() -> {
+			Entity p = Minecraft.getInstance().world.getEntityByID(message.playerId);
+			if (p instanceof EntityPlayer) {
+				IBaublesItemHandler baubles = BaublesApi.getBaublesHandler((EntityPlayer) p);
+				baubles.setStackInSlot(message.slot, message.bauble);
+			}
+		});
+		ctx.get().setPacketHandled(true);
 	}
 }
