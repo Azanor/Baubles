@@ -11,18 +11,17 @@
 
 package baubles.api.render;
 
+import baubles.api.IBauble;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 
 /**
- * A Bauble Item that implements this will be have hooks to render something on
- * the player while its equipped.
- * This class doesn't extend IBauble to make the API not depend on the Baubles
- * API, but the item in question still needs to implement IBauble.
+ * A Bauble capability object that implements this will be have hooks to render something on
+ * the player while it's equipped.
  */
-public interface IRenderBauble {
+public interface IRenderBauble extends IBauble {
 
 	/**
 	 * Called for the rendering of the bauble on the player. The player instance can be
@@ -30,7 +29,7 @@ public interface IRenderBauble {
 	 * the RenderType passed in. Make sure to check against the type parameter for
 	 * rendering. 
 	 */
-	public void onPlayerBaubleRender(ItemStack stack, EntityPlayer player, RenderType type, float partialTicks);
+	public void onPlayerBaubleRender(EntityPlayer player, RenderType type, float partialTicks);
 
 	/**
 	 * A few helper methods for the render.

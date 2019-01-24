@@ -1,7 +1,6 @@
 
 package baubles.common;
 
-import baubles.common.event.EventHandlerItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -26,7 +25,6 @@ public class CommonProxy implements IGuiHandler {
 
 	public void registerEventHandlers() {
 		MinecraftForge.EVENT_BUS.register(new EventHandlerEntity());
-		MinecraftForge.EVENT_BUS.register(new EventHandlerItem());
 	}
 
 	public void init() { }

@@ -3,6 +3,7 @@ package baubles.api.cap;
 import baubles.api.IBauble;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.capabilities.OptionalCapabilityInstance;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class BaublesContainer extends ItemStackHandler implements IBaublesItemHandler {
@@ -36,15 +37,16 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
 	 */
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack, EntityLivingBase player) {
-		if (stack==null || stack.isEmpty() || !stack.hasCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null))
+		OptionalCapabilityInstance<IBauble> oci = stack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE);
+		if (stack.isEmpty() || !oci.isPresent())
 			return false;
-		IBauble bauble = stack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null);
-		return bauble.canEquip(stack, player) && bauble.getBaubleType(stack).hasSlot(slot);
+		IBauble bauble = oci.orElseThrow(NullPointerException::new);
+		return bauble.canEquip(player) && bauble.getBaubleType().hasSlot(slot);
 	}
 
 	@Override
 	public void setStackInSlot(int slot, ItemStack stack) {
-		if (stack==null || stack.isEmpty() || this.isItemValidForSlot(slot, stack, player)) {
+		if (stack.isEmpty() || this.isItemValidForSlot(slot, stack, player)) {
 			super.setStackInSlot(slot, stack);
 		}
 	}
@@ -73,17 +75,11 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
 
 	@Override
 	public boolean isChanged(int slot) {
-		if (changed==null) {
-			changed = new boolean[this.getSlots()];
-		}
 		return changed[slot];
 	}
 
 	@Override
 	public void setChanged(int slot, boolean change) {
-		if (changed==null) {
-			changed = new boolean[this.getSlots()];
-		}
 		this.changed[slot] = change;
 	}
 

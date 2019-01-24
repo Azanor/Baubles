@@ -3,6 +3,7 @@ package baubles.common.items;
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.IBauble;
+import baubles.api.cap.BaublesCapabilities;
 import baubles.api.cap.IBaublesItemHandler;
 import baubles.common.Baubles;
 import net.minecraft.entity.EntityLivingBase;
@@ -13,18 +14,26 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.capabilities.OptionalCapabilityInstance;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 @Mod.EventBusSubscriber(modid = Baubles.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class ItemRing extends Item implements IBauble
+public class ItemRing extends Item
 {
 	public ItemRing()
 	{
@@ -37,8 +46,42 @@ public class ItemRing extends Item implements IBauble
 	}
 
 	@Override
-	public BaubleType getBaubleType(ItemStack itemstack) {
-		return BaubleType.RING;
+	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound unused) {
+		IBauble bauble = new IBauble() {
+			@Override
+			public BaubleType getBaubleType() {
+				return BaubleType.RING;
+			}
+
+			@Override
+			public void onWornTick(EntityLivingBase player) {
+				if (player.ticksExisted % 39 == 0) {
+					player.addPotionEffect(new PotionEffect(MobEffects.HASTE, 40, 0, true, true));
+				}
+			}
+
+			@Override
+			public void onEquipped(EntityLivingBase player) {
+				player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, .75F, 1.9f);
+			}
+
+			@Override
+			public void onUnequipped(EntityLivingBase player) {
+				player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, .75F, 2f);
+			}
+		};
+
+		return new ICapabilityProvider() {
+			private final OptionalCapabilityInstance<IBauble> oci = OptionalCapabilityInstance.of(() -> bauble);
+			@Nonnull
+			@Override
+			public <T> OptionalCapabilityInstance<T> getCapability(@Nonnull Capability<T> cap, @Nullable EnumFacing side) {
+				if (cap == BaublesCapabilities.CAPABILITY_ITEM_BAUBLE) {
+					return oci.cast();
+				}
+				return OptionalCapabilityInstance.empty();
+			}
+		};
 	}
 
 	@Override
@@ -50,7 +93,7 @@ public class ItemRing extends Item implements IBauble
 				if(!baubles.getStackInSlot(i).isEmpty() && baubles.isItemValidForSlot(i, held, player)) {
 				    ItemStack split = held.split(1);
 					baubles.setStackInSlot(i, split);
-					onEquipped(split, player);
+					split.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE).ifPresent(b -> b.onEquipped(player));
 					break;
 				}
 		}
@@ -58,24 +101,7 @@ public class ItemRing extends Item implements IBauble
 	}
 
 	@Override
-	public void onWornTick(ItemStack itemstack, EntityLivingBase player) {
-		if (player.ticksExisted%39==0) {
-			player.addPotionEffect(new PotionEffect(MobEffects.HASTE,40,0,true,true));
-		}
-	}
-
-	@Override
 	public boolean hasEffect(ItemStack par1ItemStack) {
 		return true;
-	}
-
-	@Override
-	public void onEquipped(ItemStack itemstack, EntityLivingBase player) {
-		player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, .75F, 1.9f);
-	}
-
-	@Override
-	public void onUnequipped(ItemStack itemstack, EntityLivingBase player) {
-		player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, .75F, 2f);
 	}
 }

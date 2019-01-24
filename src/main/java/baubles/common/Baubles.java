@@ -4,7 +4,6 @@ import java.io.File;
 
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
-import baubles.api.cap.BaubleItem;
 import baubles.api.cap.BaublesCapabilities;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
