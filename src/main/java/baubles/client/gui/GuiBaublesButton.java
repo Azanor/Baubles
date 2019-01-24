@@ -24,37 +24,33 @@ public class GuiBaublesButton extends GuiButton {
 	}
 
 	@Override
-	public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
-		boolean pressed = super.mousePressed(mc, mouseX - this.parentGui.getGuiLeft(), mouseY);
-		if (pressed) {
-			if (parentGui instanceof GuiInventory) {
-				PacketHandler.INSTANCE.sendToServer(new PacketOpenBaublesInventory());
-			} else {
-				((GuiPlayerExpanded) parentGui).displayNormalInventory();
-				PacketHandler.INSTANCE.sendToServer(new PacketOpenNormalInventory());
-			}
+	public void onClick(double mouseX, double mouseY) {
+		if (parentGui instanceof GuiInventory) {
+			PacketHandler.INSTANCE.sendToServer(new PacketOpenBaublesInventory());
+		} else {
+			((GuiPlayerExpanded) parentGui).displayNormalInventory();
+			PacketHandler.INSTANCE.sendToServer(new PacketOpenNormalInventory());
 		}
-		return pressed;
 	}
 
 	@Override
-	public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks)
+	public void render(int mouseX, int mouseY, float partialTicks)
 	{
 		if (this.visible)
 		{
 			int x = this.x + this.parentGui.getGuiLeft();
 
-			FontRenderer fontrenderer = mc.fontRenderer;
-			mc.getTextureManager().bindTexture(GuiPlayerExpanded.background);
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			FontRenderer fontrenderer = Minecraft.getInstance().fontRenderer;
+			Minecraft.getInstance().getTextureManager().bindTexture(GuiPlayerExpanded.background);
+			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			this.hovered = mouseX >= x && mouseY >= this.y && mouseX < x + this.width && mouseY < this.y + this.height;
 			int k = this.getHoverState(this.hovered);
 			GlStateManager.enableBlend();
-			GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+			GlStateManager.blendFuncSeparate(770, 771, 1, 0);
 			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 			GlStateManager.pushMatrix();
-			GlStateManager.translate(0, 0, 200);
+			GlStateManager.translatef(0, 0, 200);
 			if (k==1) {
 				this.drawTexturedModalRect(x, this.y, 200, 48, 10, 10);
 			} else {
@@ -62,8 +58,6 @@ public class GuiBaublesButton extends GuiButton {
 				this.drawCenteredString(fontrenderer, I18n.format(this.displayString), x + 5, this.y + this.height, 0xffffff);
 			}
 			GlStateManager.popMatrix();
-
-			this.mouseDragged(mc, mouseX, mouseY);
 		}
 	}
 }

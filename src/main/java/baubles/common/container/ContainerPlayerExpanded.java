@@ -19,12 +19,9 @@ import baubles.api.cap.IBaublesItemHandler;
 
 public class ContainerPlayerExpanded extends Container
 {
-	/**
-	 * The crafting matrix inventory.
-	 */
-	public final InventoryCrafting craftMatrix = new InventoryCrafting(this, 2, 2);
-	public final InventoryCraftResult craftResult = new InventoryCraftResult();
-	public IBaublesItemHandler baubles;
+	private final InventoryCrafting craftMatrix = new InventoryCrafting(this, 2, 2);
+	private final InventoryCraftResult craftResult = new InventoryCraftResult();
+	public final IBaublesItemHandler baubles;
 	/**
 	 * Determines if inventory manipulation should be handled.
 	 */
@@ -36,22 +33,22 @@ public class ContainerPlayerExpanded extends Container
 	{
 		this.isLocalWorld = par2;
 		this.thePlayer = player;
-		baubles = player.getCapability(BaublesCapabilities.CAPABILITY_BAUBLES, null);
+		baubles = player.getCapability(BaublesCapabilities.CAPABILITY_BAUBLES).orElseThrow(NullPointerException::new);
 
-		this.addSlotToContainer(new SlotCrafting(playerInv.player, this.craftMatrix, this.craftResult, 0, 154, 28));
+		this.addSlot(new SlotCrafting(playerInv.player, this.craftMatrix, this.craftResult, 0, 154, 28));
 
 		for (int i = 0; i < 2; ++i)
 		{
 			for (int j = 0; j < 2; ++j)
 			{
-				this.addSlotToContainer(new Slot(this.craftMatrix, j + i * 2, 116 + j * 18, 18 + i * 18));
+				this.addSlot(new Slot(this.craftMatrix, j + i * 2, 116 + j * 18, 18 + i * 18));
 			}
 		}
 
 		for (int k = 0; k < 4; k++) 
 		{
 			final EntityEquipmentSlot slot = equipmentSlots[k];
-			this.addSlotToContainer(new Slot(playerInv, 36 + (3 - k), 8, 8 + k * 18)
+			this.addSlot(new Slot(playerInv, 36 + (3 - k), 8, 8 + k * 18)
 			{
 				@Override
 				public int getSlotStackLimit()
@@ -77,28 +74,28 @@ public class ContainerPlayerExpanded extends Container
 			});
 		}
 
-		this.addSlotToContainer(new SlotBauble(player,baubles,0,77,8 ));
-		this.addSlotToContainer(new SlotBauble(player,baubles,1,77,8 + 1 * 18));
-		this.addSlotToContainer(new SlotBauble(player,baubles,2,77,8 + 2 * 18));
-		this.addSlotToContainer(new SlotBauble(player,baubles,3,77,8 + 3 * 18));
-		this.addSlotToContainer(new SlotBauble(player,baubles,4,96,8 ));
-		this.addSlotToContainer(new SlotBauble(player,baubles,5,96,8 + 1 * 18));
-		this.addSlotToContainer(new SlotBauble(player,baubles,6,96,8 + 2 * 18));
+		this.addSlot(new SlotBauble(player,baubles,0,77,8 ));
+		this.addSlot(new SlotBauble(player,baubles,1,77,8 + 1 * 18));
+		this.addSlot(new SlotBauble(player,baubles,2,77,8 + 2 * 18));
+		this.addSlot(new SlotBauble(player,baubles,3,77,8 + 3 * 18));
+		this.addSlot(new SlotBauble(player,baubles,4,96,8 ));
+		this.addSlot(new SlotBauble(player,baubles,5,96,8 + 1 * 18));
+		this.addSlot(new SlotBauble(player,baubles,6,96,8 + 2 * 18));
 
 		for (int i = 0; i < 3; ++i)
 		{
 			for (int j = 0; j < 9; ++j)
 			{
-				this.addSlotToContainer(new Slot(playerInv, j + (i + 1) * 9, 8 + j * 18, 84 + i * 18));
+				this.addSlot(new Slot(playerInv, j + (i + 1) * 9, 8 + j * 18, 84 + i * 18));
 			}
 		}
 
 		for (int i = 0; i < 9; ++i)
 		{
-			this.addSlotToContainer(new Slot(playerInv, i, 8 + i * 18, 142));
+			this.addSlot(new Slot(playerInv, i, 8 + i * 18, 142));
 		}
 
-		this.addSlotToContainer(new Slot(playerInv, 40, 96, 62)
+		this.addSlot(new Slot(playerInv, 40, 96, 62)
 		{
 			@Override
 			public boolean isItemValid(ItemStack stack)
@@ -124,9 +121,6 @@ public class ContainerPlayerExpanded extends Container
 		this.slotChangedCraftingGrid(this.thePlayer.getEntityWorld(), this.thePlayer, this.craftMatrix, this.craftResult);
 	}
 
-	/**
-	 * Called when the container is closed.
-	 */
 	@Override
 	public void onContainerClosed(EntityPlayer player)
 	{
@@ -145,9 +139,6 @@ public class ContainerPlayerExpanded extends Container
 		return true;
 	}
 
-	/**
-	 * Called when a player shift-clicks on a slot. You must override this or you will crash when someone does that.
-	 */
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
 	{
@@ -216,11 +207,11 @@ public class ContainerPlayerExpanded extends Container
 				}
 			}
 			// inv -> bauble
-			else if (itemstack.hasCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null))
+			else if (itemstack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE).isPresent())
 			{
-				IBauble bauble = itemstack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null);
-				for (int baubleSlot : bauble.getBaubleType(itemstack).getValidSlots()) {
-					if ( bauble.canEquip(itemstack1, thePlayer) && !((Slot)this.inventorySlots.get(baubleSlot+9)).getHasStack() &&
+				IBauble bauble = itemstack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE).orElseThrow(NullPointerException::new);
+				for (int baubleSlot : bauble.getBaubleType().getValidSlots()) {
+					if ( bauble.canEquip(thePlayer) && !this.inventorySlots.get(baubleSlot+9).getHasStack() &&
 							!this.mergeItemStack(itemstack1, baubleSlot+9, baubleSlot + 10, false))
 					{
 						return ItemStack.EMPTY;
@@ -262,8 +253,9 @@ public class ContainerPlayerExpanded extends Container
 			}
 
 			if (itemstack1.isEmpty() && !baubles.isEventBlocked() && slot instanceof SlotBauble &&
-					itemstack.hasCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
-				itemstack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null).onUnequipped(itemstack, playerIn);
+					itemstack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE).isPresent()) {
+				itemstack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE)
+						.ifPresent(b -> b.onUnequipped(playerIn));
 			}
 
 			ItemStack itemstack2 = slot.onTake(playerIn, itemstack1);
@@ -276,8 +268,6 @@ public class ContainerPlayerExpanded extends Container
 
 		return itemstack;
 	}
-
-	//private void unequipBauble(ItemStack stack) { }
 
 	@Override
 	public boolean canMergeSlot(ItemStack stack, Slot slot)

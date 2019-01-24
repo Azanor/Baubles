@@ -52,7 +52,7 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
 	@Override
 	public void initGui()
 	{
-		this.buttonList.clear();
+		this.buttons.clear();
 		super.initGui();
 		resetGuiLeft();
 	}

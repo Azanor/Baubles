@@ -20,5 +20,5 @@ public class PacketOpenNormalInventory {
 		ctx.get().setPacketHandled(true);
 	}
 
-	private PacketOpenNormalInventory() {}
+	public PacketOpenNormalInventory() {}
 }
