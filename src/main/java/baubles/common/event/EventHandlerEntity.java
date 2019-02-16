@@ -42,10 +42,12 @@ public class EventHandlerEntity {
 	public static void cloneCapabilitiesEvent(PlayerEvent.Clone event)
 	{
 		try {
-			BaublesContainer bco = (BaublesContainer) BaublesApi.getBaublesHandler(event.getOriginal());
-			NBTTagCompound nbt = bco.serializeNBT();
-			BaublesContainer bcn = (BaublesContainer) BaublesApi.getBaublesHandler(event.getEntityPlayer());
-			bcn.deserializeNBT(nbt);
+			event.getOriginal().getCapability(BaublesCapabilities.CAPABILITY_BAUBLES).ifPresent(bco -> {
+				NBTTagCompound nbt = ((BaublesContainer) bco).serializeNBT();
+				event.getEntityPlayer().getCapability(BaublesCapabilities.CAPABILITY_BAUBLES).ifPresent(bcn -> {
+					((BaublesContainer) bcn).deserializeNBT(nbt);
+				});
+			});
 		} catch (Exception e) {
 			Baubles.log.error("Could not clone player ["+event.getOriginal().getName()+"] baubles when changing dimensions");
 		}
@@ -85,10 +87,11 @@ public class EventHandlerEntity {
 	}
 
 	private static void syncSlots(EntityPlayer player, Collection<? extends EntityPlayer> receivers) {
-		IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
-		for (int i = 0; i < baubles.getSlots(); i++) {
-			syncSlot(player, i, baubles.getStackInSlot(i), receivers);
-		}
+		player.getCapability(BaublesCapabilities.CAPABILITY_BAUBLES).ifPresent(baubles -> {
+			for (int i = 0; i < baubles.getSlots(); i++) {
+				syncSlot(player, i, baubles.getStackInSlot(i), receivers);
+			}
+		});
 	}
 
 	public static void syncSlot(EntityPlayer player, int slot, ItemStack stack, Collection<? extends EntityPlayer> receivers) {
@@ -108,16 +111,17 @@ public class EventHandlerEntity {
 	}
 
 	private static void dropItemsAt(EntityPlayer player, Collection<EntityItem> drops) {
-		IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
-		for (int i = 0; i < baubles.getSlots(); ++i) {
-			if (!baubles.getStackInSlot(i).isEmpty()) {
-				EntityItem ei = new EntityItem(player.world,
-						player.posX, player.posY + player.getEyeHeight(), player.posZ,
-						baubles.getStackInSlot(i).copy());
-				ei.setPickupDelay(40);
-				drops.add(ei);
-				baubles.setStackInSlot(i, ItemStack.EMPTY);
+		player.getCapability(BaublesCapabilities.CAPABILITY_BAUBLES).ifPresent(baubles -> {
+			for (int i = 0; i < baubles.getSlots(); ++i) {
+				if (!baubles.getStackInSlot(i).isEmpty()) {
+					EntityItem ei = new EntityItem(player.world,
+							player.posX, player.posY + player.getEyeHeight(), player.posZ,
+							baubles.getStackInSlot(i).copy());
+					ei.setPickupDelay(40);
+					drops.add(ei);
+					baubles.setStackInSlot(i, ItemStack.EMPTY);
+				}
 			}
-		}
+		});
 	}
 }

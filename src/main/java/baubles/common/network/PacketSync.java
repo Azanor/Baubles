@@ -1,5 +1,6 @@
 package baubles.common.network;
 
+import baubles.api.cap.BaublesCapabilities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,8 +42,9 @@ public class PacketSync {
 		ctx.get().enqueueWork(() -> {
 			Entity p = Minecraft.getInstance().world.getEntityByID(message.playerId);
 			if (p instanceof EntityPlayer) {
-				IBaublesItemHandler baubles = BaublesApi.getBaublesHandler((EntityPlayer) p);
-				baubles.setStackInSlot(message.slot, message.bauble);
+				p.getCapability(BaublesCapabilities.CAPABILITY_BAUBLES).ifPresent(b -> {
+					b.setStackInSlot(message.slot, message.bauble);
+				});
 			}
 		});
 		ctx.get().setPacketHandled(true);

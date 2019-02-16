@@ -34,20 +34,20 @@ public final class BaublesRenderLayer implements LayerRenderer<EntityPlayer> {
 		if(!Config.renderBaubles || player.getActivePotionEffect(MobEffects.INVISIBILITY) != null)
 			return;
 
-		IBaublesItemHandler inv = BaublesApi.getBaublesHandler(player);
+		player.getCapability(BaublesCapabilities.CAPABILITY_BAUBLES).ifPresent(inv -> {
+			dispatchRenders(inv, player, RenderType.BODY, partialTicks);
 
-		dispatchRenders(inv, player, RenderType.BODY, partialTicks);
+			float yaw = player.prevRotationYawHead + (player.rotationYawHead - player.prevRotationYawHead) * partialTicks;
+			float yawOffset = player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset) * partialTicks;
+			float pitch = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch) * partialTicks;
 
-		float yaw = player.prevRotationYawHead + (player.rotationYawHead - player.prevRotationYawHead) * partialTicks;
-		float yawOffset = player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset) * partialTicks;
-		float pitch = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch) * partialTicks;
-
-		GlStateManager.pushMatrix();
-		GlStateManager.rotatef(yawOffset, 0, -1, 0);
-		GlStateManager.rotatef(yaw - 270, 0, 1, 0);
-		GlStateManager.rotatef(pitch, 0, 0, 1);
-		dispatchRenders(inv, player, RenderType.HEAD, partialTicks);
-		GlStateManager.popMatrix();
+			GlStateManager.pushMatrix();
+			GlStateManager.rotatef(yawOffset, 0, -1, 0);
+			GlStateManager.rotatef(yaw - 270, 0, 1, 0);
+			GlStateManager.rotatef(pitch, 0, 0, 1);
+			dispatchRenders(inv, player, RenderType.HEAD, partialTicks);
+			GlStateManager.popMatrix();
+		});
 	}
 
 	private void dispatchRenders(IBaublesItemHandler inv, EntityPlayer player, RenderType type, float partialTicks) {

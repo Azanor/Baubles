@@ -82,16 +82,17 @@ public class ItemRing extends Item
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-		if(!world.isRemote) { 
-			IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
+		if(!world.isRemote) {
 			ItemStack held = player.getHeldItem(hand);
-			for(int i = 0; i < baubles.getSlots(); i++)
-				if(!baubles.getStackInSlot(i).isEmpty() && baubles.isItemValidForSlot(i, held)) {
-				    ItemStack split = held.split(1);
-					baubles.setStackInSlot(i, split);
-					split.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE).ifPresent(b -> b.onEquipped(player));
-					break;
-				}
+			player.getCapability(BaublesCapabilities.CAPABILITY_BAUBLES).ifPresent(baubles -> {
+				for(int i = 0; i < baubles.getSlots(); i++)
+					if(!baubles.getStackInSlot(i).isEmpty() && baubles.isItemValidForSlot(i, held)) {
+						ItemStack split = held.split(1);
+						baubles.setStackInSlot(i, split);
+						split.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE).ifPresent(b -> b.onEquipped(player));
+						break;
+					}
+			});
 		}
 		return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
 	}
