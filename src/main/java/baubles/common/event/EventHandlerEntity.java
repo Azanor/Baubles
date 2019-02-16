@@ -115,11 +115,6 @@ public class EventHandlerEntity {
 						player.posX, player.posY + player.getEyeHeight(), player.posZ,
 						baubles.getStackInSlot(i).copy());
 				ei.setPickupDelay(40);
-				float f1 = player.world.rand.nextFloat() * 0.5F;
-				float f2 = player.world.rand.nextFloat() * (float) Math.PI * 2.0F;
-				ei.motionX = (double) (-MathHelper.sin(f2) * f1);
-				ei.motionZ = (double) (MathHelper.cos(f2) * f1);
-				ei.motionY = 0.20000000298023224D;
 				drops.add(ei);
 				baubles.setStackInSlot(i, ItemStack.EMPTY);
 			}
