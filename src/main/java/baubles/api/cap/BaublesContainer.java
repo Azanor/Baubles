@@ -85,6 +85,11 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
 		sync();
 	}
 
+	@Override
+	public EntityLivingBase getHolder() {
+		return holder;
+	}
+
 	private void sync() {
 		if (!(holder instanceof EntityPlayerMP)) {
 			return;

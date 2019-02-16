@@ -54,7 +54,7 @@ public class ItemRing extends Item
 
 			@Override
 			public void onWornTick(EntityLivingBase player) {
-				if (player.ticksExisted % 39 == 0) {
+				if (!player.world.isRemote && player.ticksExisted % 39 == 0) {
 					player.addPotionEffect(new PotionEffect(MobEffects.HASTE, 40, 0, true, true));
 				}
 			}
@@ -86,7 +86,7 @@ public class ItemRing extends Item
 			IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
 			ItemStack held = player.getHeldItem(hand);
 			for(int i = 0; i < baubles.getSlots(); i++)
-				if(!baubles.getStackInSlot(i).isEmpty() && baubles.isItemValidForSlot(i, held, player)) {
+				if(!baubles.getStackInSlot(i).isEmpty() && baubles.isItemValidForSlot(i, held)) {
 				    ItemStack split = held.split(1);
 					baubles.setStackInSlot(i, split);
 					split.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE).ifPresent(b -> b.onEquipped(player));

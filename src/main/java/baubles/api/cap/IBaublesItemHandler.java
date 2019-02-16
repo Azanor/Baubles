@@ -15,4 +15,5 @@ public interface IBaublesItemHandler extends IItemHandlerModifiable {
 	public void setEventBlock(boolean blockEvents);
 
 	void tick();
+	EntityLivingBase getHolder();
 }

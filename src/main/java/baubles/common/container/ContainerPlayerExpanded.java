@@ -74,13 +74,13 @@ public class ContainerPlayerExpanded extends Container
 			});
 		}
 
-		this.addSlot(new SlotBauble(player,baubles,0,77,8 ));
-		this.addSlot(new SlotBauble(player,baubles,1,77,8 + 1 * 18));
-		this.addSlot(new SlotBauble(player,baubles,2,77,8 + 2 * 18));
-		this.addSlot(new SlotBauble(player,baubles,3,77,8 + 3 * 18));
-		this.addSlot(new SlotBauble(player,baubles,4,96,8 ));
-		this.addSlot(new SlotBauble(player,baubles,5,96,8 + 1 * 18));
-		this.addSlot(new SlotBauble(player,baubles,6,96,8 + 2 * 18));
+		this.addSlot(new SlotBauble(baubles,0,77,8 ));
+		this.addSlot(new SlotBauble(baubles,1,77,8 + 1 * 18));
+		this.addSlot(new SlotBauble(baubles,2,77,8 + 2 * 18));
+		this.addSlot(new SlotBauble(baubles,3,77,8 + 3 * 18));
+		this.addSlot(new SlotBauble(baubles,4,96,8 ));
+		this.addSlot(new SlotBauble(baubles,5,96,8 + 1 * 18));
+		this.addSlot(new SlotBauble(baubles,6,96,8 + 2 * 18));
 
 		for (int i = 0; i < 3; ++i)
 		{
