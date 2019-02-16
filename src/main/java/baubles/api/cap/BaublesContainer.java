@@ -1,35 +1,39 @@
 package baubles.api.cap;
 
 import baubles.api.IBauble;
+import baubles.common.event.EventHandlerEntity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.ItemStackHandler;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class BaublesContainer extends ItemStackHandler implements IBaublesItemHandler {
 
 	private final static int BAUBLE_SLOTS = 7;
-	private boolean[] changed = new boolean[BAUBLE_SLOTS];
-	private boolean blockEvents=false;
+	private final ItemStack[] previous = new ItemStack[BAUBLE_SLOTS];
+	private final boolean[] changed = new boolean[BAUBLE_SLOTS];
+	private boolean blockEvents = false;
 	private final EntityLivingBase holder;
 
 	public BaublesContainer(EntityLivingBase holder)
 	{
 		super(BAUBLE_SLOTS);
 		this.holder = holder;
+		Arrays.fill(previous, ItemStack.EMPTY);
 	}
 
 	@Override
 	public void setSize(int size)
 	{
-		if (size<BAUBLE_SLOTS) size = BAUBLE_SLOTS;
-		super.setSize(size);
-		boolean[] old = changed;
-		changed = new boolean[size];
-		for(int i = 0;i<old.length && i<changed.length;i++)
-		{
-			changed[i] = old[i];
-		}
+		throw new UnsupportedOperationException("Can't resize baubles container");
 	}
 
 	@Override
@@ -42,14 +46,15 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
 	}
 
 	@Override
-	public void setStackInSlot(int slot, ItemStack stack) {
+	public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
 		if (stack.isEmpty() || this.isItemValidForSlot(slot, stack)) {
 			super.setStackInSlot(slot, stack);
 		}
 	}
 
+	@Nonnull
 	@Override
-	public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+	public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
 		if (!this.isItemValidForSlot(slot, stack)) return stack;
 		return super.insertItem(slot, stack, simulate);
 	}
@@ -67,16 +72,37 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
 	@Override
 	protected void onContentsChanged(int slot)
 	{
-		setChanged(slot,true);
+		this.changed[slot] = true;
 	}
 
 	@Override
-	public boolean isChanged(int slot) {
-		return changed[slot];
+	public void tick() {
+		for (int i = 0; i < getSlots(); i++) {
+			ItemStack stack = getStackInSlot(i);
+			stack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE)
+					.ifPresent(b -> b.onWornTick(holder));
+		}
+		sync();
 	}
 
-	@Override
-	public void setChanged(int slot, boolean change) {
-		this.changed[slot] = change;
+	private void sync() {
+		if (!(holder instanceof EntityPlayerMP)) {
+			return;
+		}
+
+		List<EntityPlayer> receivers = null;
+		for (int i = 0; i < getSlots(); i++) {
+			ItemStack stack = getStackInSlot(i);
+			boolean autosync = stack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE).map(b -> b.willAutoSync(holder)).orElse(false);
+			if (changed[i] || autosync && !ItemStack.areItemStacksEqual(stack, previous[i])) {
+				if (receivers == null) {
+					receivers = new ArrayList<>(((WorldServer) holder.world).getEntityTracker().getTrackingPlayers(holder));
+					receivers.add((EntityPlayerMP) holder);
+				}
+				EventHandlerEntity.syncSlot((EntityPlayerMP) holder, i, stack, receivers);
+				this.changed[i] = false;
+				previous[i] = stack.copy();
+			}
+		}
 	}
 }

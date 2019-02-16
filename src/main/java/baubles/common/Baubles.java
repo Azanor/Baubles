@@ -6,7 +6,10 @@ import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import baubles.api.cap.BaublesCapabilities;
 import baubles.client.ClientProxy;
+import net.minecraft.nbt.INBTBase;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
@@ -20,6 +23,8 @@ import baubles.api.cap.BaublesContainer;
 import baubles.api.cap.IBaublesItemHandler;
 import baubles.common.event.CommandBaubles;
 import baubles.common.network.PacketHandler;
+
+import javax.annotation.Nullable;
 
 @Mod(Baubles.MODID)
 public class Baubles {
@@ -40,10 +45,10 @@ public class Baubles {
 		Config.initialize(Paths.get("config", MODID + ".toml"));
 
 		CapabilityManager.INSTANCE.register(IBaublesItemHandler.class,
-				new CapabilityBaubles<>(), () -> new BaublesContainer(null));
+				new DummyStorage<>(), () -> new BaublesContainer(null));
 
 		CapabilityManager.INSTANCE
-				.register(IBauble.class, new BaublesCapabilities.CapabilityItemBaubleStorage(), () -> new IBauble() {
+				.register(IBauble.class, new DummyStorage<>(), () -> new IBauble() {
 					@Override
 					public BaubleType getBaubleType() {
 						return BaubleType.TRINKET;
@@ -53,6 +58,16 @@ public class Baubles {
 		proxy.registerEventHandlers();
 		PacketHandler.init();
 	}
+
+	private static class DummyStorage<T> implements Capability.IStorage<T> {
+		@Nullable
+		@Override
+		public INBTBase writeNBT(Capability<T> capability, T instance, EnumFacing side) { return null; }
+
+		@Override
+		public void readNBT(Capability<T> capability, T instance, EnumFacing side, INBTBase nbt) { }
+	}
+
 
 	@EventHandler
 	public void init(FMLInitializationEvent evt) {

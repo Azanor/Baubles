@@ -38,8 +38,6 @@ import net.minecraftforge.fml.network.NetworkDirection;
 @Mod.EventBusSubscriber(modid = Baubles.MODID)
 public class EventHandlerEntity {
 
-	private static HashMap<UUID,ItemStack[]> baublesSync = new HashMap<>();
-
 	@SubscribeEvent
 	public static void cloneCapabilitiesEvent(PlayerEvent.Clone event)
 	{
@@ -79,54 +77,10 @@ public class EventHandlerEntity {
 	}
 
 	@SubscribeEvent
-	public static void onPlayerLoggedOut(PlayerLoggedOutEvent event)
-	{
-		baublesSync.remove(event.getPlayer().getUniqueID());
-	}
-
-	@SubscribeEvent
 	public static void playerTick(TickEvent.PlayerTickEvent event) {
-		// player events
 		if (event.phase == TickEvent.Phase.END) {
 			EntityPlayer player = event.player;
-			IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
-			for (int i = 0; i < baubles.getSlots(); i++) {
-				ItemStack stack = baubles.getStackInSlot(i);
-				stack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE)
-					.ifPresent(b -> b.onWornTick(player));
-			}
-			if (!player.world.isRemote) {
-				syncBaubles(player, baubles);
-			}
-		}
-	}
-
-	private static void syncBaubles(EntityPlayer player, IBaublesItemHandler baubles) {
-		ItemStack[] items = baublesSync.get(player.getUniqueID());
-		if (items == null) {
-			items = new ItemStack[baubles.getSlots()];
-			Arrays.fill(items, ItemStack.EMPTY);
-			baublesSync.put(player.getUniqueID(), items);
-		}
-		if (items.length != baubles.getSlots()) {
-			ItemStack[] old = items;
-			items = new ItemStack[baubles.getSlots()];
-			System.arraycopy(old, 0, items, 0, Math.min(old.length, items.length));
-			baublesSync.put(player.getUniqueID(), items);
-		}
-		Set<EntityPlayer> receivers = null;
-		for (int i = 0; i < baubles.getSlots(); i++) {
-			ItemStack stack = baubles.getStackInSlot(i);
-			boolean autosync = stack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE).map(b -> b.willAutoSync(player)).orElse(false);
-			if (baubles.isChanged(i) || autosync && !ItemStack.areItemStacksEqual(stack, items[i])) {
-				if (receivers == null) {
-					receivers = new HashSet<>(((WorldServer) player.world).getEntityTracker().getTrackingPlayers(player));
-					receivers.add(player);
-				}
-				syncSlot(player, i, stack, receivers);
-				baubles.setChanged(i,false);
-				items[i] = stack.copy();
-			}
+			player.getCapability(BaublesCapabilities.CAPABILITY_BAUBLES).ifPresent(IBaublesItemHandler::tick);
 		}
 	}
 
@@ -137,7 +91,7 @@ public class EventHandlerEntity {
 		}
 	}
 
-	private static void syncSlot(EntityPlayer player, int slot, ItemStack stack, Collection<? extends EntityPlayer> receivers) {
+	public static void syncSlot(EntityPlayer player, int slot, ItemStack stack, Collection<? extends EntityPlayer> receivers) {
 		PacketSync pkt = new PacketSync(player, slot, stack);
 		for (EntityPlayer receiver : receivers) {
 			PacketHandler.INSTANCE.sendTo(pkt, ((EntityPlayerMP) receiver).connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
