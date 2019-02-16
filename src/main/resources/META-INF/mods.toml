@@ -1,0 +1,16 @@
+modLoader="javafml"
+# A version range to match for said mod loader - for regular FML @Mod it will be the forge version
+loaderVersion="[25,)"
+issueTrackerURL="https://github.com/Azanor/Baubles/issues"
+displayURL="http://www.minecraftforum.net/topic/2535073-baubles"
+logoFile="BLogo.png"
+credits="Special thanks to chicken_bones"
+authors="Azanor"
+
+[[mods]]
+modId="baubles"
+version="${version}"
+displayName="Baubles"
+description='''
+Adding a touch of bling to Minecraft
+'''

@@ -1,6 +1,7 @@
 package baubles.api.cap;
 
 import baubles.api.IBauble;
+import baubles.common.Baubles;
 import baubles.common.event.EventHandlerEntity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,7 +17,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class BaublesContainer extends ItemStackHandler implements IBaublesItemHandler {
-
 	private final static int BAUBLE_SLOTS = 7;
 	private final ItemStack[] previous = new ItemStack[BAUBLE_SLOTS];
 	private final boolean[] changed = new boolean[BAUBLE_SLOTS];
@@ -33,7 +33,8 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
 	@Override
 	public void setSize(int size)
 	{
-		throw new UnsupportedOperationException("Can't resize baubles container");
+		if (size != BAUBLE_SLOTS)
+			Baubles.log.warn("Cannot resize baubles container");
 	}
 
 	@Override

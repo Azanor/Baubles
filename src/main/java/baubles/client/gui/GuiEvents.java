@@ -14,11 +14,10 @@ public class GuiEvents {
 
 	@SubscribeEvent
 	public static void guiPostInit(GuiScreenEvent.InitGuiEvent.Post event) {
-
-		if (event.getGui() instanceof GuiInventory || event.getGui() instanceof GuiPlayerExpanded) {
+		if (event.getGui() instanceof GuiInventory) {
 			GuiContainer gui = (GuiContainer) event.getGui();
-			event.getButtonList().add(new GuiBaublesButton(55, gui, 64, 9, 10, 10,
-					I18n.format((event.getGui() instanceof GuiInventory) ? "button.baubles" : "button.normal")));
+			event.addButton(new GuiBaublesButton(55, gui, 64, 9, 10, 10,
+					I18n.format("button.baubles")));
 		}
 	}
 }

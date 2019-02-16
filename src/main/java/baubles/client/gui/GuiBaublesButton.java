@@ -1,5 +1,6 @@
 package baubles.client.gui;
 
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import org.lwjgl.opengl.GL11;
 
 import baubles.common.network.PacketHandler;
@@ -19,7 +20,7 @@ public class GuiBaublesButton extends GuiButton {
 	private final GuiContainer parentGui;
 
 	public GuiBaublesButton(int buttonId, GuiContainer parentGui, int x, int y, int width, int height, String buttonText) {
-		super(buttonId, x, parentGui.getGuiTop() + y, width, height, buttonText);
+		super(buttonId, x + parentGui.getGuiLeft(), parentGui.getGuiTop() + y, width, height, buttonText);
 		this.parentGui = parentGui;
 	}
 
@@ -28,8 +29,8 @@ public class GuiBaublesButton extends GuiButton {
 		if (parentGui instanceof GuiInventory) {
 			PacketHandler.INSTANCE.sendToServer(new PacketOpenBaublesInventory());
 		} else {
-			((GuiPlayerExpanded) parentGui).displayNormalInventory();
 			PacketHandler.INSTANCE.sendToServer(new PacketOpenNormalInventory());
+			this.displayNormalInventory(mouseX, mouseY);
 		}
 	}
 
@@ -38,8 +39,6 @@ public class GuiBaublesButton extends GuiButton {
 	{
 		if (this.visible)
 		{
-			int x = this.x + this.parentGui.getGuiLeft();
-
 			FontRenderer fontrenderer = Minecraft.getInstance().fontRenderer;
 			Minecraft.getInstance().getTextureManager().bindTexture(GuiPlayerExpanded.background);
 			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -59,5 +58,12 @@ public class GuiBaublesButton extends GuiButton {
 			}
 			GlStateManager.popMatrix();
 		}
+	}
+
+	private void displayNormalInventory(double oldMouseX, double oldMouseY) {
+		GuiInventory gui = new GuiInventory(Minecraft.getInstance().player);
+		ObfuscationReflectionHelper.setPrivateValue(GuiInventory.class, gui, (float) oldMouseX, "field_147048_u");
+		ObfuscationReflectionHelper.setPrivateValue(GuiInventory.class, gui, (float) oldMouseY, "field_147047_v");
+		Minecraft.getInstance().displayGuiScreen(gui);
 	}
 }

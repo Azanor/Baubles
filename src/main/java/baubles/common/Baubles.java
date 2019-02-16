@@ -5,24 +5,26 @@ import java.util.Map;
 
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
-import baubles.api.cap.BaublesCapabilities;
 import baubles.client.BaublesRenderLayer;
+import baubles.client.gui.GuiPlayerExpanded;
+import baubles.common.network.BaublesInteractionObject;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.nbt.INBTBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ExtensionPoint;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.network.FMLPlayMessages;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -67,6 +69,7 @@ public class Baubles {
 		@SubscribeEvent
 		public static void clientSetup(FMLClientSetupEvent evt) {
 			ClientRegistry.registerKeyBinding(KEY_BAUBLES);
+			ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> ClientInit::handleGui);
 		}
 
 		@SubscribeEvent
@@ -79,6 +82,13 @@ public class Baubles {
 
 			render = skinMap.get("slim");
 			render.addLayer(new BaublesRenderLayer());
+		}
+
+		private static GuiScreen handleGui(FMLPlayMessages.OpenContainer msg) {
+			if (BaublesInteractionObject.ID.equals(msg.getId())) {
+				return new GuiPlayerExpanded(Minecraft.getInstance().player);
+			}
+			return null;
 		}
 	}
 
