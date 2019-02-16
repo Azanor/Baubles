@@ -55,13 +55,13 @@ public final class BaublesRenderLayer implements LayerRenderer<EntityPlayer> {
 			ItemStack stack = inv.getStackInSlot(i);
 			if(!stack.isEmpty()) {
 				stack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE).ifPresent(bauble -> {
-                    if (bauble instanceof IRenderBauble) {
-                        GlStateManager.pushMatrix();
-                        GL11.glColor3ub((byte) 255, (byte) 255, (byte) 255);
-                        GlStateManager.color4f(1F, 1F, 1F, 1F);
-                        ((IRenderBauble) bauble).onPlayerBaubleRender(player, type, partialTicks);
-                        GlStateManager.popMatrix();
-                    }
+					if (bauble instanceof IRenderBauble) {
+						GlStateManager.pushMatrix();
+						GL11.glColor3ub((byte) 255, (byte) 255, (byte) 255);
+						GlStateManager.color4f(1F, 1F, 1F, 1F);
+						((IRenderBauble) bauble).onPlayerBaubleRender(player, type, partialTicks);
+						GlStateManager.popMatrix();
+					}
 				});
 			}
 		}

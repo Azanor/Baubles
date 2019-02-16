@@ -20,11 +20,10 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.capabilities.OptionalCapabilityInstance;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -37,7 +36,7 @@ public class ItemRing extends Item
 {
 	public ItemRing()
 	{
-		super(new Item.Builder().maxStackSize(1).group(ItemGroup.TOOLS).rarity(EnumRarity.RARE));
+		super(new Item.Properties().maxStackSize(1).group(ItemGroup.TOOLS).rarity(EnumRarity.RARE));
 	}
 
 	@SubscribeEvent
@@ -72,14 +71,11 @@ public class ItemRing extends Item
 		};
 
 		return new ICapabilityProvider() {
-			private final OptionalCapabilityInstance<IBauble> oci = OptionalCapabilityInstance.of(() -> bauble);
+			private final LazyOptional<IBauble> opt = LazyOptional.of(() -> bauble);
 			@Nonnull
 			@Override
-			public <T> OptionalCapabilityInstance<T> getCapability(@Nonnull Capability<T> cap, @Nullable EnumFacing side) {
-				if (cap == BaublesCapabilities.CAPABILITY_ITEM_BAUBLE) {
-					return oci.cast();
-				}
-				return OptionalCapabilityInstance.empty();
+			public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable EnumFacing side) {
+				return BaublesCapabilities.CAPABILITY_ITEM_BAUBLE.orEmpty(cap, opt);
 			}
 		};
 	}

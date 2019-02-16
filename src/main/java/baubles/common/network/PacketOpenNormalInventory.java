@@ -13,10 +13,7 @@ public class PacketOpenNormalInventory {
 	}
 
 	public static void handle(PacketOpenNormalInventory message, Supplier<NetworkEvent.Context> ctx) {
-		ctx.get().enqueueWork(() -> {
-			ctx.get().getSender().openContainer.onContainerClosed(ctx.get().getSender());
-			ctx.get().getSender().openContainer = ctx.get().getSender().inventoryContainer;
-		});
+		ctx.get().enqueueWork(() -> ctx.get().getSender().closeContainer());
 		ctx.get().setPacketHandled(true);
 	}
 

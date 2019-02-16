@@ -1,28 +1,28 @@
 package baubles.api.cap;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.capabilities.OptionalCapabilityInstance;
 import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 
 public class BaublesContainerProvider implements INBTSerializable<NBTTagCompound>, ICapabilityProvider {
 	private final BaublesContainer inner;
-	private final OptionalCapabilityInstance<IBaublesItemHandler> oci;
+	private final LazyOptional<IBaublesItemHandler> opt;
 
-	public BaublesContainerProvider(BaublesContainer inner) {
-		this.inner = inner;
-		this.oci = OptionalCapabilityInstance.of(() -> inner);
+	public BaublesContainerProvider(EntityPlayer player) {
+		this.inner = new BaublesContainer(player);
+		this.opt = LazyOptional.of(() -> inner);
 	}
 
 	@Nonnull
 	@Override
-	public <T> OptionalCapabilityInstance<T> getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
-		if (capability == BaublesCapabilities.CAPABILITY_BAUBLES) return this.oci.cast();
-		return OptionalCapabilityInstance.empty();
+	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
+		return BaublesCapabilities.CAPABILITY_BAUBLES.orEmpty(capability, opt);
 	}
 
 	@Override

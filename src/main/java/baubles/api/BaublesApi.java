@@ -15,9 +15,7 @@ public class BaublesApi
 	 */
 	public static IBaublesItemHandler getBaublesHandler(EntityPlayer player)
 	{
-		IBaublesItemHandler handler = player.getCapability(BaublesCapabilities.CAPABILITY_BAUBLES).orElseThrow(NullPointerException::new);
-		handler.setPlayer(player);
-		return handler;
+		return player.getCapability(BaublesCapabilities.CAPABILITY_BAUBLES).orElseThrow(NullPointerException::new);
 	}
 
 	/**

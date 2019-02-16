@@ -10,7 +10,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
-import net.minecraftforge.fml.javafmlmod.FMLModLoadingContext;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -31,7 +31,7 @@ public class Baubles {
 	public static final int GUI = 0;
 
 	public Baubles() {
-		FMLModLoadingContext.get().getModEventBus().addListener(this::preInit);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::preInit);
 		MinecraftForge.EVENT_BUS.addListener(this::serverLoad);
 		proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 	}
@@ -40,7 +40,7 @@ public class Baubles {
 		Config.initialize(Paths.get("config", MODID + ".toml"));
 
 		CapabilityManager.INSTANCE.register(IBaublesItemHandler.class,
-				new CapabilityBaubles<>(), BaublesContainer::new);
+				new CapabilityBaubles<>(), () -> new BaublesContainer(null));
 
 		CapabilityManager.INSTANCE
 				.register(IBauble.class, new BaublesCapabilities.CapabilityItemBaubleStorage(), () -> new IBauble() {

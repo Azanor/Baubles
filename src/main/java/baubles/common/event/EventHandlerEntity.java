@@ -57,7 +57,7 @@ public class EventHandlerEntity {
 	public static void attachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
 		if (event.getObject() instanceof EntityPlayer) {
 			event.addCapability(new ResourceLocation(Baubles.MODID,"container"),
-					new BaublesContainerProvider(new BaublesContainer()));
+					new BaublesContainerProvider((EntityPlayer) event.getObject()));
 		}
 	}
 
@@ -81,7 +81,7 @@ public class EventHandlerEntity {
 	@SubscribeEvent
 	public static void onPlayerLoggedOut(PlayerLoggedOutEvent event)
 	{
-		baublesSync.remove(event.player.getUniqueID());
+		baublesSync.remove(event.getPlayer().getUniqueID());
 	}
 
 	@SubscribeEvent
