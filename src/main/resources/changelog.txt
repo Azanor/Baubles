@@ -1,3 +1,6 @@
+1.6.0
+- Ported to 1.13.2
+
 1.5.2
 - API: added isBaubleEquipped helper method to BaublesAPI
 - fixed player bauble syncing (Thanks pau101) closes #235
