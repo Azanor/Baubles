@@ -7,6 +7,7 @@ import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import baubles.client.BaublesRenderLayer;
 import baubles.client.gui.GuiPlayerExpanded;
+import baubles.common.event.CommandBaubles;
 import baubles.common.network.BaublesInteractionObject;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -15,6 +16,7 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.nbt.INBTBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ExtensionPoint;
@@ -23,6 +25,7 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import org.apache.logging.log4j.LogManager;
@@ -43,6 +46,7 @@ public class Baubles {
 
 	public Baubles() {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::preInit);
+		MinecraftForge.EVENT_BUS.addListener(this::serverLoad);
 	}
 
 	private void preInit(FMLCommonSetupEvent event) {
@@ -101,10 +105,8 @@ public class Baubles {
 		public void readNBT(Capability<T> capability, T instance, EnumFacing side, INBTBase nbt) { }
 	}
 
-	/* todo 1.13
 	private void serverLoad(FMLServerStartingEvent event)
 	{
-		event.registerServerCommand(new CommandBaubles());
+		CommandBaubles.register(event.getCommandDispatcher());
 	}
-	*/
 }

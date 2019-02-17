@@ -9,5 +9,8 @@
     "name.TRINKET": "Bauble (Any)",
     "name.HEAD": "Bauble (Head)",
     "name.BODY": "Bauble (Body)",
-    "name.CHARM": "Bauble (Charm)"
+    "name.CHARM": "Bauble (Charm)",
+    "command.baubles.clear.feedback": "Cleared baubles slot %1$s for %2$s",
+    "command.baubles.clear.cleared": "Your baubles slot %1$s was cleared by %2$s",
+    "command.baubles.show.result": "%1$s's bauble in slot %2$s is %3$s"
 }
