@@ -1,0 +1,73 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+    }
+}
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+
+version = "1.12-1.5.2"
+group= "com.azanor.baubles"
+archivesBaseName = "Baubles"
+
+srcCompat = JavaVersion.VERSION_1_8
+targetCompat = JavaVersion.VERSION_1_8
+
+minecraft {
+    version = "1.12-14.21.1.2404"
+    runDir = "run"
+    mappings = "snapshot_20170708"
+    makeObfSourceJar = false
+}
+
+processResources
+{
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+                
+        // replace version and mcversion
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+        
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+// Create deobf dev jars
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'deobf'
+}
+
+// Create API library jar
+task apiZip(type: Jar) {
+    from(sourceSets.main.java) {
+        include "baubles/api/**"
+    }
+    from(sourceSets.main.output) {
+        include "baubles/api/**"
+    }
+
+    classifier = 'api'
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    classifier = 'sources'
+}
+
+artifacts {
+    archives deobfJar
+    archives apiZip
+    archives sourcesJar
+}
