@@ -1,0 +1,15 @@
+modLoader="javafml"
+loaderVersion="[25,)"
+displayURL="http://www.minecraftforum.net/topic/2535073-baubles"
+credits="Special thanks to chicken_bones"
+authors="Azanor"
+[[mods]]
+modId="baubles"
+version="${version}"
+displayName="Baubles"
+description='''
+Adding a touch of bling to Minecraft
+'''
+
+#"mcversion": "${mcversion}",
+#"logoFile": "BLogo.png",
