@@ -1,30 +1,70 @@
 package baubles.common.network;
 
-import net.minecraft.util.IThreadListener;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import baubles.common.Baubles;
-import io.netty.buffer.ByteBuf;
+import baubles.common.container.ContainerPlayerExpanded;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.world.IInteractionObject;
+import net.minecraftforge.fml.network.NetworkHooks;
 
-public class PacketOpenBaublesInventory implements IMessage, IMessageHandler<PacketOpenBaublesInventory, IMessage> {
+import javax.annotation.Nullable;
 
-	public PacketOpenBaublesInventory() {}
+public class PacketOpenBaublesInventory extends Packet {
 
-	@Override
-	public void toBytes(ByteBuf buffer) {}
+    public PacketOpenBaublesInventory() {
+    }
 
-	@Override
-	public void fromBytes(ByteBuf buffer) {}
+    @Override
+    void server(EntityPlayerMP player) {
+        player.openContainer.onContainerClosed(player);
+        NetworkHooks.openGui(player, new InteractionObjectPlayerExpanded());
+    }
 
-	@Override
-	public IMessage onMessage(PacketOpenBaublesInventory message, MessageContext ctx) {
-		IThreadListener mainThread = (WorldServer) ctx.getServerHandler().player.world;
-		mainThread.addScheduledTask(new Runnable(){ public void run() {
-			ctx.getServerHandler().player.openContainer.onContainerClosed(ctx.getServerHandler().player);
-			ctx.getServerHandler().player.openGui(Baubles.instance, Baubles.GUI, ctx.getServerHandler().player.world, 0, 0, 0);
-		}});
-		return null;
-	}
+    @Override
+    void encode(Packet packet, PacketBuffer buf) {
+
+    }
+
+    @Override
+    Packet decode(PacketBuffer buf) {
+        return this;
+    }
+
+    private class InteractionObjectPlayerExpanded implements IInteractionObject {
+
+        private String name;
+
+        @Override
+        public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
+            return new ContainerPlayerExpanded(playerInventory, !playerIn.world.isRemote, playerIn);
+        }
+
+        @Override
+        public String getGuiID() {
+            name = "PlayerExpanded".toLowerCase();
+            return new ResourceLocation(Baubles.MODID, name).toString();
+        }
+
+        @Override
+        public ITextComponent getName() {
+            return new TextComponentString(name);
+        }
+
+        @Override
+        public boolean hasCustomName() {
+            return false;
+        }
+
+        @Nullable
+        @Override
+        public ITextComponent getCustomName() {
+            return null;
+        }
+    }
 }

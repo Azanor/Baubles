@@ -1,18 +1,37 @@
 package baubles.common.network;
 
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.minecraftforge.fml.relauncher.Side;
 import baubles.common.Baubles;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
 
-public class PacketHandler
-{
-	public static final SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(Baubles.MODID.toLowerCase());
+public class PacketHandler {
+    public static final SimpleChannel INSTANCE =
+            NetworkRegistry.newSimpleChannel(new ResourceLocation(Baubles.MODID.toLowerCase(), "packets"), () -> "2.0", client -> true, server -> true);
+    private static int id = 0;
 
-	public static void init()
-	{
-		INSTANCE.registerMessage(PacketOpenBaublesInventory.class, PacketOpenBaublesInventory.class, 0, Side.SERVER);
-		INSTANCE.registerMessage(PacketOpenNormalInventory.class, PacketOpenNormalInventory.class, 1, Side.SERVER);
-		INSTANCE.registerMessage(PacketSync.Handler.class, PacketSync.class, 2, Side.CLIENT);
-	}
+    public static void init() {
+        registerPacket(PacketOpenBaublesInventory.class);
+        registerPacket(PacketOpenNormalInventory.class);
+        registerPacket(PacketSync.class);
+    }
+
+    private static void registerPacket(Class<? extends Packet> clazz) {
+        try {
+            final Packet packet = clazz.newInstance();
+            INSTANCE.registerMessage(id, (Class<Packet>)clazz, packet::encode, packet::decode, packet::handlePacket);
+            id += 1;
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void sendTo(Packet packet, EntityPlayerMP player) {
+        INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), packet);
+    }
+    public static void sendToServer(Packet packet) {
+        INSTANCE.send(PacketDistributor.SERVER.noArg(), packet);
+    }
 }

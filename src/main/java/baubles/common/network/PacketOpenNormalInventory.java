@@ -1,29 +1,26 @@
 package baubles.common.network;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraft.util.IThreadListener;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.PacketBuffer;
 
-public class PacketOpenNormalInventory implements IMessage, IMessageHandler<PacketOpenNormalInventory, IMessage> {
+public class PacketOpenNormalInventory extends Packet {
 
-	public PacketOpenNormalInventory() {}
+    public PacketOpenNormalInventory() {
+    }
 
-	@Override
-	public void toBytes(ByteBuf buffer) {}
+    @Override
+    void server(EntityPlayerMP player) {
+        player.openContainer.onContainerClosed(player);
+        player.openContainer = player.inventoryContainer;
+    }
 
-	@Override
-	public void fromBytes(ByteBuf buffer) {}
+    @Override
+    void encode(Packet packet, PacketBuffer buf) {
 
-	@Override
-	public IMessage onMessage(PacketOpenNormalInventory message, MessageContext ctx) {
-		IThreadListener mainThread = (WorldServer) ctx.getServerHandler().player.world;
-		mainThread.addScheduledTask(new Runnable(){ public void run() {
-			ctx.getServerHandler().player.openContainer.onContainerClosed(ctx.getServerHandler().player);
-			ctx.getServerHandler().player.openContainer = ctx.getServerHandler().player.inventoryContainer;
-		}});
-		return null;
-	}
+    }
+
+    @Override
+    Packet decode(PacketBuffer buf) {
+        return this;
+    }
 }
