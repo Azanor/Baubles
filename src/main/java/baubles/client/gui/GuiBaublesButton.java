@@ -23,19 +23,20 @@ public class GuiBaublesButton extends GuiButton {
         this.parentGui = parentGui;
     }
 
-	@Override
-	public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
-		boolean pressed = super.mousePressed(mc, mouseX - this.parentGui.getGuiLeft(), mouseY);
-		if (pressed) {
-			if (parentGui instanceof GuiInventory) {
-				PacketHandler.INSTANCE.sendToServer(new PacketOpenBaublesInventory());
-			} else {
-				((GuiPlayerExpanded) parentGui).displayNormalInventory();
-				PacketHandler.INSTANCE.sendToServer(new PacketOpenNormalInventory());
-			}
-		}
-		return pressed;
-	}
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int i) {
+        boolean pressed = super.mouseClicked(mouseX - parentGui.getGuiLeft(), mouseY, i);
+        if (pressed) {
+            if (parentGui instanceof GuiInventory) {
+                System.out.println("test1");
+                PacketHandler.sendToServer(new PacketOpenBaublesInventory());
+            } else {
+                ((GuiPlayerExpanded) parentGui).displayNormalInventory();
+                PacketHandler.sendToServer(new PacketOpenNormalInventory());
+            }
+        }
+        return pressed;
+    }
 
 	@Override
 	public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks)

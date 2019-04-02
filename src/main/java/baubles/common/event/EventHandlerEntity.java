@@ -128,12 +128,12 @@ public class EventHandlerEntity {
         }
     }
 
-	private void syncSlot(EntityPlayer player, int slot, ItemStack stack, Collection<? extends EntityPlayer> receivers) {
-		PacketSync pkt = new PacketSync(player, slot, stack);
-		for (EntityPlayer receiver : receivers) {
-			PacketHandler.INSTANCE.sendTo(pkt, (EntityPlayerMP) receiver);
-		}
-	}
+    private void syncSlot(EntityPlayer player, int slot, ItemStack stack, Collection<? extends EntityPlayer> receivers) {
+        PacketSync pkt = new PacketSync(player, slot, stack);
+        for (EntityPlayer receiver : receivers) {
+            PacketHandler.sendTo(pkt, (EntityPlayerMP) receiver);
+        }
+    }
 
     @SubscribeEvent
     public void playerDeath(PlayerDropsEvent event) {
