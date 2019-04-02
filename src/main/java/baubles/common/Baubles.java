@@ -70,4 +70,8 @@ public class Baubles {
         proxy.init();
     }
 
+    @SubscribeEvent
+    public void serverLoad(FMLServerStartingEvent event) {
+        //todo: add command registration
+    }
 }
