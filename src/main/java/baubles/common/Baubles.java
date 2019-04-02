@@ -58,14 +58,14 @@ public class Baubles {
 			if (Config.config!=null) Config.save();
 		}
 
-		CapabilityManager.INSTANCE.register(IBaublesItemHandler.class,
-				new CapabilityBaubles<IBaublesItemHandler>(), BaublesContainer.class);
 
-		CapabilityManager.INSTANCE
-				.register(IBauble.class, new BaublesCapabilities.CapabilityItemBaubleStorage(), () -> new BaubleItem(BaubleType.TRINKET));
+        CapabilityManager.INSTANCE.register(IBaublesItemHandler.class,
+                new BaublesCapabilities.CapabilityBaubles<>(), BaublesContainer::new);
 
 		proxy.registerEventHandlers();
 		PacketHandler.init();
+        CapabilityManager.INSTANCE
+                .register(IBauble.class, new BaublesCapabilities.CapabilityItemBaubleStorage(), () -> new BaubleItem(BaubleType.TRINKET));
 
 		Config.save();
 	}

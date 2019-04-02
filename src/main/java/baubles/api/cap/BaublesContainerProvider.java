@@ -5,34 +5,35 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.common.util.LazyOptional;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class BaublesContainerProvider implements INBTSerializable<NBTTagCompound>, ICapabilityProvider {
 
-	private final BaublesContainer container;
+    private final BaublesContainer container;
 
-	public BaublesContainerProvider(BaublesContainer container) {
-		this.container = container;
-	}
+    public BaublesContainerProvider(BaublesContainer container) {
+        this.container = container;
+    }
 
-	@Override
-	public boolean hasCapability (Capability<?> capability, EnumFacing facing) {
-		return capability == BaublesCapabilities.CAPABILITY_BAUBLES;
-	}
+    @Override
+    public NBTTagCompound serializeNBT() {
+        return container.serializeNBT();
+    }
 
-	@Override
-	@SuppressWarnings("unchecked")
-	public <T> T getCapability (Capability<T> capability, EnumFacing facing) {
-		if (capability == BaublesCapabilities.CAPABILITY_BAUBLES) return (T) this.container;
-		return null;
-	}
+    @Override
+    public void deserializeNBT(NBTTagCompound nbt) {
+        container.deserializeNBT(nbt);
+    }
 
-	@Override
-	public NBTTagCompound serializeNBT () {
-		return this.container.serializeNBT();
-	}
-
-	@Override
-	public void deserializeNBT (NBTTagCompound nbt) {
-		this.container.deserializeNBT(nbt);
-	}
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable EnumFacing side) {
+        if (cap == BaublesCapabilities.CAPABILITY_BAUBLES)
+            return LazyOptional.of(() -> (T) container);
+        else
+            return LazyOptional.empty();
+    }
 }

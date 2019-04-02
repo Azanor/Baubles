@@ -34,37 +34,37 @@ public class SlotBauble extends SlotItemHandler
 		if(stack.isEmpty())
 			return false;
 
-		IBauble bauble = stack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null);
-		return bauble.canUnequip(stack, player);
-	}
+        LazyOptional<IBauble> bauble = stack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null);
+        return bauble.filter(b->b.canUnequip(stack, player)).isPresent();
+    }
 
-	@Override
-	public ItemStack onTake(EntityPlayer playerIn, ItemStack stack) {
-		if (!getHasStack() && !((IBaublesItemHandler)getItemHandler()).isEventBlocked() &&
-				stack.hasCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
-			stack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null).onUnequipped(stack, playerIn);
-		}
-		super.onTake(playerIn, stack);
-		return stack;
-	}
+    @Override
+    public ItemStack onTake(EntityPlayer playerIn, ItemStack stack) {
+        if (!getHasStack() && !((IBaublesItemHandler) getItemHandler()).isEventBlocked()) {
+            stack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null)
+                    .ifPresent(b -> b.onUnequipped(stack, playerIn));
+        }
+        super.onTake(playerIn, stack);
+        return stack;
+    }
 
-	@Override
-	public void putStack(ItemStack stack) {
-		if (getHasStack() && !ItemStack.areItemStacksEqual(stack,getStack()) &&
-				!((IBaublesItemHandler)getItemHandler()).isEventBlocked() &&
-				getStack().hasCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
-			getStack().getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null).onUnequipped(getStack(), player);
-		}
+    @Override
+    public void putStack(ItemStack stack) {
+        if (getHasStack() && !ItemStack.areItemStacksEqual(stack, getStack()) &&
+                !((IBaublesItemHandler) getItemHandler()).isEventBlocked()){
+            stack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null)
+                    .ifPresent(b -> b.onUnequipped(getStack(), player));
+        }
 
 		ItemStack oldstack = getStack().copy();
 		super.putStack(stack);
 
-		if (getHasStack() && !ItemStack.areItemStacksEqual(oldstack,getStack())
-				&& !((IBaublesItemHandler)getItemHandler()).isEventBlocked() &&
-				getStack().hasCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
-			getStack().getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null).onEquipped(getStack(), player);
-		}
-	}
+        if (getHasStack() && !ItemStack.areItemStacksEqual(oldstack, getStack())
+                && !((IBaublesItemHandler) getItemHandler()).isEventBlocked()){
+            stack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null)
+                    .ifPresent(b -> b.onEquipped(getStack(), player));
+        }
+    }
 
 	@Override
 	public int getSlotStackLimit()

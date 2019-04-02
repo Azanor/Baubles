@@ -3,6 +3,7 @@ package baubles.api.cap;
 import baubles.api.IBauble;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class BaublesContainer extends ItemStackHandler implements IBaublesItemHandler {
@@ -30,17 +31,19 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
 		}
 	}
 
-	/**
-	 * Returns true if automation is allowed to insert the given stack (ignoring
-	 * stack size) into the given slot.
-	 */
-	@Override
-	public boolean isItemValidForSlot(int slot, ItemStack stack, EntityLivingBase player) {
-		if (stack==null || stack.isEmpty() || !stack.hasCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null))
-			return false;
-		IBauble bauble = stack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null);
-		return bauble.canEquip(stack, player) && bauble.getBaubleType(stack).hasSlot(slot);
-	}
+    /**
+     * Returns true if automation is allowed to insert the given stack (ignoring
+     * stack size) into the given slot.
+     */
+    @Override
+    public boolean isItemValidForSlot(int slot, ItemStack stack, EntityLivingBase player) {
+        LazyOptional<IBauble> bauble = stack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null);
+        if (stack == null || stack.isEmpty() || !bauble.isPresent())
+            return false;
+        else
+            return bauble.orElse(null).canEquip(stack, player) &&
+                    bauble.orElse(null).getBaubleType(stack).hasSlot(slot);
+    }
 
 	@Override
 	public void setStackInSlot(int slot, ItemStack stack) {

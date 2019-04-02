@@ -34,12 +34,14 @@ public class ClientEventHandler
 		}
 	}
 
-	@SubscribeEvent
-	public void tooltipEvent(ItemTooltipEvent event) {
-		if (!event.getItemStack().isEmpty() && event.getItemStack().hasCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
-			IBauble bauble = event.getItemStack().getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null);
-			BaubleType bt = bauble.getBaubleType(event.getItemStack());
-			event.getToolTip().add(TextFormatting.GOLD + I18n.format("name."+bt));
-		}
-	}
+    @SubscribeEvent
+    public void tooltipEvent(ItemTooltipEvent event) {
+        LazyOptional<IBauble> bauble = event.getItemStack().getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null);
+        bauble.ifPresent(b -> {
+            if (!event.getItemStack().isEmpty()) {
+                BaubleType bt = b.getBaubleType(event.getItemStack());
+                event.getToolTip().add(new TextComponentString(TextFormatting.GOLD + I18n.format("name." + bt)));
+            }
+        });
+    }
 }
