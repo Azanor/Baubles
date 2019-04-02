@@ -32,17 +32,6 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        if (world instanceof WorldClient) {
-            switch (ID) {
-                case Baubles.GUI:
-                    return new GuiPlayerExpanded(player);
-            }
-        }
-        return null;
-    }
-
-    @Override
     public World getClientWorld() {
         return Minecraft.getInstance().world;
     }
