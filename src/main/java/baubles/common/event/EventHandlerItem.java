@@ -8,16 +8,16 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class EventHandlerItem
-{
-	private static ResourceLocation capabilityResourceLocation = new ResourceLocation(Baubles.MODID, "bauble_cap");
+public class EventHandlerItem {
+    private static ResourceLocation capabilityResourceLocation = new ResourceLocation(Baubles.MODID, "bauble_cap");
 
     /**
      * Handles backwards compatibility with items that implement IBauble instead of exposing it as a capability.
@@ -35,7 +35,7 @@ public class EventHandlerItem
                 || event.getCapabilities().values().stream().anyMatch(c -> c.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null).isPresent()))
             return;
 
-		event.addCapability(capabilityResourceLocation, new ICapabilityProvider() {
+        event.addCapability(capabilityResourceLocation, new ICapabilityProvider() {
 
             @Nonnull
             @Override

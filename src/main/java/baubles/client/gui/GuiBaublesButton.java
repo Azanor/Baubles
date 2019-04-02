@@ -16,12 +16,12 @@ import net.minecraft.client.resources.I18n;
 
 public class GuiBaublesButton extends GuiButton {
 
-	private final GuiContainer parentGui;
+    private final GuiContainer parentGui;
 
-	public GuiBaublesButton(int buttonId, GuiContainer parentGui, int x, int y, int width, int height, String buttonText) {
-		super(buttonId, x, parentGui.getGuiTop() + y, width, height, buttonText);
-		this.parentGui = parentGui;
-	}
+    public GuiBaublesButton(int buttonId, GuiContainer parentGui, int x, int y, int width, int height, String buttonText) {
+        super(buttonId, x, parentGui.getGuiTop() + y, width, height, buttonText);
+        this.parentGui = parentGui;
+    }
 
 	@Override
 	public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {

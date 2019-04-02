@@ -7,32 +7,29 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class SlotBauble extends SlotItemHandler
-{
-	int baubleSlot;
-	EntityPlayer player;
+public class SlotBauble extends SlotItemHandler {
+    int baubleSlot;
+    EntityPlayer player;
 
-	public SlotBauble(EntityPlayer player, IBaublesItemHandler itemHandler, int slot, int par4, int par5)
-	{
-		super(itemHandler, slot, par4, par5);
-		this.baubleSlot = slot;
-		this.player = player;
-	}
+    public SlotBauble(EntityPlayer player, IBaublesItemHandler itemHandler, int slot, int par4, int par5) {
+        super(itemHandler, slot, par4, par5);
+        baubleSlot = slot;
+        this.player = player;
+    }
 
-	/**
-	 * Check if the stack is a valid item for this slot.
-	 */
-	@Override
-	public boolean isItemValid(ItemStack stack)
-	{
-		return ((IBaublesItemHandler)getItemHandler()).isItemValidForSlot(baubleSlot, stack, player);
-	}
+    /**
+     * Check if the stack is a valid item for this slot.
+     */
+    @Override
+    public boolean isItemValid(ItemStack stack) {
+        return ((IBaublesItemHandler) getItemHandler()).isItemValidForSlot(baubleSlot, stack, player);
+    }
 
-	@Override
-	public boolean canTakeStack(EntityPlayer player) {
-		ItemStack stack = getStack();
-		if(stack.isEmpty())
-			return false;
+    @Override
+    public boolean canTakeStack(EntityPlayer player) {
+        ItemStack stack = getStack();
+        if (stack.isEmpty())
+            return false;
 
         LazyOptional<IBauble> bauble = stack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null);
         return bauble.filter(b->b.canUnequip(stack, player)).isPresent();
@@ -56,8 +53,8 @@ public class SlotBauble extends SlotItemHandler
                     .ifPresent(b -> b.onUnequipped(getStack(), player));
         }
 
-		ItemStack oldstack = getStack().copy();
-		super.putStack(stack);
+        ItemStack oldstack = getStack().copy();
+        super.putStack(stack);
 
         if (getHasStack() && !ItemStack.areItemStacksEqual(oldstack, getStack())
                 && !((IBaublesItemHandler) getItemHandler()).isEventBlocked()){
@@ -66,9 +63,8 @@ public class SlotBauble extends SlotItemHandler
         }
     }
 
-	@Override
-	public int getSlotStackLimit()
-	{
-		return 1;
-	}
+    @Override
+    public int getSlotStackLimit() {
+        return 1;
+    }
 }

@@ -37,3 +37,4 @@ public class BaublesContainerProvider implements INBTSerializable<NBTTagCompound
             return LazyOptional.empty();
     }
 }
+
