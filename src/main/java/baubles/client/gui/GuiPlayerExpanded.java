@@ -9,6 +9,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 public class GuiPlayerExpanded extends InventoryEffectRenderer {
 
@@ -115,6 +116,12 @@ public class GuiPlayerExpanded extends InventoryEffectRenderer {
 
     public void displayNormalInventory() {
         GuiInventory gui = new GuiInventory(mc.player);
+        try {
+            ObfuscationReflectionHelper.setPrivateValue(GuiInventory.class, gui, oldMouseX, "oldMouseX"/*, "field_147048_u"*/);
+            ObfuscationReflectionHelper.setPrivateValue(GuiInventory.class, gui, oldMouseY, "oldMouseY"/*, "field_147047_v"*/);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         mc.displayGuiScreen(gui);
     }
 }
