@@ -1,44 +1,37 @@
 package baubles.common;
 
-import java.io.File;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import com.electronwill.nightconfig.core.file.CommentedFileConfig;
+import com.electronwill.nightconfig.core.io.WritingMode;
+import net.minecraftforge.common.ForgeConfigSpec;
+
+import java.nio.file.Path;
 
 public class Config {
+    private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
+    public static final General GENERAL = new General(BUILDER);
+    public static final ForgeConfigSpec spec = BUILDER.build();
 
-	public static Configuration config;
-	public static boolean renderBaubles=true;
+    public static class General {
+        public final ForgeConfigSpec.ConfigValue<Boolean> renderBaubles;
 
-	public static void initialize(File file)
-	{
-		config = new Configuration(file);
-		config.load();
+        public General(ForgeConfigSpec.Builder builder) {
+            builder.push("General");
+            renderBaubles = builder
+                    .comment("Set this to false to disable rendering of baubles in the player.")
+                    .define("baubleRenderEnabled", true);
+            builder.pop();
+        }
+    }
 
-		load();
+    public static void loadConfig(ForgeConfigSpec spec, Path path) {
 
-		MinecraftForge.EVENT_BUS.register(ConfigChangeListener.class);
-	}
+        final CommentedFileConfig configData = CommentedFileConfig.builder(path)
+                .sync()
+                .autosave()
+                .writingMode(WritingMode.REPLACE)
+                .build();
 
-	public static void load() {
-		String desc = "Set this to false to disable rendering of baubles in the player.";
-		renderBaubles = config.getBoolean("baubleRender.enabled", 
-				Configuration.CATEGORY_CLIENT, renderBaubles, desc);
-		
-		if(config.hasChanged())	config.save();
-	}
-
-	public static void save()
-	{
-		config.save();
-	}
-
-	public static class ConfigChangeListener {
-		@SubscribeEvent
-		public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
-			if(eventArgs.getModID().equals(Baubles.MODID))
-				load();
-		}
-	}
+        configData.load();
+        spec.setConfig(configData);
+    }
 }
