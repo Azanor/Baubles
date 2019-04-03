@@ -1,0 +1,13 @@
+{
+  "item.Ring.0.name": "Кольцо шахтёра",
+  "button.baubles": "Baubles",
+  "button.normal": "Обычн.",
+  "keybind.baublesinventory": "Инвентарь Baubles",
+  "name.AMULET": "Бижутерия (Амулет)",
+  "name.RING": "Бижутерия (Кольцо)",
+  "name.BELT": "Бижутерия (Пояс)",
+  "name.TRINKET": "Бижутерия (Любая)",
+  "name.HEAD": "Бижутерия (Голова)",
+  "name.BODY": "Бижутерия (Тело)",
+  "name.CHARM": "Бижутерия (Брелок)"
+}

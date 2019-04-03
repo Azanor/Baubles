@@ -1,0 +1,13 @@
+{
+  "item.Ring.0.name": "Bergarbeiterring",
+  "button.baubles": "Baubles",
+  "button.normal": "Normal",
+  "keybind.baublesinventory": "Baubles-Inventar",
+  "name.AMULET": "Bauble (Amulett)",
+  "name.RING": "Bauble (Ring)",
+  "name.BELT": "Bauble (Gürtel)",
+  "name.TRINKET": "Bauble (Beliebig)",
+  "name.HEAD": "Bauble (Kopf)",
+  "name.BODY": "Bauble (Körper)",
+  "name.CHARM": "Bauble (Talisman)"
+}
