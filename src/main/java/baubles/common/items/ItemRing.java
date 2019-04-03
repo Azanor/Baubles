@@ -23,7 +23,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ObjectHolder;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid=Baubles.MODID)
 public class ItemRing extends Item implements IBauble {
     @ObjectHolder(Baubles.MODID + ":ring")
     public static final Item RING = null;
@@ -33,7 +33,7 @@ public class ItemRing extends Item implements IBauble {
     }
 
     @SubscribeEvent
-    public static void registerItems(RegistryEvent.Register<Item> event) {
+    public static void register(RegistryEvent.Register<Item> event) {
         event.getRegistry().register((new ItemRing()).setRegistryName(Baubles.MODID, "ring"));
     }
 
