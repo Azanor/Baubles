@@ -35,7 +35,7 @@ public class BaublesContainer extends ItemStackHandler implements IBaublesItemHa
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack, EntityLivingBase player) {
         LazyOptional<IBauble> bauble = stack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null);
-        if (stack == null || stack.isEmpty() || !bauble.isPresent())
+        if (stack.isEmpty() || !bauble.isPresent())
             return false;
         else
             return bauble.orElse(null).canEquip(stack, player) &&

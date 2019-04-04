@@ -30,7 +30,7 @@ public class PacketSync extends Packet {
         World world = Baubles.proxy.getClientWorld();
         if (world == null) return;
         Entity p = world.getEntityByID(playerId);
-        if (p != null && p instanceof EntityPlayer) {
+        if (p instanceof EntityPlayer) {
             IBaublesItemHandler baubles = BaublesApi.getBaublesHandler((EntityPlayer) p);
             baubles.setStackInSlot(slot, bauble);
         }
