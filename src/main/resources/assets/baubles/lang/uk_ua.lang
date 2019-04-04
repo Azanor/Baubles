@@ -1,6 +1,6 @@
 #
 # Речі
-item.Ring.0.name=Перстень шахтаря
+item.baubles.ring=Перстень шахтаря
 #
 # GUI
 button.baubles=Baubles
