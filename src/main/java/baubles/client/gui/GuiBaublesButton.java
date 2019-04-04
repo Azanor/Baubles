@@ -27,7 +27,6 @@ public class GuiBaublesButton extends GuiButton {
         boolean pressed = super.mouseClicked(mouseX - parentGui.getGuiLeft(), mouseY, i);
         if (pressed) {
             if (parentGui instanceof GuiInventory) {
-                System.out.println("test1");
                 PacketHandler.sendToServer(new PacketOpenBaublesInventory());
             } else {
                 ((GuiPlayerExpanded) parentGui).displayNormalInventory();
