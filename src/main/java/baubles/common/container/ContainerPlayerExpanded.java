@@ -42,18 +42,9 @@ public class ContainerPlayerExpanded extends Container {
             }
         }
 
-        final String[] EMPTY_SLOT_NAMES = new String[]{
-                "minecraft:textures/item/empty_armor_slot_boots.png",
-                "minecraft:textures/item/empty_armor_slot_leggings.png",
-                "minecraft:textures/item/empty_armor_slot_chestplate.png",
-                "minecraft:textures/item/empty_armor_slot_helmet.png"};
-
         for (int k = 0; k < 4; k++) {
             final EntityEquipmentSlot slot = equipmentSlots[k];
             addSlot(new Slot(playerInv, 36 + (3 - k), 8, 8 + k * 18) {
-
-                private ResourceLocation resourceLocation = new ResourceLocation(EMPTY_SLOT_NAMES[slot.getIndex()]);
-
                 @Override
                 public int getSlotStackLimit() {
                     return 1;
@@ -68,16 +59,6 @@ public class ContainerPlayerExpanded extends Container {
                 public boolean canTakeStack(EntityPlayer playerIn) {
                     ItemStack itemstack = getStack();
                     return !itemstack.isEmpty() && !playerIn.isCreative() && EnchantmentHelper.hasBindingCurse(itemstack) ? false : super.canTakeStack(playerIn);
-                }
-
-                @OnlyIn(Dist.CLIENT)
-                public net.minecraft.util.ResourceLocation getBackgroundLocation() {
-                    return resourceLocation;
-                }
-
-                @Override
-                public String getSlotTexture() {
-                    return EMPTY_SLOT_NAMES[slot.getIndex()];
                 }
             });
         }
@@ -104,19 +85,6 @@ public class ContainerPlayerExpanded extends Container {
             @Override
             public boolean isItemValid(ItemStack stack) {
                 return super.isItemValid(stack);
-            }
-
-            @Override
-            public String getSlotTexture() {
-                return resourceLocation.toString();
-            }
-
-            private ResourceLocation resourceLocation = new ResourceLocation("minecraft:textures/item/empty_armor_slot_shield.png");
-
-
-            @OnlyIn(Dist.CLIENT)
-            public net.minecraft.util.ResourceLocation getBackgroundLocation() {
-                return resourceLocation;
             }
         });
 
