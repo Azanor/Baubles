@@ -21,20 +21,24 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.ObjectHolder;
 
-@Mod.EventBusSubscriber(modid=Baubles.MODID)
+@Mod.EventBusSubscriber(modid = Baubles.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ItemRing extends Item implements IBauble {
     @ObjectHolder(Baubles.MODID + ":ring")
     public static final Item RING = null;
 
     public ItemRing() {
-        super(new Properties().maxStackSize(1).defaultMaxDamage(0).group(ItemGroup.TOOLS));
+        super(new Properties().maxStackSize(1).group(ItemGroup.TOOLS));
     }
 
     @SubscribeEvent
     public static void register(RegistryEvent.Register<Item> event) {
-        event.getRegistry().register((new ItemRing()).setRegistryName(Baubles.MODID, "ring"));
+        GameRegistry.findRegistry(Item.class).registerAll(new ItemRing().setRegistryName(Baubles.MODID, "ring"));
+
+        //it's don't work in forge 1.13.2-25.0.90
+        //event.getRegistry().register(new ItemRing().setRegistryName(Baubles.MODID, "ring"));
     }
 
     @Override

@@ -8,7 +8,6 @@ import baubles.api.cap.BaublesContainer;
 import baubles.api.cap.IBaublesItemHandler;
 import baubles.client.ClientProxy;
 import baubles.client.gui.GuiPlayerExpanded;
-import baubles.common.items.ItemRing;
 import baubles.common.network.PacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.capabilities.CapabilityManager;
