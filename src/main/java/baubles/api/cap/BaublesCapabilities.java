@@ -12,7 +12,7 @@ public class BaublesCapabilities {
     * Access to the baubles capability.
     */
    @CapabilityInject(IBaublesItemHandler.class)
-   public static final Capability<IBaublesItemHandler> CAPABILITY_BAUBLES = null;
+   public static Capability<IBaublesItemHandler> CAPABILITY_BAUBLES = null;
 
    @CapabilityInject(IBauble.class)
    public static final Capability<IBauble> CAPABILITY_ITEM_BAUBLE = null;
