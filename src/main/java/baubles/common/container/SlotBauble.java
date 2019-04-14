@@ -3,8 +3,11 @@ package baubles.common.container;
 import baubles.api.IBauble;
 import baubles.api.cap.BaublesCapabilities;
 import baubles.api.cap.IBaublesItemHandler;
+import baubles.common.event.BaubleEquipmentChangeEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.EventBus;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class SlotBauble extends SlotItemHandler
@@ -45,6 +48,7 @@ public class SlotBauble extends SlotItemHandler
 			stack.getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null).onUnequipped(stack, playerIn);
 		}
 		super.onTake(playerIn, stack);
+		MinecraftForge.EVENT_BUS.post(new BaubleEquipmentChangeEvent(playerIn, baubleSlot, stack, ItemStack.EMPTY));
 		return stack;
 	}
 
@@ -58,12 +62,15 @@ public class SlotBauble extends SlotItemHandler
 
 		ItemStack oldstack = getStack().copy();
 		super.putStack(stack);
-
 		if (getHasStack() && !ItemStack.areItemStacksEqual(oldstack,getStack())
 				&& !((IBaublesItemHandler)getItemHandler()).isEventBlocked() &&
 				getStack().hasCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null)) {
 			getStack().getCapability(BaublesCapabilities.CAPABILITY_ITEM_BAUBLE, null).onEquipped(getStack(), player);
 		}
+		if (!ItemStack.areItemStacksEqual(oldstack,getStack())){
+			MinecraftForge.EVENT_BUS.post(new BaubleEquipmentChangeEvent(player, baubleSlot, oldstack, getStack()));
+		}
+
 	}
 
 	@Override
