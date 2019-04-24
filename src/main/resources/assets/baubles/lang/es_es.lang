@@ -1,6 +1,6 @@
 #
 # ITEMS
-item.Ring.0.name=Anillo de Minero
+item.Ring.name=Anillo de Minero
 #
 # GUI
 button.baubles=Ornamentos

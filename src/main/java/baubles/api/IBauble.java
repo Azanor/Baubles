@@ -24,6 +24,8 @@ public interface IBauble {
 	public default void onWornTick(ItemStack itemstack, EntityLivingBase player) {		
 	}
 
+	String getUnlocalizedName(ItemStack par1ItemStack);
+
 	/**
 	 * This method is called when the bauble is equipped by a player
 	 */

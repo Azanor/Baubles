@@ -1,6 +1,6 @@
 #
 # ITEMS
-item.Ring.0.name=Кольцо шахтёра
+item.Ring.name=Кольцо шахтёра
 #
 # GUI
 button.baubles=Baubles

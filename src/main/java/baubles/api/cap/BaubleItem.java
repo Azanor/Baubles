@@ -16,4 +16,9 @@ public class BaubleItem implements IBauble
 	public BaubleType getBaubleType(ItemStack itemstack) {
 		return baubleType;
 	}
+
+	@Override
+	public String getUnlocalizedName(ItemStack par1ItemStack) {
+		return null;
+	}
 }
