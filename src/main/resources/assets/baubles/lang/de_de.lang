@@ -1,6 +1,6 @@
 #
 # ITEMS
-item.Ring.0.name=Bergarbeiterring
+item.Ring.name=Bergarbeiterring
 #
 # GUI
 button.baubles=Baubles
