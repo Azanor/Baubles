@@ -1,6 +1,6 @@
 #
 # ITEMS
-item.Ring.0.name=Anello del minatore
+item.Ring.name=Anello del minatore
 #
 # GUI
 button.baubles=Accessori

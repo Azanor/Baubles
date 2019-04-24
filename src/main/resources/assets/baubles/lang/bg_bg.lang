@@ -1,6 +1,6 @@
 #
 # ITEMS
-item.Ring.0.name=Пръстенът на миньора
+item.Ring.name=Пръстенът на миньора
 #
 # GUI
 button.baubles=Дрънкулки

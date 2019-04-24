@@ -1,6 +1,6 @@
 #
 # ITEMS
-item.Ring.0.name=Pierścień Górnika
+item.Ring.name=Pierścień Górnika
 #
 # GUI
 button.baubles=Baubles
