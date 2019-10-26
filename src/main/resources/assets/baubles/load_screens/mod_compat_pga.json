@@ -1,0 +1,7 @@
+{
+	"screens" : [{
+			"COMMENT" : "BAUBLES SUPPORT", 
+			"class" : "baubles.common.container.ContainerPlayerExpanded", 
+			"texture" : "baubles:textures/gui/expanded_inventory.png"
+		}]
+}
