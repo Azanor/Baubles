@@ -1,0 +1,19 @@
+#
+# ITEMS
+item.Ring.0.name=Gruvarbetarens ring
+#
+# GUI
+button.baubles=Småsaker
+button.normal=Normal
+#
+# Keybinding
+keybind.baublesinventory=Småsaksutrustning
+#
+# Description
+name.AMULET=Småsak (amulett)
+name.RING=Småsak (ring)
+name.BELT=Småsak (bälte)
+name.TRINKET=Småsak (valfri)
+name.HEAD=Småsak (huvud)
+name.BODY=Småsak (kropp)
+name.CHARM=Småsak (talisman)
