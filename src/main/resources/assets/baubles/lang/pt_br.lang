@@ -3,8 +3,17 @@
 item.Ring.0.name=Anel do Minerador
 #
 # GUI
-button.baubles=Baubles
+button.baubles=Enfeites
 button.normal=Normal
 #
 # Keybinding
-keybind.baublesinventory=Inventário das Baubles
+keybind.baublesinventory=Inventário de enfeites
+#
+# Description
+name.AMULET=Enfeites (Amuleto)
+name.RING=Enfeites (Anel)
+name.BELT=Enfeites (Cinto)
+name.TRINKET=Enfeites (Qualquer)
+name.HEAD=Enfeites (Cabeça)
+name.BODY=Enfeites (Corpo)
+name.CHARM=Enfeites (Charme)
